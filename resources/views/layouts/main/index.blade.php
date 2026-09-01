@@ -56,8 +56,8 @@
 		@include('layouts.main.menu.index')
 		<main>
 			@yield('content')
-			@include('layouts.main.footer.index')
 		</main>
+		@include('layouts.main.footer.index')
 		
 		<!--**********************************
            Support ticket button start

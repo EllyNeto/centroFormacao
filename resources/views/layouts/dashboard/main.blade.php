@@ -65,8 +65,8 @@
     @include('layouts.dashboard.menu')
     <main>
         @yield('content')
-		@include('layouts.dashboard.footer')
     </main>
+	@include('layouts.dashboard.footer')
 </div>
 
 
