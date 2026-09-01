@@ -23,17 +23,17 @@
 
 <!-- FAVICONS ICON -->
 	<link rel="shortcut icon" type="image/png" href="././images/favicon.png" >
-	<link rel="stylesheet" href="./vendor/chartist/css/chartist.min.css">
-	<link href="./vendor/wow-master/css/libs/animate.css" rel="stylesheet">
-	<link href="./vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="{{asset('./vendor/chartist/css/chartist.min.css')}}">
+	<link href="{{asset('./vendor/wow-master/css/libs/animate.css" rel="stylesheet')}}">
+	<link href="{{asset('./vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
 	
-	<link href="./vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+	<link href="{{asset('./vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
 	
 	
 	<!-- Style css -->
 	<link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
 	<!-- Style css -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="{{asset('css/style.css')}}" rel="stylesheet">
 	
 </head>
 <body>
@@ -127,20 +127,20 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    <script src="./vendor/global/global.min.js"></script>
-	<script src="./vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="{{asset('./vendor/global/global.min.js')}}"></script>
+	<script src="{{asset('./vendor/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
 	
 	<!--datatables-->
-	<script src="./vendor/datatables/js/jquery.dataTables.min.js"></script>
-	<script src="js/plugins-init/datatables.init.js"></script>
+	<script src="{{asset('./vendor/datatables/js/jquery.dataTables.min.js"></script')}}">
+	<script src="{{asset('js/plugins-init/datatables.init.js')}}"></script>
 	
 	<!-- Dashboard 1 -->
-	<script src="./vendor/wow-master/dist/wow.min.js"></script>
+	<script src="{{asset('./vendor/wow-master/dist/wow.min.js')}}"></script>
 	
-	<script src="js/custom.min.js"></script>
-	<script src="js/dlabnav-init.js"></script>
-	<script src="js/demo.js"></script>
-    <script src="js/styleSwitcher.js"></script>
+	<script src="{{asset('js/custom.min.js')}}"></script>
+	<script src="{{asset('js/dlabnav-init.js')}}"></script>
+	<script src="{{asset('js/demo.js')}}"></script>
+    <script src="{{asset('js/styleSwitcher.js')}}"></script>
 	
 	
 </body>

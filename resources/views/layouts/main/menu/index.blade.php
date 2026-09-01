@@ -20,9 +20,9 @@
 						<span class="nav-text">Student</span>
 					</a>
 					<ul aria-expanded="false">
-						<li><a href="student.html">Student</a></li>
-						<li><a href="student-detail.html">Student Detail</a></li>
-						<li><a href="add-student.html">Add New Student</a></li>
+						<li><a href="{{url('./student/index')}}">Student</a></li>
+						<li><a href="{{url('./student/show')}}">Student Detail</a></li>
+						<li><a href="{{url('./student/create')}}">Add New Student</a></li>
 						
 					</ul>
 
@@ -32,9 +32,9 @@
 						<span class="nav-text">Teacher</span>
 					</a>
 					<ul aria-expanded="false">
-						<li><a href="teacher.html">Teacher</a></li>
-						<li><a href="teacher-detail.html">Teacher Detail</a></li>
-						<li><a href="add-teacher.html">Add New Teacher</a></li>
+						<li><a href="{{url('./teacher/index')}}">Teacher</a></li>
+						<li><a href="{{url('./teacher/show')}}">Teacher Detail</a></li>
+						<li><a href="{{url('./teacher/create')}}">Add New Teacher</a></li>
 						
 					</ul>
 

@@ -21,19 +21,19 @@
 	<title>Akademi : School and Education Management Admin Dashboard Template</title>
 
 <!-- FAVICONS ICON -->
-	<link rel="shortcut icon" type="image/png" href="./images/favicon.png" >
-	<link href="./vendor/wow-master/css/libs/animate.css" rel="stylesheet">
-	<link href="./vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="./vendor/bootstrap-select-country/css/bootstrap-select-country.min.css">
-	<link rel="stylesheet" href="./vendor/jquery-nice-select/css/nice-select.css">
-	<link href="./vendor/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+	<link rel="shortcut icon" type="image/png" href="{{asset('./images/favicon.png')}}" >
+	<link href="{{asset('./vendor/wow-master/css/libs/animate.css')}}" rel="stylesheet">
+	<link href="{{asset('./vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
+	<link rel="stylesheet" href="{{asset('./vendor/bootstrap-select-country/css/bootstrap-select-country.min.css')}}">
+	<link rel="stylesheet" href="{{asset('./vendor/jquery-nice-select/css/nice-select.css')}}">
+	<link href="{{asset('./vendor/datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
 	
-	 <link href="./vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+	 <link href="{{asset('./vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 	<!--swiper-slider-->
-	<link rel="stylesheet" href="./vendor/swiper/css/swiper-bundle.min.css">
+	<link rel="stylesheet" href="{{asset('./vendor/swiper/css/swiper-bundle.min.css')}}">
 	<!-- Style css -->
 	<link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
-    <link href="./css/style.css" rel="stylesheet">
+    <link href="{{asset('./css/style.css')}}" rel="stylesheet">
 	
 </head>
 <body>
@@ -65,7 +65,7 @@
     @include('layouts.dashboard.menu')
     <main>
         @yield('content')
-        @include('layouts.dashboard.footer')
+		@include('layouts.dashboard.footer')
     </main>
 </div>
 
@@ -132,33 +132,33 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    <script src="vendor/global/global.min.js"></script>
-	<script src="vendor/chart.js/Chart.bundle.min.js"></script>
-	<script src="vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="{{asset('vendor/global/global.min.js')}}"></script>
+	<script src="{{asset('vendor/chart.js/Chart.bundle.min.js')}}"></script>
+	<script src="{{asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
 	<!-- Apex Chart -->
-	<script src="vendor/apexchart/apexchart.js"></script>
+	<script src="{{asset('vendor/apexchart/apexchart.js')}}"></script>
 	<!-- Chart piety plugin files -->
-    <script src="vendor/peity/jquery.peity.min.js"></script>
-	<script src="vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+    <script src="{{asset('vendor/peity/jquery.peity.min.js')}}"></script>
+	<script src="{{asset('vendor/jquery-nice-select/js/jquery.nice-select.min.js')}}"></script>
 	<!--swiper-slider-->
-	<script src="vendor/swiper/js/swiper-bundle.min.js"></script>
+	<script src="{{asset('vendor/swiper/js/swiper-bundle.min.js')}}"></script>
 	
 	
     <!-- Datatable -->
-    <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="js/plugins-init/datatables.init.js"></script>
+    <script src="{{asset('vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('js/plugins-init/datatables.init.js')}}"></script>
 
 	<!-- Dashboard 1 -->
-	<script src="js/dashboard/dashboard-1.js"></script>
-	<script src="vendor/wow-master/dist/wow.min.js"></script>
-	<script src="vendor/bootstrap-datetimepicker/js/moment.js"></script>
-	<script src="vendor/datepicker/js/bootstrap-datepicker.min.js"></script>
-	<script src="vendor/bootstrap-select-country/js/bootstrap-select-country.min.js"></script>
+	<script src="{{asset('js/dashboard/dashboard-1.js')}}"></script>
+	<script src="{{asset('vendor/wow-master/dist/wow.min.js')}}"></script>
+	<script src="{{asset('vendor/bootstrap-datetimepicker/js/moment.js')}}"></script>
+	<script src="{{asset('vendor/datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+	<script src="{{asset('vendor/bootstrap-select-country/js/bootstrap-select-country.min.js')}}"></script>
 	
-	<script src="js/dlabnav-init.js"></script>
-    <script src="js/custom.min.js"></script>
-	<script src="js/demo.js"></script>
-    <script src="js/styleSwitcher.js"></script>
+	<script src="{{asset('js/dlabnav-init.js')}}"></script>
+    <script src="{{asset('js/custom.min.js')}}"></script>
+	<script src="{{asset('js/demo.js')}}"></script>
+    <script src="{{asset('js/styleSwitcher.js')}}"></script>
 	
 	
 </body>

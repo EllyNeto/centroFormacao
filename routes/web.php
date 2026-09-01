@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\courseController;
+use App\Http\Controllers\studentController;
+use App\Http\Controllers\teacherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +17,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('layouts.main.index');
+    return view('layouts.dashboard.main');
 });
+
+Route::get('/student/index', [studentController::class, 'index']);
+Route::get('/student/create', [studentController::class, 'create']);
+Route::get('/student/{id}', [studentController::class, 'show']);
+
+Route::get('/teacher/index', [teacherController::class, 'index']);
+Route::get('/teacher/create', [teacherController::class, 'create']);
+Route::get('/teacher/{id}', [teacherController::class, 'show']);
