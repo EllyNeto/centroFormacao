@@ -9,9 +9,9 @@
 							<span class="nav-text">Dashboard</span>
 						</a>
 						<ul aria-expanded="false">
-							<li><a href="index.html">Dashboard Light</a></li>
-							<li><a href="index-2.html">Dashboard Dark</a></li>
-							<li><a href="finance.html">Finance</a></li>
+							<li><a href="{{url('/dashboard/main')}}">Dashboard Light</a></li>
+							<li><a href="{{url('/dashboard/main')}}">Dashboard Dark</a></li>
+							<li><a href="{{url('/finance/index')}}">Finance</a></li>
 						</ul>
 
 					</li>

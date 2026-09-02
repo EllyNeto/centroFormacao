@@ -17,7 +17,15 @@ use App\Http\Controllers\teacherController;
 */
 
 Route::get('/', function () {
-    return view('layouts.dashboard.main');
+    return view('dashboard.main');
+});
+
+Route::get('/dashboard/main', function () {
+    return view('dashboard.main');
+});
+
+Route::get('/finance/index', function () {
+    return view('finance.index');
 });
 
 Route::get('/student/index', [studentController::class, 'index']);

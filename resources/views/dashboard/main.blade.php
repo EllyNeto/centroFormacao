@@ -61,12 +61,12 @@
     ***********************************-->
     <div id="main-wrapper" class="wallet-open active">
     <div class="wallet-bar-close"></div>
-    @include('layouts.dashboard.header')
-    @include('layouts.dashboard.menu')
+    @include('dashboard.header')
+    @include('dashboard.menu')
     <main>
-        @yield('content')
+         @include('layouts.components.graphic')
     </main>
-	@include('layouts.dashboard.footer')
+	@include('dashboard.footer')
 </div>
 
 
