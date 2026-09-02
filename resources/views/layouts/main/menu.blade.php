@@ -4,50 +4,50 @@
         <div class="dlabnav">
 			<div class="dlabnav-scroll">	
 				<ul class="metismenu" id="menu">
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+					<li><a href="{{url('./dashboard/main')}}" >
 							<i class="material-symbols-outlined">home</i>
 							<span class="nav-text">Dashboard</span>
 						</a>
-						<ul aria-expanded="false">
-							<li><a href="{{url('./dashboard/main')}}">Dashboard Light</a></li>
+						{{-- <ul aria-expanded="false">
+							<li><a href="{{url('./dashboard/main')}}">Dashboard</a></li>
 							<li><a href="{{url('./dashboard/main')}}">Dashboard Dark</a></li>
 							<li><a href="{{url('/finance/index')}}">Finance</a></li>
-						</ul>
+						</ul> --}}
 
 					</li>
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+					<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">school</i>
-						<span class="nav-text">Student</span>
+						<span class="nav-text">Estudante</span>
 					</a>
 					<ul aria-expanded="false">
-						<li><a href="{{url('./student/index')}}">Student</a></li>
-						<li><a href="{{url('./student/show')}}">Student Detail</a></li>
-						<li><a href="{{url('./student/create')}}">Add New Student</a></li>
+						<li><a href="{{url('./student/index')}}">Estudante</a></li>
+						<li><a href="{{url('./student/show')}}">Detalhes do estudante</a></li>
+						<li><a href="{{url('./student/create')}}">Adiconar novo estudante</a></li>
 						
 					</ul>
 
 					</li>
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">person</i>
-						<span class="nav-text">Teacher</span>
+						<span class="nav-text">Formador</span>
 					</a>
 					<ul aria-expanded="false">
-						<li><a href="{{url('./teacher/index')}}">Teacher</a></li>
-						<li><a href="{{url('./teacher/show')}}">Teacher Detail</a></li>
-						<li><a href="{{url('./teacher/create')}}">Add New Teacher</a></li>
+						<li><a href="{{url('./teacher/index')}}">Formador</a></li>
+						<li><a href="{{url('./teacher/show')}}">Detalhes do formador</a></li>
+						<li><a href="{{url('./teacher/create')}}">Adiconar novo formador</a></li>
 						
 					</ul>
 
 					</li>
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">restaurant_menu</i>
-						<span class="nav-text">Food</span>
+						<span class="nav-text">Curso</span>
 					</a>
 						<ul aria-expanded="false">
-							<li><a href="food.html">Food menu</a></li>
-							<li><a href="food-details.html">Food Detail</a></li>
+							<li><a href="{{ route('course.index') }}">Cursos</a></li>
+							<li><a href="{{ route('course.create') }}">Adicionar novo Curso</a></li>
 						</ul>
-
+{{-- 
 					</li>
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
 						<i class="material-icons">folder</i>	
@@ -193,7 +193,7 @@
 							<li><a href="empty-page.html">Empty Page</a></li>
 						</ul>
 					</li>
-				</ul>
+				</ul> --}}
 				<div class="copyright">
 					<p><strong>School Admission Dashboard</strong></p>
 					<p class="fs-12">Made with <span class="heart"></span> by DexignLab</p>

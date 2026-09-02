@@ -1,4 +1,4 @@
-@extends('layouts.main.index')
+@extends('layouts.main.main')
 
 @section('title', 'Formadores')
 

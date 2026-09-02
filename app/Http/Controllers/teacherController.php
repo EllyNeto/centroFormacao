@@ -10,12 +10,12 @@ class teacherController extends Controller
     public function index()
     {
         $teachers = Teacher::all();
-        return view('teacher.index', ['teachers' => $teachers]);
+        return view('teacher.index.index', ['teachers' => $teachers]);
     }
 
     public function create()
     {
-        return view('teacher.create');
+        return view('teacher.create.index');
     }
     
     public function store(Request $request)
@@ -32,7 +32,7 @@ class teacherController extends Controller
 
     public function show($id)
     {
-        return view('teacher.show');
+        return view('teacher.show.index');
     }
 
     public function dashboard()

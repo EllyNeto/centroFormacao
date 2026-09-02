@@ -19,21 +19,23 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- Page Title Here -->
-	<title>Akademi : School and Education Management Admin Dashboard Template</title>
+	<title>@yield('title', 'Akademi : School and Education Management Admin Dashboard Template')</title>
 
 <!-- FAVICONS ICON -->
-	<link rel="shortcut icon" type="image/png" href="././images/favicon.png" >
-	<link rel="stylesheet" href="{{asset('./vendor/chartist/css/chartist.min.css')}}">
-	<link href="{{asset('./vendor/wow-master/css/libs/animate.css" rel="stylesheet')}}">
-	<link href="{{asset('./vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
+	<link rel="shortcut icon" type="image/png" href="{{asset('images/favicon.png')}}" >
+	<link rel="stylesheet" href="{{asset('vendor/chartist/css/chartist.min.css')}}">
+	<link href="{{asset('vendor/wow-master/css/libs/animate.css')}}" rel="stylesheet">
+	<link href="{{asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
 	
-	<link href="{{asset('./vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
+	<link href="{{asset('vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
 	
 	
 	<!-- Style css -->
 	<link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
 	<!-- Style css -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
+
+	@stack('styles')
 	
 </head>
 <body>
@@ -42,7 +44,15 @@
         Preloader start
     ********************-->
 	<div id="preloader">
-		<div class="loader"></div>
+		<div class="loader">
+			<div class="dots">
+				<div class="dot mainDot"></div>
+				<div class="dot"></div>
+				<div class="dot"></div>
+				<div class="dot"></div>
+				<div class="dot"></div>
+			</div>
+		</div>
 	  </div>
     <!--*******************
         Preloader end
@@ -51,13 +61,14 @@
     <!--**********************************
         Main wrapper start
     ***********************************-->
-    <div id="main-wrapper">
-		@include('layouts.main.header.index')
-		@include('layouts.main.menu.index')
+    <div id="main-wrapper" class="@yield('wrapper_class', '')">
+		<div class="wallet-bar-close"></div>
+		@include('layouts.main.header')
+		@include('layouts.main.menu')
 		<main>
 			@yield('content')
 		</main>
-		@include('layouts.main.footer.index')
+		@include('layouts.main.footer')
 		
 		<!--**********************************
            Support ticket button start
@@ -127,16 +138,12 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    <script src="{{asset('./vendor/global/global.min.js')}}"></script>
-	<script src="{{asset('./vendor/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
-	
-	<!--datatables-->
-	<script src="{{asset('./vendor/datatables/js/jquery.dataTables.min.js"></script')}}">
-	<script src="{{asset('js/plugins-init/datatables.init.js')}}"></script>
-	
-	<!-- Dashboard 1 -->
-	<script src="{{asset('./vendor/wow-master/dist/wow.min.js')}}"></script>
-	
+    <script src="{{asset('vendor/global/global.min.js')}}"></script>
+	<script src="{{asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
+	<script src="{{asset('vendor/wow-master/dist/wow.min.js')}}"></script>
+
+	@stack('scripts')
+
 	<script src="{{asset('js/custom.min.js')}}"></script>
 	<script src="{{asset('js/dlabnav-init.js')}}"></script>
 	<script src="{{asset('js/demo.js')}}"></script>
