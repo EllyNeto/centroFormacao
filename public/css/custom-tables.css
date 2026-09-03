@@ -1,0 +1,113 @@
+/* ==========================================================================
+   Estilização Personalizada para Tabelas de Listagem (Cursos, Estudantes e Formadores)
+   Objetivo: Garantir largura total (100%), alinhamento centralizado e proporção ideal das tabelas.
+   ========================================================================== */
+
+/* Garantir que o container da tabela ocupe 100% da largura disponível */
+.card#accordion-one,
+.element-area,
+.demo-view {
+    width: 100% !important;
+}
+
+/* Regras de largura e alinhamento para todas as tabelas */
+.table, 
+table.dataTable,
+table.dataTable.display {
+    width: 100% !important;
+    font-size: 14px !important;
+    vertical-align: middle !important;
+    margin-bottom: 0 !important;
+}
+
+/* Cabeçalho da tabela - Centralizado com fonte padrão */
+.table th, 
+table.dataTable th,
+table.dataTable thead th {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 14px 12px !important;
+    background-color: #f8fafc !important;
+    color: #334155 !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+}
+
+/* Células da tabela - Centralizadas e proporcionais */
+.table td, 
+table.dataTable td,
+table.dataTable tbody td {
+    vertical-align: middle !important;
+    text-align: center !important;
+    padding: 12px 10px !important;
+    color: #475569 !important;
+}
+
+/* Rodapé da tabela */
+.table tfoot th, 
+table.dataTable tfoot th {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 12px 10px !important;
+    background-color: #f8fafc !important;
+    color: #475569 !important;
+    border-top: 2px solid #e2e8f0 !important;
+}
+
+/* Alinhamento de fotos/avatares */
+.table td .avatar,
+table.dataTable td .avatar {
+    margin: 0 auto !important;
+    display: inline-block !important;
+    border-radius: 50% !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Badges e etiquetas */
+.table td .badge {
+    font-size: 12px !important;
+    padding: 6px 12px !important;
+    font-weight: 500 !important;
+    border-radius: 4px !important;
+    display: inline-block !important;
+}
+
+/* Botões de ação centralizados */
+.table td .btn-xs,
+table.dataTable td .btn-xs {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 18px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 6px !important;
+    margin: 0 2px !important;
+}
+
+/* Ajustes no contêiner responsivo para ocupar toda a largura da página */
+.table-responsive {
+    width: 100% !important;
+    overflow-x: auto !important;
+}
+
+/* ==========================================================================
+   Desativação da Tela de Carregamento (Preloader) e Exibição Instantânea
+   ========================================================================== */
+#preloader,
+.dz-preloader {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Forçar visualização imediata do conteúdo ao mudar de tela (sem atraso de 1s) */
+#main-wrapper {
+    opacity: 1 !important;
+}

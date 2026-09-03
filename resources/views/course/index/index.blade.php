@@ -47,15 +47,15 @@
 											<div class="tab-pane fade show active" id="Preview" role="tabpanel" aria-labelledby="home-tab">
 											 <div class="card-body p-0">
 												<div class="table-responsive">
-													<table id="example" class="display table" style="min-width: 845px">
+													<table id="example" class="display table w-100" style="width: 100%;">
 														<thead>
 															<tr>
-                                                                <th>#ID</th>
-                                                                <th>Nome do Curso</th>
-                                                                <th>Categoria</th>
-                                                                <th>Duração</th>
-                                                                <th>Descrição</th>
-                                                                <th class="text-center">Ações</th>
+                                                                 <th>#ID</th>
+                                                                 <th>Nome do Curso</th>
+                                                                 <th>Estado</th>
+                                                                 <th>Duração</th>
+                                                                 <th>Descrição</th>
+                                                                 <th class="text-center">Ações</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -68,11 +68,13 @@
                                                                         {{ $courseItem->name }}
                                                                     </a>
                                                                 </td>
-                                                                <td>
-                                                                    <span class="badge badge-primary light">
-                                                                        {{ $courseItem->category }}
-                                                                    </span>
-                                                                </td>
+																	<td>
+																		@if($courseItem->status)
+																			<span class="badge badge-success light">Activo</span>
+																		@else
+																			<span class="badge badge-danger light">Desativo</span>
+																		@endif
+																	</td>
                                                                 <td>
                                                                     <i class="fa fa-clock-o text-muted me-1"></i> {{ $courseItem->duration }} horas
                                                                 </td>
@@ -106,20 +108,16 @@
                                                                     <tr>
                                                                         <td colspan="6" class="text-center py-4 text-muted">
                                                                             <i class="fa fa-folder-open-o fs-24 mb-2 d-block"></i>
-                                                                            Nenhum curso encontrado na base de dados.
-                                                                            <br>
-                                                                            <a href="{{ route('course.create') }}" class="btn btn-primary btn-sm mt-2">
-                                                                                Adicionar o Primeiro Curso
-                                                                            </a>
+                                                                            Nenhum curso encontrado.
                                                                         </td>
                                                                     </tr>
                                                                 @endforelse
                                                             </tbody>													
                                                             <tfoot>
-                                                            <tr>
+                                                                <tr>
                                                                     <th>#ID</th>
                                                                     <th>Nome do Curso</th>
-                                                                    <th>Categoria</th>
+                                                                    <th>Estado</th>
                                                                     <th>Duração</th>
                                                                     <th>Descrição</th>
                                                                     <th class="text-center">Ações</th>

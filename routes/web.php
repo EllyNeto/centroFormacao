@@ -58,10 +58,62 @@ Route::put('/course/update/{id}', [courseController::class, 'update'])->name('co
 // Rota DELETE para eliminar um curso da base de dados por ID
 Route::delete('/course/destroy/{id}', [courseController::class, 'destroy'])->name('course.destroy');
 
-Route::get('/student/index', [studentController::class, 'index']);
-Route::get('/student/create', [studentController::class, 'create']);
-Route::get('/student/{id}', [studentController::class, 'show']);
+/*
+|--------------------------------------------------------------------------
+| Rotas do Módulo de Estudantes (Student CRUD)
+|--------------------------------------------------------------------------
+|
+| Gestão completa de estudantes: Listar, Criar, Salvar, Ver, Editar, Atualizar e Eliminar.
+|
+*/
 
-Route::get('/teacher/index', [teacherController::class, 'index']);
-Route::get('/teacher/create', [teacherController::class, 'create']);
-Route::get('/teacher/{id}', [teacherController::class, 'show']);
+// Rota GET para a listagem de todos os estudantes registados
+Route::get('/student/index', [studentController::class, 'index'])->name('student.index');
+
+// Rota GET para apresentar o formulário de registo de novo estudante
+Route::get('/student/create', [studentController::class, 'create'])->name('student.create');
+
+// Rota POST para processar a gravação dos dados do novo estudante
+Route::post('/student/store', [studentController::class, 'store'])->name('student.store');
+
+// Rota GET para visualizar os detalhes de um estudante específico por ID
+Route::get('/student/{id}', [studentController::class, 'show'])->name('student.show');
+
+// Rota GET para apresentar o formulário de edição de um estudante existente por ID
+Route::get('/student/edit/{id}', [studentController::class, 'edit'])->name('student.edit');
+
+// Rota PUT para processar a atualização dos dados do estudante por ID
+Route::put('/student/update/{id}', [studentController::class, 'update'])->name('student.update');
+
+// Rota DELETE para eliminar um estudante da base de dados por ID
+Route::delete('/student/destroy/{id}', [studentController::class, 'destroy'])->name('student.destroy');
+
+/*
+|--------------------------------------------------------------------------
+| Rotas do Módulo de Formadores (Teacher/Formador CRUD)
+|--------------------------------------------------------------------------
+|
+| Gestão completa de formadores: Listar, Criar, Salvar, Ver, Editar, Atualizar e Eliminar.
+|
+*/
+
+// Rota GET para a listagem de todos os formadores registados
+Route::get('/teacher/index', [teacherController::class, 'index'])->name('teacher.index');
+
+// Rota GET para apresentar o formulário de registo de novo formador
+Route::get('/teacher/create', [teacherController::class, 'create'])->name('teacher.create');
+
+// Rota POST para processar a gravação dos dados do novo formador
+Route::post('/teacher/store', [teacherController::class, 'store'])->name('teacher.store');
+
+// Rota GET para visualizar os detalhes de um formador específico por ID
+Route::get('/teacher/{id}', [teacherController::class, 'show'])->name('teacher.show');
+
+// Rota GET para apresentar o formulário de edição de um formador existente por ID
+Route::get('/teacher/edit/{id}', [teacherController::class, 'edit'])->name('teacher.edit');
+
+// Rota PUT para processar a atualização dos dados do formador por ID
+Route::put('/teacher/update/{id}', [teacherController::class, 'update'])->name('teacher.update');
+
+// Rota DELETE para eliminar um formador da base de dados por ID
+Route::delete('/teacher/destroy/{id}', [teacherController::class, 'destroy'])->name('teacher.destroy');

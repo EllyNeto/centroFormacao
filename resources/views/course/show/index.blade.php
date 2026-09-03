@@ -28,12 +28,12 @@
                             {{-- Coluna Principal: Informações do Curso --}}
                             <div class="col-xl-8 col-lg-7">
                                 <div class="mb-4">
-                                    <span class="badge badge-primary light mb-2">{{ $course->category }}</span>
-                                    <h2 class="font-w700 text-black mb-3">{{ $course->name }}</h2>
+                                    <h2 class="font-w700 text-black mb-1">{{ $course->name }}</h2>
+                                    <span class="badge badge-primary light">#ID {{ $course->id }}</span>
                                 </div>
 
                                 <div class="mb-4">
-                                    <h5 class="text-primary font-w600">Descrição / Ementa do Curso</h5>
+                                    <h5 class="text-primary font-w600">Descrição</h5>
                                     <p class="fs-15 text-justify">
                                         {{ $course->description ?: 'Sem descrição disponível para este curso.' }}
                                     </p>
@@ -52,8 +52,12 @@
                                                 <strong>#{{ $course->id }}</strong>
                                             </li>
                                             <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
-                                                <span class="text-muted"><i class="fa fa-tag me-2"></i> Categoria:</span>
-                                                <strong>{{ $course->category }}</strong>
+                                                <span class="text-muted"><i class="fa fa-tag me-2"></i> Estado:</span>
+                                                    @if($course->status)
+                                                        <strong class="text-success">Activo</strong>
+                                                    @else
+                                                        <strong class="text-danger">Desativo</strong>
+                                                    @endif
                                             </li>
                                             <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
                                                 <span class="text-muted"><i class="fa fa-clock-o me-2"></i> Carga Horária:</span>

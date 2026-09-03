@@ -34,12 +34,14 @@
 	<link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
 	<!-- Style css -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
+	{{-- Folha de Estilos Personalizada para Tabelas Centralizadas e Ampliadas --}}
+    <link href="{{asset('css/custom-tables.css')}}" rel="stylesheet">
 
 	<!-- Datatable -->
-    <link href="{{asset('vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet')}}">
-    <link href="{{asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet')}}">
+    <link href="{{asset('vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+    <link href="{{asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
     <!-- Custom Stylesheet -->
-	<link href="{{asset('vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet')}}">
+	<link href="{{asset('vendor/jquery-nice-select/css/nice-select.css')}}" rel="stylesheet">
 
 	@stack('styles')
 	
@@ -67,7 +69,7 @@
     <!--**********************************
         Main wrapper start
     ***********************************-->
-    <div id="main-wrapper" class="@yield('wrapper_class', '')">
+    <div id="main-wrapper" class="show @yield('wrapper_class', '')">
 		<div class="wallet-bar-close"></div>
 		@include('layouts.main.header')
 		@include('layouts.main.menu')

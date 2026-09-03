@@ -15,38 +15,43 @@
 						</ul> --}}
 
 					</li>
+					{{-- Seção Módulo de Estudante --}}
 					<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">school</i>
 						<span class="nav-text">Estudante</span>
 					</a>
 					<ul aria-expanded="false">
-						<li><a href="{{url('./student/index')}}">Estudante</a></li>
-						<li><a href="{{url('./student/show')}}">Detalhes do estudante</a></li>
-						<li><a href="{{url('./student/create')}}">Adiconar novo estudante</a></li>
-						
+						{{-- Link para a listagem de estudantes --}}
+						<li><a href="{{ route('student.index') }}">Listar</a></li>
+						{{-- Link para criação de novo estudante --}}
+						<li><a href="{{ route('student.create') }}">Adicionar novo</a></li>
 					</ul>
-
 					</li>
+
+					{{-- Seção Módulo de Formador --}}
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">person</i>
 						<span class="nav-text">Formador</span>
 					</a>
 					<ul aria-expanded="false">
-						<li><a href="{{url('./teacher/index')}}">Formador</a></li>
-						<li><a href="{{url('./teacher/show')}}">Detalhes do formador</a></li>
-						<li><a href="{{url('./teacher/create')}}">Adiconar novo formador</a></li>
-						
+						{{-- Link para a listagem de formadores --}}
+						<li><a href="{{ route('teacher.index') }}">Listar</a></li>
+						{{-- Link para registo de novo formador --}}
+						<li><a href="{{ route('teacher.create') }}">Adicionar novo</a></li>
 					</ul>
-
 					</li>
+					{{-- Seção Módulo de Curso --}}
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-						<i class="material-symbols-outlined">restaurant_menu</i>
+						<i class="material-symbols-outlined">menu_book</i>
 						<span class="nav-text">Curso</span>
 					</a>
 						<ul aria-expanded="false">
+							{{-- Link para a listagem de cursos --}}
 							<li><a href="{{ route('course.index') }}">Listar</a></li>
+							{{-- Link para criação de novo curso --}}
 							<li><a href="{{ route('course.create') }}">Adicionar novo</a></li>
 						</ul>
+					</li>
 {{-- 
 					</li>
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">

@@ -26,41 +26,50 @@
                         @method('PUT')
 
                         <div class="card-body">
+                            {{-- Exibição de erros de validação se houver algum erro --}}
+                            @if ($errors->any())
+                                <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                                    <h6 class="alert-heading font-w600 mb-1"><i class="fa fa-exclamation-triangle me-2"></i> Erro ao atualizar curso:</h6>
+                                    <ul class="mb-0 ps-3">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+
                             <div class="row">
                                 {{-- Coluna Esquerda: Nome e Descrição --}}
                                 <div class="col-xl-6 col-sm-6">
                                     {{-- Campo: Nome do Curso --}}
                                     <div class="mb-3">
                                         <label for="name" class="form-label text-primary">Nome do Curso <span class="text-danger">*</span></label>
-                                        <input type="text" id="name" name="name" class="form-control" required>
+                                        <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $course->name) }}" required>
                                     </div>
 
                                     {{-- Campo: Descrição / Programa do Curso --}}
                                     <div class="mb-3">
                                         <label for="description" class="form-label text-primary">Descrição do Curso</label>
-                                        <textarea id="description" name="description" class="form-control" rows="5">{{ ($course->description) }}</textarea>
+                                        <textarea id="description" name="description" class="form-control" rows="5">{{ old('description', $course->description) }}</textarea>
                                     </div>
                                 </div>
 
-                                {{-- Coluna Direita: Categoria e Duração em Horas --}}
+                                {{-- Coluna Direita: Estado e Duração em Horas --}}
                                 <div class="col-xl-6 col-sm-6">
-                                    {{-- Campo: Categoria --}}
+                                    {{-- Campo: Estado --}}
                                     <div class="mb-3">
-                                        <label for="category" class="form-label text-primary">Categoria <span class="text-danger">*</span></label>
-                                        <select id="category" name="category" class="default-select wide form-control" required>
-                                            <option value="" disabled>Selecione uma categoria...</option>
-                                            <option value="Tecnologia da Informação">Tecnologia da Informação</option>
-                                            <option value="Gestão & Negócios">Gestão & Negócios</option>
-                                            <option value="Contabilidade">Contabilidade</option>
-                                            <option value="Línguas">Línguas</option>
-                                            <option value="Design & Multimédia">Design & Multimédia</option>
+                                        <label for="status" class="form-label text-primary">Estado <span class="text-danger">*</span></label>
+                                        <select id="status" name="status" class="default-select wide form-control" required>
+                                            <option value="1" {{ old('status', $course->status) ? 'selected' : '' }}>Activo</option>
+                                            <option value="0" {{ !old('status', $course->status) ? 'selected' : '' }}>Desativo</option>
                                         </select>
                                     </div>
 
                                     {{-- Campo: Duração em Horas --}}
                                     <div class="mb-3">
                                         <label for="duration" class="form-label text-primary">Duração (em Horas) <span class="text-danger">*</span></label>
-                                        <input type="number" id="duration" name="duration" class="form-control  value="{{ $course->duration}}" min="1" required>
+                                        <input type="number" id="duration" name="duration" class="form-control" value="{{ old('duration', $course->duration) }}" min="1" required>
                                     </div>
                                 </div>
                             </div>

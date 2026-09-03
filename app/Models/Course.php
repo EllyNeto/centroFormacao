@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property string $name
- * @property string $category
+ * @property boolean $status
  * @property int $duration
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -31,8 +31,12 @@ class Course extends Model
      */
     protected $fillable = [
         'name',        // Nome do curso
-        'category',    // Categoria temática
+        'status',      // Estado do curso
         'duration',    // Carga horária total (em horas)
         'description', // Descrição/Ementa do curso
+    ];
+
+    protected $casts = [
+        'status' => 'boolean',
     ];
 }

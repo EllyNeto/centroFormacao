@@ -12,72 +12,99 @@
 				<div class="row">
 					<div class="col-xl-12">
 						<div class="card">
-							<div class="card-header">
-								<h5 class="mb-0">Student Details</h5>
+							<div class="card-header d-flex justify-content-between align-items-center">
+								<h5 class="mb-0">Detalhes do Estudante</h5>
+								<a href="{{ route('student.index') }}" class="btn btn-secondary btn-sm">
+									<i class="fa fa-arrow-left me-1"></i> Voltar à Listagem
+								</a>
 							</div>
-							<div class="card-body">
-								<div class="row">
-									<div class="col-xl-3 col-lg-4">
-										<label class="form-label text-primary">Photo<span class="required">*</span></label>
-										 <div class="avatar-upload">
-											<div class="avatar-preview">
-												<div id="imagePreview" style="background-image: url(images/no-img-avatar.png);"> 			
-												</div>
-											</div>
-											<div class="change-btn mt-2 mb-lg-0 mb-3">
-												<input type='file' class="form-control d-none"  id="imageUpload" accept=".png, .jpg, .jpeg">
-												<label for="imageUpload" class="dlab-upload mb-0 btn btn-primary btn-sm">Choose File</label>
-												<a href="javascript:void" class="btn btn-danger light remove-img ms-2 btn-sm">Remove</a>
-											</div>
-										</div>	
-									</div>
-									<div class="col-xl-9 col-lg-8">
-										<div class="row">
-											<div class="col-xl-6 col-sm-6">
-												<div class="mb-3">
-												  <label for="exampleFormControlInput1" class="form-label text-primary">First Name<span class="required">*</span></label>
-												  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="James">
-												</div>
-												<div class="mb-3">
-												  <label  class="form-label text-primary">Date & Place of Birth<span class="required">*</span></label>
-													<div class="d-flex">
-														<input type="text" class="form-control" placeholder="2017-06-04" id="datepicker">
-														<input type="text" class="form-control w-50 ms-3" id="exampleFormControlInput7" placeholder="USA">
+							
+							{{-- Formulário para envio dos dados do novo estudante via POST --}}
+							<form action="{{ route('student.store') }}" method="POST" enctype="multipart/form-data">
+								{{-- Diretiva CSRF obrigatória do Laravel --}}
+								 @csrf
+								 
+								<div class="card-body">
+									{{-- Exibição de erros de validação se houver algum campo inválido --}}
+									@if ($errors->any())
+										<div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+											<h6 class="alert-heading font-w600 mb-1"><i class="fa fa-exclamation-triangle me-2"></i> Erro ao guardar estudante:</h6>
+											<ul class="mb-0 ps-3">
+												@foreach ($errors->all() as $error)
+													<li>{{ $error }}</li>
+												@endforeach
+											</ul>
+											<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+										</div>
+									@endif
+
+									<div class="row">
+										{{-- Coluna Esquerda: Fotografia do Aluno --}}
+										<div class="col-xl-3 col-lg-4">
+											<label class="form-label text-primary">Fotografia do Estudante</label>
+											<div class="avatar-upload">
+												<div class="avatar-preview mb-3">
+													<div id="imagePreview" style="background-image: url('{{ asset('images/no-img-avatar.png') }}'); width: 130px; height: 130px; background-size: cover; background-position: center; border-radius: 12px; border: 2px solid #e2e8f0; margin: 0 auto;"> 			
 													</div>
 												</div>
-												<div class="mb-3">
-												  <label for="exampleFormControlInput3" class="form-label text-primary">Email<span class="required">*</span></label>
-												  <input type="email" class="form-control" id="exampleFormControlInput3" placeholder="hello@example.com">
+												<div class="change-btn mt-2 mb-lg-0 mb-3">
+													{{-- Campo do tipo File para seleção da imagem com pré-visualização instantânea --}}
+													<input type='file' class="form-control" name="image" id="imageUpload" accept="image/*" onchange="previewStudentImage(this)">
+													<small class="text-muted d-block mt-1">Formatos aceites: JPG, PNG, WEBP (Máx: 2MB)</small>
 												</div>
-												<div class="mb-3">
-												  <label for="exampleFormControlTextarea1" class="form-label text-primary">Address<span class="required">*</span></label>
-												  <textarea class="form-control" id="exampleFormControlTextarea1" rows="6">
-													 
-												  </textarea>
+											</div>	
+										</div>
+									
+										{{-- Coluna Direita: Dados Pessoais do Estudante --}}
+										<div class="col-xl-9 col-lg-8">
+											<div class="row">
+												<div class="col-xl-6 col-sm-6">
+													{{-- Campo: Nome Completo --}}
+													<div class="mb-3">
+													  <label for="name" class="form-label text-primary">Nome Completo <span class="text-danger">*</span></label>
+													  <input type="text" class="form-control" id="name" name="name" placeholder="Ex: James Lino" value="{{ old('name') }}" required>
+													</div>
+													
+													{{-- Campo: Email --}}
+													<div class="mb-3">
+													  <label for="email" class="form-label text-primary">Email <span class="text-danger">*</span></label>
+													  <input type="email" class="form-control" id="email" name="email" placeholder="exemplo@gmail.com" value="{{ old('email') }}" required>
+													</div>
+													
+													{{-- Campo: Número do BI --}}
+													<div class="mb-3">
+													  <label for="identity_card_number" class="form-label text-primary">Número do BI <span class="text-danger">*</span></label>
+													  <input type="text" class="form-control" id="identity_card_number" name="identity_card_number" placeholder="Ex: 000123456LA042" value="{{ old('identity_card_number') }}" required>
+													</div>
 												</div>
-											</div>
-											<div class="col-xl-6 col-sm-6">
-												<div class="mb-3">
-												  <label for="exampleFormControlInput4" class="form-label text-primary">Last Name<span class="required">*</span></label>
-												  <input type="text" class="form-control" id="exampleFormControlInput4" placeholder="Wally">
-												</div>
-												<div class="mb-3">
-												  <label for="exampleFormControlInput5" class="form-label text-primary">Parent Name<span class="required">*</span></label>
-												  <input type="text" class="form-control" id="exampleFormControlInput5" placeholder="Mana William">
-												</div>
-												<div class="mb-3">
-												  <label for="exampleFormControlInput6" class="form-label text-primary">Phone Number<span class="required">*</span></label>
-												  <input type="number" class="form-control" id="exampleFormControlInput6" placeholder="+123456789">
+												
+												<div class="col-xl-6 col-sm-6">
+													{{-- Campo: Número de Telefone --}}
+													<div class="mb-3">
+													  <label for="phone" class="form-label text-primary">Número de Telefone <span class="text-danger">*</span></label>
+													  <input type="text" class="form-control" id="phone" name="phone" placeholder="Ex: 923000000" value="{{ old('phone') }}" required>
+													</div>
+													
+													{{-- Campo: Código do Estudante --}}
+													<div class="mb-3">
+													  <label for="code" class="form-label text-primary">Código do Estudante <span class="text-danger">*</span></label>
+													  <input type="number" class="form-control" id="code" name="code" placeholder="Ex: 1001" value="{{ old('code') }}" required>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
+								
+								{{-- Rodapé do cartão com os botões de ação --}}
+								<div class="card-footer text-end">
+									<a href="{{ route('student.index') }}" class="btn btn-danger light me-2">Cancelar</a>
+									<button type="submit" class="btn btn-primary">Salvar Estudante</button>
+								</div>
+							</form>
 						</div>
-					</div>
 				</div>
-				<div class="col-xl-12">
+				{{-- <div class="col-xl-12">
 					<div class="card">
 						<div class="card-header">
 							<h5 class="mb-0">Parents Details</h5>
@@ -127,18 +154,78 @@
 									
 									</div>
 								</div>
-							</div>
-							<div class="">
+							</div> --}}
+							{{-- <div class="">
 								<button class="btn btn-outline-primary me-3">Save as Draft</button>
 								<button class="btn btn-primary" type="button">Save</button>
-							</div>
+							</div> --}}
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+			{{-- <script>
+		$(function () {
+			  $("#datepicker").datepicker({ 
+					autoclose: true, 
+					todayHighlight: true
+			  }).datepicker('update', new Date());
+		
+		});
+
+	</script>
+	
+	 <script>
+		function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#imagePreview').css('background-image', 'url('+e.target.result +')');
+            $('#imagePreview').hide();
+            $('#imagePreview').fadeIn(650);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+$("#imageUpload").change(function() {
+    readURL(this);
+});
+	$('.remove-img').on('click', function() {
+		var imageUrl = "images/no-img-avatar.png";
+		$('.avatar-preview, #imagePreview').removeAttr('style');
+		$('#imagePreview').css('background-image', 'url(' + imageUrl + ')');
+	});
+
+
+
+	</script> --}}
 		
         <!--**********************************
             Content body end
         ***********************************-->
+
+{{-- Script para pré-visualização instantânea da fotografia do estudante selecionada --}}
+@push('scripts')
+<script>
+	function previewStudentImage(input) {
+		if (input.files && input.files[0]) {
+			var file = input.files[0];
+			// Verificação do tamanho máximo do ficheiro (2MB = 2 * 1024 * 1024 bytes)
+			if (file.size > 2 * 1024 * 1024) {
+				alert('A fotografia selecionada é demasiado grande! O tamanho máximo permitido é de 2MB.');
+				input.value = '';
+				return;
+			}
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var preview = document.getElementById('imagePreview');
+				if (preview) {
+					preview.style.backgroundImage = 'url(' + e.target.result + ')';
+				}
+			}
+			reader.readAsDataURL(file);
+		}
+	}
+</script>
+@endpush
 @endsection

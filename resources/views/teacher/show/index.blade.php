@@ -11,6 +11,32 @@
 			<div class="container-fluid">
 				<!-- Row -->
 				<div class="row">
+					<div class="col-xl-12 mb-3">
+						<div class="d-flex justify-content-between align-items-center bg-white p-3 rounded card-header">
+							<h4 class="card-title mb-0">Detalhes do Formador: {{ $teacher->name }}</h4>
+							<div>
+								{{-- Botão para voltar à lista principal de formadores --}}
+								<a href="{{ route('teacher.index') }}" class="btn btn-secondary btn-sm me-1">
+									<i class="fa fa-arrow-left me-1"></i> Voltar à Listagem
+								</a>
+
+								{{-- Botão para editar as informações do formador --}}
+								<a href="{{ route('teacher.edit', $teacher->id) }}" class="btn btn-primary btn-sm me-1">
+									<i class="fa fa-pencil me-1"></i> Editar Formador
+								</a>
+
+								{{-- Formulário para eliminar o formador --}}
+								<form action="{{ route('teacher.destroy', $teacher->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este formador?');" style="display: inline-block;">
+									@csrf
+									@method('DELETE')
+									<button type="submit" class="btn btn-danger btn-sm">
+										<i class="fa fa-trash me-1"></i> Eliminar
+									</button>
+								</form>
+							</div>
+						</div>
+					</div>
+
 					<div class="col-xl-9">
 						<div class="card h-auto">
 							<div class="card-header p-0">
@@ -18,7 +44,7 @@
 									<div class="user-svg">
 										<svg width="264" height="109" viewBox="0 0 264 109" fill="none" xmlns="http://www.w3.org/2000/svg">
 											<rect x="8.01074" y="8.6521" width="247.592" height="259.13" rx="123.796" stroke="#FCC43E" stroke-width="16"/>
-											</svg>
+										</svg>
 									</div>
 									<div class="user-svg-1">
 										<svg width="264" height="59" viewBox="0 0 264 59" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -31,78 +57,66 @@
 								<div class="d-flex justify-content-between">
 									<div class="user">
 										<div class="user-media">
-											<img src="images/avatar/8.jpg" alt="" class="avatar avatar-xxl">
+											{{-- Foto de perfil dinâmica do formador --}}
+											@if($teacher->image)
+												<img src="{{ asset('img/teachers/'.$teacher->image) }}" alt="Foto do Formador" class="avatar avatar-xxl" style="object-fit: cover;">
+											@else
+												<img src="{{ asset('images/avatar/8.jpg') }}" alt="Foto Padrão" class="avatar avatar-xxl">
+											@endif
 										</div>
 										<div>
-											<h2 class="mb-0">Maria Historia</h2>
-											<p  class="text-primary font-w600">History Teacher</p>
-										</div>
-									</div>
-									<div class="dropdown custom-dropdown">
-										<div class="btn sharp tp-btn " data-bs-toggle="dropdown">
-											<svg width="24" height="6" viewBox="0 0 24 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M12.0012 0.359985C11.6543 0.359985 11.3109 0.428302 10.9904 0.561035C10.67 0.693767 10.3788 0.888317 10.1335 1.13358C9.88829 1.37883 9.69374 1.67 9.56101 1.99044C9.42828 2.31089 9.35996 2.65434 9.35996 3.00119C9.35996 3.34803 9.42828 3.69148 9.56101 4.01193C9.69374 4.33237 9.88829 4.62354 10.1335 4.8688C10.3788 5.11405 10.67 5.3086 10.9904 5.44134C11.3109 5.57407 11.6543 5.64239 12.0012 5.64239C12.7017 5.64223 13.3734 5.36381 13.8686 4.86837C14.3638 4.37294 14.6419 3.70108 14.6418 3.00059C14.6416 2.3001 14.3632 1.62836 13.8677 1.13315C13.3723 0.637942 12.7004 0.359826 12 0.359985H12.0012ZM3.60116 0.359985C3.25431 0.359985 2.91086 0.428302 2.59042 0.561035C2.26997 0.693767 1.97881 0.888317 1.73355 1.13358C1.48829 1.37883 1.29374 1.67 1.16101 1.99044C1.02828 2.31089 0.959961 2.65434 0.959961 3.00119C0.959961 3.34803 1.02828 3.69148 1.16101 4.01193C1.29374 4.33237 1.48829 4.62354 1.73355 4.8688C1.97881 5.11405 2.26997 5.3086 2.59042 5.44134C2.91086 5.57407 3.25431 5.64239 3.60116 5.64239C4.30165 5.64223 4.97339 5.36381 5.4686 4.86837C5.9638 4.37294 6.24192 3.70108 6.24176 3.00059C6.2416 2.3001 5.96318 1.62836 5.46775 1.13315C4.97231 0.637942 4.30045 0.359826 3.59996 0.359985H3.60116ZM20.4012 0.359985C20.0543 0.359985 19.7109 0.428302 19.3904 0.561035C19.07 0.693767 18.7788 0.888317 18.5336 1.13358C18.2883 1.37883 18.0937 1.67 17.961 1.99044C17.8283 2.31089 17.76 2.65434 17.76 3.00119C17.76 3.34803 17.8283 3.69148 17.961 4.01193C18.0937 4.33237 18.2883 4.62354 18.5336 4.8688C18.7788 5.11405 19.07 5.3086 19.3904 5.44134C19.7109 5.57407 20.0543 5.64239 20.4012 5.64239C21.1017 5.64223 21.7734 5.36381 22.2686 4.86837C22.7638 4.37294 23.0419 3.70108 23.0418 3.00059C23.0416 2.3001 22.7632 1.62836 22.2677 1.13315C21.7723 0.637942 21.1005 0.359826 20.4 0.359985H20.4012Z" fill="#A098AE"/>
-											</svg>
-										</div>
-										<div class="dropdown-menu dropdown-menu-end">
-											<a class="dropdown-item" href="javascript:void(0);">Option 1</a>
-											<a class="dropdown-item" href="javascript:void(0);">Option 2</a>
-											<a class="dropdown-item" href="javascript:void(0);">Option 3</a>
+											{{-- Nome do formador e área de especialização --}}
+											<h2 class="mb-0">{{ $teacher->name }}</h2>
+											<p class="text-primary font-w600">{{ $teacher->specialty ?: 'Formador' }}</p>
 										</div>
 									</div>
 								</div>	
-								<div class="row mt-2">
-									<div class="col-xl-3 col-xxl-6 col-sm-6">
+								<div class="row mt-4">
+									{{-- Número do BI --}}
+									<div class="col-xl-4 col-sm-6 mb-3">
 										<ul class="student-details">
 											<li class="me-2">
 												<a class="icon-box bg-secondary">
-													<img src="images/profile.svg" alt="">
+													<img src="{{ asset('images/profile.svg') }}" alt="">
 												</a>
 											</li>
 											<li>
-												<span>Parents:</span>
-												<h5 class="mb-0">Justin Hope</h5>
+												<span>Nº do BI:</span>
+												<h5 class="mb-0">{{ $teacher->identity_card_number ?: 'N/D' }}</h5>
 											</li>
 										</ul>
 									</div>
-									<div class="col-xl-3 col-xxl-6 col-sm-6">
-										
-										<ul class="student-details">
-											<li class="me-2">
-												<a class="icon-box bg-secondary">
-													<img src="images/svg/location.svg" alt="">
-												</a>	
 
-											</li>
-											<li><span>Address:</span><h5 class="mb-0">Jakarta, Indonesia</h5></li>
-										</ul>
-									</div>
-									<div class="col-xl-3 col-xxl-6 col-sm-6">
+									{{-- Telefone --}}
+									<div class="col-xl-4 col-sm-6 mb-3">
 										<ul class="student-details">
 											<li class="me-2">
 												<a class="icon-box bg-secondary">
-													<img src="images/svg/phone.svg" alt="">
+													<img src="{{ asset('images/svg/phone.svg') }}" alt="">
 												</a>	
 											</li>
-											<li><span>Phone:</span><h5 class="mb-0">+12 345 6789 0</h5></li>
+											<li><span>Telefone:</span><h5 class="mb-0">{{ $teacher->phone_number ?? $teacher->phone ?? 'N/D' }}</h5></li>
 										</ul>
 									</div>
-									<div class="col-xl-3 col-xxl-6 col-sm-6">
+
+									{{-- Email --}}
+									<div class="col-xl-4 col-sm-6 mb-3">
 										<ul class="student-details">
 											<li class="me-2">
 												<a class="icon-box bg-secondary">
-													<img src="images/svg/email.svg" alt="">
+													<img src="{{ asset('images/svg/email.svg') }}" alt="">
 												</a>	
-											
 											</li>
-											<li><span>Email:</span><h5 class="mb-0">Historia@mail.com</h5></li>
+											<li><span>E-mail:</span><h5 class="mb-0">{{ $teacher->email }}</h5></li>
 										</ul>
 									</div>
 								</div>
-								
 							</div>
 						</div>
-						<div  class="'col-xl-12">
+{{-- Preservação dos blocos de detalhes adicionais do template sem apagar código --}}
+{{-- 
+<div class="card">
+
 							<div class="card">
 								<div class="card-body">
 									<div class="teacher-deatails">
@@ -259,6 +273,8 @@
 					</div>
 				</div>
 			</div>
+		</div>
+--}}
 		</div>
 		<!--**********************************
 					moal
