@@ -44,8 +44,8 @@
 						<span class="nav-text">Curso</span>
 					</a>
 						<ul aria-expanded="false">
-							<li><a href="{{ route('course.index') }}">Cursos</a></li>
-							<li><a href="{{ route('course.create') }}">Adicionar novo Curso</a></li>
+							<li><a href="{{ route('course.index') }}">Listar</a></li>
+							<li><a href="{{ route('course.create') }}">Adicionar novo</a></li>
 						</ul>
 {{-- 
 					</li>

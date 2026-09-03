@@ -32,19 +32,13 @@
                                     {{-- Campo: Nome do Curso --}}
                                     <div class="mb-3">
                                         <label for="name" class="form-label text-primary">Nome do Curso <span class="text-danger">*</span></label>
-                                        <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $course->name) }}" required>
-                                        @error('name')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <input type="text" id="name" name="name" class="form-control" required>
                                     </div>
 
                                     {{-- Campo: Descrição / Programa do Curso --}}
                                     <div class="mb-3">
                                         <label for="description" class="form-label text-primary">Descrição do Curso</label>
-                                        <textarea id="description" name="description" class="form-control @error('description') is-invalid @enderror" rows="5">{{ old('description', $course->description) }}</textarea>
-                                        @error('description')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <textarea id="description" name="description" class="form-control" rows="5">{{ ($course->description) }}</textarea>
                                     </div>
                                 </div>
 
@@ -53,27 +47,20 @@
                                     {{-- Campo: Categoria --}}
                                     <div class="mb-3">
                                         <label for="category" class="form-label text-primary">Categoria <span class="text-danger">*</span></label>
-                                        <select id="category" name="category" class="default-select wide form-control @error('category') is-invalid @enderror" required>
+                                        <select id="category" name="category" class="default-select wide form-control" required>
                                             <option value="" disabled>Selecione uma categoria...</option>
-                                            @php $cat = old('category', $course->category); @endphp
-                                            <option value="Tecnologia da Informação" {{ $cat == 'Tecnologia da Informação' ? 'selected' : '' }}>Tecnologia da Informação</option>
-                                            <option value="Gestão & Negócios" {{ $cat == 'Gestão & Negócios' ? 'selected' : '' }}>Gestão & Negócios</option>
-                                            <option value="Contabilidade" {{ $cat == 'Contabilidade' ? 'selected' : '' }}>Contabilidade</option>
-                                            <option value="Línguas" {{ $cat == 'Línguas' ? 'selected' : '' }}>Línguas</option>
-                                            <option value="Design & Multimédia" {{ $cat == 'Design & Multimédia' ? 'selected' : '' }}>Design & Multimédia</option>
+                                            <option value="Tecnologia da Informação">Tecnologia da Informação</option>
+                                            <option value="Gestão & Negócios">Gestão & Negócios</option>
+                                            <option value="Contabilidade">Contabilidade</option>
+                                            <option value="Línguas">Línguas</option>
+                                            <option value="Design & Multimédia">Design & Multimédia</option>
                                         </select>
-                                        @error('category')
-                                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
                                     </div>
 
                                     {{-- Campo: Duração em Horas --}}
                                     <div class="mb-3">
                                         <label for="duration" class="form-label text-primary">Duração (em Horas) <span class="text-danger">*</span></label>
-                                        <input type="number" id="duration" name="duration" class="form-control @error('duration') is-invalid @enderror" value="{{ old('duration', $course->duration) }}" min="1" required>
-                                        @error('duration')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <input type="number" id="duration" name="duration" class="form-control  value="{{ $course->duration}}" min="1" required>
                                     </div>
                                 </div>
                             </div>

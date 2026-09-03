@@ -47,10 +47,10 @@
                                         <h5 class="card-title text-primary mb-3">Informações Gerais</h5>
                                         
                                         <ul class="list-group list-group-flush bg-transparent">
-                                            {{-- <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
+                                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
                                                 <span class="text-muted"><i class="fa fa-hashtag me-2"></i> ID do Curso:</span>
                                                 <strong>#{{ $course->id }}</strong>
-                                            </li> --}}
+                                            </li>
                                             <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
                                                 <span class="text-muted"><i class="fa fa-tag me-2"></i> Categoria:</span>
                                                 <strong>{{ $course->category }}</strong>

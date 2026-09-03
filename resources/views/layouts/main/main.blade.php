@@ -35,6 +35,12 @@
 	<!-- Style css -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
 
+	<!-- Datatable -->
+    <link href="{{asset('vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet')}}">
+    <link href="{{asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet')}}">
+    <!-- Custom Stylesheet -->
+	<link href="{{asset('vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet')}}">
+
 	@stack('styles')
 	
 </head>
@@ -43,7 +49,7 @@
     <!--*******************
         Preloader start
     ********************-->
-	<div id="preloader">
+	{{-- <div id="preloader">
 		<div class="loader">
 			<div class="dots">
 				<div class="dot mainDot"></div>
@@ -53,7 +59,7 @@
 				<div class="dot"></div>
 			</div>
 		</div>
-	  </div>
+	  </div> --}}
     <!--*******************
         Preloader end
     ********************-->
@@ -148,7 +154,38 @@
 	<script src="{{asset('js/dlabnav-init.js')}}"></script>
 	<script src="{{asset('js/demo.js')}}"></script>
     <script src="{{asset('js/styleSwitcher.js')}}"></script>
+
+	<!-- Required vendors for Datatable-->
+    <script src="vendor/global/global.min.js"></script>
+   
+    <script src="vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
 	
+    <!-- Script Datatable -->
+    <script src="{{asset('vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('js/plugins-init/datatables.init.js')}}"></script>
+
+	<script src="{{asset('vendor/jquery-nice-select/js/jquery.nice-select.min.js')}}"></script>
+
+    <script src="{{asset('js/custom.min.js')}}"></script>
+	<script src="{{asset('js/dlabnav-init.js')}}"></script>
+	<script src="{{asset('js/demo.js')}}"></script>
+    <script src="{{asset('js/styleSwitcher.js')}}"></script>
+
+	
+	<!-- code-highlight for Datatable-->
+	<script src="{{asset('js/highlight.min.js')}}"></script>
+	<script>
+		hljs.highlightAll();
+		hljs.configure({ ignoreUnescapedHTML: true })	
+	</script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', (event) => {
+			document.querySelectorAll('pre code').forEach((el) => {
+				hljs.highlightElement(el);
+			});
+			});
+	</script>
 	
 </body>
 
