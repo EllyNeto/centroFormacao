@@ -65,10 +65,10 @@ class teacherController extends Controller
             $requestImage = $request->file('image');
             $extension = $requestImage->extension();
             $imageName = md5($requestImage->getClientOriginalName() . time()) . '.' . $extension;
-            $requestImage->storeAs('img/teacher', $imageName);
+             $imagePath = $requestImage->storeAs('storage', $imageName, 'public');
 
-            // Adiciona o nome do ficheiro aos dados validados
-            $validatedData['image'] = $imageName;
+            // Substitui o nome da imagem antiga pelo novo nome
+            $validatedData['image'] = $imagePath;
         }
 
         // Regista o novo formador na base de dados
@@ -140,7 +140,7 @@ class teacherController extends Controller
         // 1. Verifica se o estudante tem uma imagem registada
         if ($teacher->image) {
             // 2. Reconstrói o caminho correto dentro de storage/app/public/
-            $caminhoCompleto = 'img/teacher/' . $teacher->image;
+            $caminhoCompleto = 'storage/' . $teacher->image;
     
             // 3. Apaga o ficheiro do disco público se ele existir lá
             if (Storage::exists($caminhoCompleto)) {
@@ -153,9 +153,10 @@ class teacherController extends Controller
             $requestImage = $request->file('image');
             $extension = $requestImage->extension();
             $imageName = md5($requestImage->getClientOriginalName() . time()) . '.' . $extension;
-            $requestImage->storeAs('img/teacher', $imageName);
+             $imagePath = $requestImage->storeAs('storage', $imageName, 'public');
 
-            $validatedData['image'] = $imageName;
+            // Substitui o nome da imagem antiga pelo novo nome
+            $validatedData['image'] = $imagePath;
         }
 
         // Atualiza os dados na base de dados
@@ -179,7 +180,7 @@ class teacherController extends Controller
         // 1. Verifica se o estudante tem uma imagem registada
         if ($teacher->image) {
             // 2. Reconstrói o caminho correto dentro de storage/app/public/
-            $caminhoCompleto = 'img/teacher/' . $teacher->image;
+            $caminhoCompleto = 'storage/' . $teacher->image;
     
             // 3. Apaga o ficheiro do disco público se ele existir lá
             if (Storage::exists($caminhoCompleto)) {

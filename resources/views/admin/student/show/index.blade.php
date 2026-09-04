@@ -59,7 +59,7 @@
 										<div class="user-media">
 											{{-- Renderização da foto de perfil dinâmica do estudante ou fallback pré-definido --}}
 											@if($student->image)
-												<img src="{{ asset('storage/app/img/student/'.$student->image) }}" alt="Foto do Estudante" class="avatar avatar-xxl" style="object-fit: cover;">
+												<img src="{{ asset('storage/'.$student->image) }}" alt="Foto do Estudante" class="avatar avatar-xxl" style="object-fit: cover;">
 											@else
 												<img src="{{ asset('images/avatar/9.jpg') }}" alt="Avatar" class="avatar avatar-xxl">
 											@endif

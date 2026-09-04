@@ -59,7 +59,7 @@
 										<div class="user-media">
 											{{-- Foto de perfil dinâmica do formador --}}
 											@if($teacher->image)
-												<img src="{{ asset('img/teacher/'.$teacher->image) }}" alt="Foto do Formador" class="avatar avatar-xxl" style="object-fit: cover;">
+												<img src="{{ asset('storage/'.$teacher->image) }}" alt="Foto do Formador" class="avatar avatar-xxl" style="object-fit: cover;">
 											@else
 												<img src="{{ asset('images/avatar/8.jpg') }}" alt="Foto Padrão" class="avatar avatar-xxl">
 											@endif

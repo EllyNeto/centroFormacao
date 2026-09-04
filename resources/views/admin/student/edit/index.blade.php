@@ -46,7 +46,7 @@
                                     <div class="avatar-upload">
                                         <div class="avatar-preview mb-3">
                                             @if($student->image)
-                                                <div id="imagePreview" style="background-image: url('{{ asset('storage/app/img/student/'.$student->image) }}'); width: 130px; height: 130px; background-size: cover; background-position: center; border-radius: 12px; border: 2px solid #e2e8f0; margin: 0 auto;"></div>
+                                                <div id="imagePreview" style="background-image: url('{{ asset('storage/'.$student->image) }}'); width: 130px; height: 130px; background-size: cover; background-position: center; border-radius: 12px; border: 2px solid #e2e8f0; margin: 0 auto;"></div>
                                             @else
                                                 <div id="imagePreview" style="background-image: url('{{ asset('images/no-img-avatar.png') }}'); width: 130px; height: 130px; background-size: cover; background-position: center; border-radius: 12px; border: 2px solid #e2e8f0; margin: 0 auto;"></div>
                                             @endif

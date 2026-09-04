@@ -70,12 +70,11 @@ class studentController extends Controller
             $requestImage = $request->file('image');
             $extension = $requestImage->getClientOriginalExtension() ?: $requestImage->extension();
             $imageName = md5($requestImage->getClientOriginalName() . time()) . '.' . $extension;
-            $requestImage->storeAs('img/student', $imageName, 'public');
+            $imagePath = $requestImage->storeAs('img/student', $imageName, 'public');
 
-            // Adiciona o nome do ficheiro aos dados validados para gravação
-            $validatedData['image'] = $imageName;
+            // Substitui o nome da imagem antiga pelo novo nome
+            $validatedData['image'] = $imagePath;
         }
-
         // Criação do registo na base de dados com os dados validados
         Student::create($validatedData);
 
