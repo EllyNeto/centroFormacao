@@ -21,7 +21,7 @@ class courseController extends Controller
         $courses = Course::orderBy('id', 'desc')->get();
 
         // Retorna a vista de listagem passando a coleção de cursos
-        return view('course.index.index', ['courses' => $courses]);
+        return view('admin.course.list.index', ['courses' => $courses]); 
     }
 
     /**
@@ -32,7 +32,7 @@ class courseController extends Controller
     public function create()
     {
         // Retorna a vista com o formulário para registar um novo curso
-        return view('course.create.index');
+        return view('admin.course.create.index');
     }
 
     /**

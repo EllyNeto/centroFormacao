@@ -4,14 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use App\Models\Student;
+use App\Models\Payment;
 
-/**
- * Controlador responsável pela gestão das operações CRUD de Estudantes (Student).
- */
-class studentController extends Controller
+class paymentController extends Controller
 {
-    /**
+        /**
      * Exibe a listagem de todos os estudantes registados na base de dados.
      *
      * @return \Illuminate\View\View
@@ -19,10 +16,10 @@ class studentController extends Controller
     public function index()
     {
         // Procura todos os estudantes registados ordenados pelo ID decrescente
-        $students = Student::orderBy('id', 'desc')->get();
+        $payments = Payment::orderBy('id', 'desc')->get();
 
         // Retorna a vista de listagem passando a coleção de estudantes
-        return view('admin.student.list.index', ['students' => $students]);
+        return view('admin.payment.list.index', ['payments' => $payments]);
     }
 
     /**
@@ -33,7 +30,7 @@ class studentController extends Controller
     public function create()
     {
         // Retorna a vista com o formulário para registar um novo estudante
-        return view('admin.student.create.index');
+        return view('admin.payment.create.index');
     }
 
     /**
@@ -65,22 +62,11 @@ class studentController extends Controller
             'image.max'                     => 'A imagem não pode ter um tamanho superior a 2MB.',
         ]);
 
-        // Processamento do upload da fotografia do estudante, se enviada
-        if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $requestImage = $request->file('image');
-            $extension = $requestImage->getClientOriginalExtension() ?: $requestImage->extension();
-            $imageName = md5($requestImage->getClientOriginalName() . time()) . '.' . $extension;
-            $requestImage->storeAs('img/student', $imageName, 'public');
-
-            // Adiciona o nome do ficheiro aos dados validados para gravação
-            $validatedData['image'] = $imageName;
-        }
-
         // Criação do registo na base de dados com os dados validados
-        Student::create($validatedData);
+        Payment::create($validatedData);
 
         // Redireciona para a listagem com mensagem de sucesso na sessão
-        return redirect()->route('student.index')->with('success', 'Estudante registado com sucesso!');
+        return redirect()->route('payment.index')->with('success', 'Estudante registado com sucesso!');
     }
 
     /**
@@ -92,10 +78,10 @@ class studentController extends Controller
     public function show($id)
     {
         // Procura o estudante pelo ID ou lança erro 404 se não for encontrado
-        $student = Student::findOrFail($id);
+        $payment = Payment::findOrFail($id);
 
         // Retorna a vista de detalhes do estudante
-        return view('admin.student.show.index', ['student' => $student]);
+        return view('admin.payment.show.index', ['payment' => $payment]);
     }
 
     /**
@@ -107,10 +93,10 @@ class studentController extends Controller
     public function edit($id)
     {
         // Procura o estudante pelo ID para pré-preencher o formulário
-        $student = Student::findOrFail($id);
+        $payment = Payment::findOrFail($id);
 
         // Retorna a vista de edição passando os dados do estudante
-        return view('admin.student.edit.index', ['student' => $student]);
+        return view('admin.payment.edit.index', ['payment' => $payment]);
     }
 
     /**
@@ -123,7 +109,7 @@ class studentController extends Controller
     public function update(Request $request, $id)
     {
         // Procura o estudante a ser atualizado pelo ID
-        $student = Student::findOrFail($id);
+        $payment = Payment::findOrFail($id);
 
         // Validação dos dados submetidos no formulário de edição
         $validatedData = $request->validate([
@@ -146,33 +132,11 @@ class studentController extends Controller
             'image.max'                     => 'A imagem não pode ter um tamanho superior a 2MB.',
         ]);
 
-        // 1. Verifica se o estudante tem uma imagem registada
-        if ($student->image) {
-            // 2. Reconstrói o caminho correto dentro de storage/app/public/
-            $caminhoCompleto = 'img/student/' . $student->image;
-    
-            // 3. Apaga o ficheiro do disco público se ele existir lá
-            if (Storage::exists($caminhoCompleto)) {
-                Storage::disk('public')->delete($caminhoCompleto);
-            }
-        }
-
-        // Processamento do upload da nova fotografia, se fornecida
-        if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $requestImage = $request->file('image');
-            $extension = $requestImage->getClientOriginalExtension() ?: $requestImage->extension();
-            $imageName = md5($requestImage->getClientOriginalName() . time()) . '.' . $extension;
-            $imagePath = $requestImage->storeAs('img/student', $imageName, 'public');
-
-            // Substitui o nome da imagem antiga pelo novo nome
-            $validatedData['image'] = $imagePath;
-        }
-
         // Atualização das propriedades do estudante na base de dados
-        $student->update($validatedData);
+        $payment->update($validatedData);
 
         // Redireciona para a listagem com mensagem de sucesso na sessão
-        return redirect()->route('student.index')->with('success', 'Estudante atualizado com sucesso!');
+        return redirect()->route('payment.index')->with('success', 'Estudante atualizado com sucesso!');
     }
 
     /**
@@ -185,24 +149,13 @@ class studentController extends Controller
         public function destroy($id)
         {
             // Procura o estudante pelo ID
-            $student = Student::findOrFail($id);
-        
-            // 1. Verifica se o estudante tem uma imagem registada
-            if ($student->image) {
-                // 2. Reconstrói o caminho correto dentro de storage/app/public/
-                $caminhoCompleto = 'img/student/' . $student->image;
-        
-                // 3. Apaga o ficheiro do disco público se ele existir lá
-                if (Storage::exists($caminhoCompleto)) {
-                    Storage::disk('public')->delete($caminhoCompleto);
-                }
-            }
+            $payment = Payment::findOrFail($id);
 
             // Apaga o registo do estudante da base de dados
-            $student->delete();
+            $payment->delete();
         
             // Redireciona para a listagem com mensagem de sucesso na sessão
-            return redirect()->route('student.index')->with('success', 'Estudante eliminado com sucesso!');
+            return redirect()->route('payment.index')->with('success', 'Estudante eliminado com sucesso!');
         }
 
     /**

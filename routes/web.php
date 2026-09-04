@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\courseController;
 use App\Http\Controllers\studentController;
 use App\Http\Controllers\teacherController;
+use App\Http\Controllers\paymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,12 +21,8 @@ Route::get('/', function () {
     return view('dashboard.index');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-});
-
 Route::get('/dashboard/main', function () {
-    return view('dashboard.index');
+    return view('admin.dashboard.index');
 });
 
 /*
@@ -38,7 +35,7 @@ Route::get('/dashboard/main', function () {
 */
 
 // Rota para a listagem de todos os cursos
-Route::get('/course/index', [courseController::class, 'index'])->name('course.index');
+Route::get('/course/index', [courseController::class, 'index'])->name('course.index'); // http://127.0.0.1:8000/course/index
 
 // Rota para apresentar o formulário de criação de novo curso
 Route::get('/course/create', [courseController::class, 'create'])->name('course.create');
@@ -117,3 +114,33 @@ Route::put('/teacher/update/{id}', [teacherController::class, 'update'])->name('
 
 // Rota DELETE para eliminar um formador da base de dados por ID
 Route::delete('/teacher/destroy/{id}', [teacherController::class, 'destroy'])->name('teacher.destroy');
+
+/*
+|--------------------------------------------------------------------------
+| Rotas do Módulo de pagamentos (Finance/Pagamento CRUD)
+|--------------------------------------------------------------------------
+|
+| Gestão completa de pagamentos: Listar, Criar, Salvar, Ver, Editar, Atualizar e Eliminar.
+|
+*/
+
+// Rota GET para a listagem de todos os pagamentos registados
+Route::get('/payment/index', [paymentController::class, 'index'])->name('payment.index');
+
+// Rota GET para apresentar o formulário de registo de novo pagamento
+Route::get('/payment/create', [paymentController::class, 'create'])->name('payment.create');
+
+// Rota POST para processar a gravação dos dados do novo pagamento
+Route::post('/payment/store', [paymentController::class, 'store'])->name('payment.store');
+
+// Rota GET para visualizar os detalhes de um pagamento específico por ID
+Route::get('/payment/{id}', [paymentController::class, 'show'])->name('payment.show');
+
+// Rota GET para apresentar o formulário de edição de um pagamento existente por ID
+Route::get('/payment/edit/{id}', [paymentController::class, 'edit'])->name('payment.edit');
+
+// Rota PUT para processar a atualização dos dados do pagamento por ID
+Route::put('/payment/update/{id}', [paymentController::class, 'update'])->name('payment.update');
+
+// Rota DELETE para eliminar um pagamento da base de dados por ID
+Route::delete('/payment/destroy/{id}', [paymentController::class, 'destroy'])->name('payment.destroy');

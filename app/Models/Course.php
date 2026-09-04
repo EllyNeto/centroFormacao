@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 
 /**
  * Modelo Eloquent representando a entidade Curso (Course).
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Course extends Model
 {
+    //Activar SoftDeletes
+    use SoftDeletes;
     /**
      * Nome da tabela associada ao modelo na base de dados.
      *
@@ -24,6 +27,9 @@ class Course extends Model
      */
     protected $table = 'courses';
 
+    // O Laravel vai tratar automaticamente a coluna 'deleted_at'
+    protected $dates = ['deleted_at']; 
+    
     /**
      * Os atributos que podem ser atribuídos em massa (Mass Assignment).
      *

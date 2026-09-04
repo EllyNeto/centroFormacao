@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Teacher;
 
 /**
@@ -21,7 +22,7 @@ class teacherController extends Controller
         $teachers = Teacher::orderBy('id', 'desc')->get();
 
         // Retorna a vista de listagem passando a coleção de formadores
-        return view('teacher.index.index', ['teachers' => $teachers]);
+        return view('admin.teacher.list.index', ['teachers' => $teachers]);
     }
 
     /**
@@ -32,7 +33,7 @@ class teacherController extends Controller
     public function create()
     {
         // Retorna a vista com o formulário para registar um novo formador
-        return view('teacher.create.index');
+        return view('admin.teacher.create.index');
     }
 
     /**
@@ -58,18 +59,13 @@ class teacherController extends Controller
             'image.image'    => 'O ficheiro de imagem selecionado não é válido.',
             'image.max'      => 'A imagem não pode exceder o tamanho de 2MB.',
         ]);
-
-        // Garantir compatibilidade no campo phone_number
-        if (isset($validatedData['phone'])) {
-            $validatedData['phone_number'] = $validatedData['phone'];
-        }
-
+ 
         // Upload da fotografia do formador se for enviada no formulário
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $requestImage = $request->file('image');
             $extension = $requestImage->extension();
             $imageName = md5($requestImage->getClientOriginalName() . time()) . '.' . $extension;
-            $requestImage->move(public_path('img/teachers'), $imageName);
+            $requestImage->storeAs('img/teacher', $imageName);
 
             // Adiciona o nome do ficheiro aos dados validados
             $validatedData['image'] = $imageName;
@@ -94,7 +90,7 @@ class teacherController extends Controller
         $teacher = Teacher::findOrFail($id);
 
         // Retorna a vista de detalhes passando o objeto $teacher
-        return view('teacher.show.index', ['teacher' => $teacher]);
+        return view('admin.teacher.show.index', ['teacher' => $teacher]);
     }
 
     /**
@@ -109,7 +105,7 @@ class teacherController extends Controller
         $teacher = Teacher::findOrFail($id);
 
         // Retorna a vista de edição pré-preenchida com os dados do formador
-        return view('teacher.edit.index', ['teacher' => $teacher]);
+        return view('admin.teacher.edit.index', ['teacher' => $teacher]);
     }
 
     /**
@@ -141,9 +137,15 @@ class teacherController extends Controller
             'image.max'      => 'A imagem não pode exceder o tamanho de 2MB.',
         ]);
 
-        // Garantir compatibilidade no campo phone_number
-        if (isset($validatedData['phone'])) {
-            $validatedData['phone_number'] = $validatedData['phone'];
+        // 1. Verifica se o estudante tem uma imagem registada
+        if ($teacher->image) {
+            // 2. Reconstrói o caminho correto dentro de storage/app/public/
+            $caminhoCompleto = 'img/teacher/' . $teacher->image;
+    
+            // 3. Apaga o ficheiro do disco público se ele existir lá
+            if (Storage::exists($caminhoCompleto)) {
+                Storage::disk('local')->delete($caminhoCompleto);
+            }
         }
 
         // Upload de nova imagem caso tenha sido selecionada
@@ -151,7 +153,7 @@ class teacherController extends Controller
             $requestImage = $request->file('image');
             $extension = $requestImage->extension();
             $imageName = md5($requestImage->getClientOriginalName() . time()) . '.' . $extension;
-            $requestImage->move(public_path('img/teachers'), $imageName);
+            $requestImage->storeAs('img/teacher', $imageName);
 
             $validatedData['image'] = $imageName;
         }
@@ -173,9 +175,21 @@ class teacherController extends Controller
     {
         // Procura o formador pelo ID
         $teacher = Teacher::findOrFail($id);
-
+        
+        // 1. Verifica se o estudante tem uma imagem registada
+        if ($teacher->image) {
+            // 2. Reconstrói o caminho correto dentro de storage/app/public/
+            $caminhoCompleto = 'img/teacher/' . $teacher->image;
+    
+            // 3. Apaga o ficheiro do disco público se ele existir lá
+            if (Storage::exists($caminhoCompleto)) {
+                Storage::disk('local')->delete($caminhoCompleto);
+            }
+        } 
         // Elimina o registo do formador
         $teacher->delete();
+
+        //falta apagar a foto
 
         // Redireciona para a listagem com mensagem de sucesso
         return redirect()->route('teacher.index')->with('success', 'Formador eliminado com sucesso!');

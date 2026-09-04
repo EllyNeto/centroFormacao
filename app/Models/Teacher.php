@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Teacher extends Model
 {
+    use SoftDeletes;
     /**
      * Nome da tabela associada ao modelo na base de dados.
      *
@@ -28,6 +30,9 @@ class Teacher extends Model
      */
     protected $table = 'teachers';
 
+    // O Laravel vai tratar automaticamente a coluna 'deleted_at'
+    protected $dates = ['deleted_at'];
+    
     /**
      * Os atributos que podem ser atribuídos em massa (Mass Assignment).
      *
