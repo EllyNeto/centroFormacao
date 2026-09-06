@@ -64,6 +64,18 @@
 							<li><a href="{{ route('course.create') }}">Adicionar novo</a></li>
 						</ul>
 					</li>
+					{{-- Seção Módulo de Turma --}}
+					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+						<i class="material-symbols-outlined">groups</i>
+						<span class="nav-text">Turma</span>
+					</a>
+						<ul aria-expanded="false">
+							{{-- Link para a listagem de turmas --}}
+							<li><a href="{{ route('class.index') }}">Listar</a></li>
+							{{-- Link para criação de nova turma --}}
+							<li><a href="{{ route('class.create') }}">Adicionar novo</a></li>
+						</ul>
+					</li>
 {{-- 
 					</li>
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">

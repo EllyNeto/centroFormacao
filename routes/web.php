@@ -5,6 +5,7 @@ use App\Http\Controllers\courseController;
 use App\Http\Controllers\studentController;
 use App\Http\Controllers\teacherController;
 use App\Http\Controllers\paymentController;
+use App\Http\Controllers\classController;
 
 /*
 |--------------------------------------------------------------------------
@@ -144,3 +145,33 @@ Route::put('/payment/update/{id}', [paymentController::class, 'update'])->name('
 
 // Rota DELETE para eliminar um pagamento da base de dados por ID
 Route::delete('/payment/destroy/{id}', [paymentController::class, 'destroy'])->name('payment.destroy');
+
+/*
+|--------------------------------------------------------------------------
+| Rotas do Módulo de Turmas (Class/Turma CRUD)
+|--------------------------------------------------------------------------
+|
+| Gestão completa de turmas: Listar, Criar, Salvar, Ver, Editar, Atualizar e Eliminar.
+|
+*/
+
+// Rota GET para a listagem de todas as turmas registadas
+Route::get('/class/index', [classController::class, 'index'])->name('class.index');
+
+// Rota GET para apresentar o formulário de registo de nova turma
+Route::get('/class/create', [classController::class, 'create'])->name('class.create');
+
+// Rota POST para processar a gravação dos dados da nova turma
+Route::post('/class/store', [classController::class, 'store'])->name('class.store');
+
+// Rota GET para visualizar os detalhes de uma turma específica por ID
+Route::get('/class/{id}', [classController::class, 'show'])->name('class.show');
+
+// Rota GET para apresentar o formulário de edição de uma turma existente por ID
+Route::get('/class/edit/{id}', [classController::class, 'edit'])->name('class.edit');
+
+// Rota PUT para processar a atualização dos dados da turma por ID
+Route::put('/class/update/{id}', [classController::class, 'update'])->name('class.update');
+
+// Rota DELETE para eliminar uma turma da base de dados por ID
+Route::delete('/class/destroy/{id}', [classController::class, 'destroy'])->name('class.destroy');

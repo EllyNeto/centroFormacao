@@ -298,3 +298,127 @@ table.dataTable td .btn-info {
 #main-wrapper {
     opacity: 1 !important;
 }
+
+/* ==========================================================================
+   Suporte Completo ao Modo Escuro (Dark Mode) para Profile Datatable & Alerts Alt
+   ========================================================================== */
+
+[data-theme-version="dark"] .card-header.flex-wrap {
+    background-color: #272738 !important;
+    border-bottom: 1px solid #33334d !important;
+}
+
+[data-theme-version="dark"] .card-header .card-title {
+    color: #f1f5f9 !important;
+}
+
+[data-theme-version="dark"] .card-header .subtitle {
+    color: #94a3b8 !important;
+}
+
+[data-theme-version="dark"] .table th, 
+[data-theme-version="dark"] table.dataTable th,
+[data-theme-version="dark"] table.dataTable thead th,
+[data-theme-version="dark"] .profile-tab thead th {
+    background-color: #2e2b5c !important; /* Roxo/Indigo Escuro para o Datatable */
+    color: #c7d2fe !important;            /* Texto Lilás Claro */
+}
+
+[data-theme-version="dark"] .table td, 
+[data-theme-version="dark"] table.dataTable td,
+[data-theme-version="dark"] table.dataTable tbody td,
+[data-theme-version="dark"] .profile-tab tbody td {
+    background-color: #1e1e2d !important;
+    color: #cbd5e1 !important;
+    border-bottom: 1px solid #2d2d3f !important;
+}
+
+[data-theme-version="dark"] .table tbody tr:hover td,
+[data-theme-version="dark"] table.dataTable tbody tr:hover td {
+    background-color: #28283d !important;
+}
+
+[data-theme-version="dark"] .table td a.text-primary,
+[data-theme-version="dark"] table.dataTable td a.text-primary {
+    color: #e2e8f0 !important;
+}
+
+[data-theme-version="dark"] .table td a.text-primary:hover,
+[data-theme-version="dark"] table.dataTable td a.text-primary:hover {
+    color: #a5b4fc !important;
+}
+
+[data-theme-version="dark"] .table td .avatar,
+[data-theme-version="dark"] table.dataTable td .avatar {
+    border-color: #334155 !important;
+}
+
+/* Controlos do DataTables em Modo Escuro */
+[data-theme-version="dark"] .dataTables_wrapper .dataTables_length,
+[data-theme-version="dark"] .dataTables_wrapper .dataTables_filter,
+[data-theme-version="dark"] .dataTables_wrapper .dataTables_info {
+    color: #94a3b8 !important;
+}
+
+[data-theme-version="dark"] .dataTables_wrapper .dataTables_filter input,
+[data-theme-version="dark"] .dataTables_wrapper .dataTables_length select {
+    background-color: #1e1e2d !important;
+    color: #f1f5f9 !important;
+    border-color: #334155 !important;
+}
+
+[data-theme-version="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: #cbd5e1 !important;
+    background-color: #272738 !important;
+}
+
+[data-theme-version="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #6366f1 !important;
+    color: #ffffff !important;
+}
+
+/* Form Controls & Labels em Modo Escuro */
+[data-theme-version="dark"] .form-label.text-primary {
+    color: #a5b4fc !important;
+}
+
+[data-theme-version="dark"] .form-control {
+    background-color: #1e1e2d !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+[data-theme-version="dark"] .form-control:focus {
+    background-color: #1e1e2d !important;
+    color: #ffffff !important;
+    border-color: #6366f1 !important;
+}
+
+/* Alertas no Modo Escuro (Alerts Alt) */
+[data-theme-version="dark"] .alert-alt.alert-success {
+    background-color: #064e3b !important;
+    border-color: #047857 !important;
+    border-left-color: #22c55e !important;
+    color: #a7f3d0 !important;
+}
+
+[data-theme-version="dark"] .alert-alt.alert-danger {
+    background-color: #7f1d1d !important;
+    border-color: #b91c1c !important;
+    border-left-color: #ef4444 !important;
+    color: #fecaca !important;
+}
+
+[data-theme-version="dark"] .alert-alt.alert-warning {
+    background-color: #78350f !important;
+    border-color: #b45309 !important;
+    border-left-color: #eab308 !important;
+    color: #fef08a !important;
+}
+
+[data-theme-version="dark"] .alert-alt.alert-info {
+    background-color: #164e63 !important;
+    border-color: #0e7490 !important;
+    border-left-color: #06b6d4 !important;
+    color: #cffafe !important;
+}

@@ -526,24 +526,24 @@ var Akademi  = function(){
 				if(jQuery(this).hasClass('active')){
 					jQuery('body').attr('data-theme-version','dark');
 					setCookie('version', 'dark');
+					localStorage.setItem('version', 'dark');
 					jQuery('#theme_version').val('dark');
 				}else{
 					jQuery('body').attr('data-theme-version','light');
 					setCookie('version', 'light');
+					localStorage.setItem('version', 'light');
 					jQuery('#theme_version').val('light');					
 				}
-				$('.default-select').selectpicker('refresh');
+				if(jQuery('.default-select').length > 0) {
+					jQuery('.default-select').selectpicker('refresh');
+				}
 			});
-			var version = getCookie('version');
-			
+			var version = getCookie('version') || localStorage.getItem('version') || 'light';
 			jQuery('body').attr('data-theme-version', version);
 			jQuery('.dz-theme-mode').removeClass('active');
-			setTimeout(function(){
-				if(jQuery('body').attr('data-theme-version') === "dark")
-				{
-					jQuery('.dz-theme-mode').addClass('active');
-				}
-			},1500)
+			if (version === "dark") {
+				jQuery('.dz-theme-mode').addClass('active');
+			}
 		}
 	}
    var handleDzFullScreen = function() {

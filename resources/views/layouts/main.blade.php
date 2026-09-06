@@ -46,7 +46,7 @@
 	@stack('styles')
 	
 </head>
-<body>
+<body data-theme-version="{{ $_COOKIE['version'] ?? 'light' }}">
 
     <!--*******************
         Preloader start
@@ -150,28 +150,17 @@
 	<script src="{{asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
 	<script src="{{asset('vendor/wow-master/dist/wow.min.js')}}"></script>
 
+	<!-- Script Datatable -->
+	<script src="{{asset('vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('js/plugins-init/datatables.init.js')}}"></script>
+	<script src="{{asset('vendor/jquery-nice-select/js/jquery.nice-select.min.js')}}"></script>
+
 	@stack('scripts')
 
 	<script src="{{asset('js/custom.min.js')}}"></script>
 	<script src="{{asset('js/dlabnav-init.js')}}"></script>
 	<script src="{{asset('js/demo.js')}}"></script>
-    <script src="{{asset('js/styleSwitcher.js')}}"></script>
-
-	<!-- Required vendors for Datatable-->
-    <script src="vendor/global/global.min.js"></script>
-   
-    <script src="vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-	
-    <!-- Script Datatable -->
-    <script src="{{asset('vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('js/plugins-init/datatables.init.js')}}"></script>
-
-	<script src="{{asset('vendor/jquery-nice-select/js/jquery.nice-select.min.js')}}"></script>
-
-    <script src="{{asset('js/custom.min.js')}}"></script>
-	<script src="{{asset('js/dlabnav-init.js')}}"></script>
-	<script src="{{asset('js/demo.js')}}"></script>
-    <script src="{{asset('js/styleSwitcher.js')}}"></script>
+	<script src="{{asset('js/styleSwitcher.js')}}"></script>
 
 	
 	<!-- code-highlight for Datatable-->
