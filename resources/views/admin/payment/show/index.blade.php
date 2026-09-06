@@ -1,8 +1,110 @@
 @extends('layouts.main')
 
-@section('title', 'Finance')
+@section('title', 'Detalhes do Pagamento')
 
 @section('content')
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    {{-- Cabeçalho do cartão com o título e botões de ação para voltar ou editar --}}
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0">Detalhes do Pagamento</h4>
+                        <div>
+                            <a href="{{ route('payment.index') }}" class="btn btn-secondary btn-sm me-1">
+                                <i class="fa fa-arrow-left me-1"></i> Voltar à Listagem
+                            </a>
+                            <a href="{{ route('payment.edit', $payment->id) }}" class="btn btn-primary btn-sm">
+                                <i class="fa fa-pencil me-1"></i> Editar Pagamento
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="row">
+                            {{-- Coluna Principal: Destaque do Valor e Tipo de Pagamento --}}
+                            <div class="col-xl-8 col-lg-7">
+                                <div class="mb-4">
+                                    <span class="badge badge-primary light mb-2">#ID {{ $payment->id }}</span>
+                                    <h2 class="font-w700 text-black mb-1">{{ $payment->type_of_payment }}</h2>
+                                    <h3 class="text-primary font-w600 mt-2">
+                                        {{ number_format($payment->value, 2, ',', '.') }} <small class="fs-16">{{ $payment->currency }}</small>
+                                    </h3>
+                                </div>
+
+                                <div class="mb-4">
+                                    <h5 class="text-primary font-w600">Referência do Comprovativo</h5>
+                                    <p class="fs-16 font-w500 text-dark">
+                                        <i class="fa fa-receipt me-2 text-muted"></i> Nº {{ $payment->reference }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {{-- Coluna Lateral: Resumo de Dados e Eliminação --}}
+                            <div class="col-xl-4 col-lg-5">
+                                <div class="card bg-light border-0">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary mb-3">Informações de Registo</h5>
+                                        
+                                        <ul class="list-group list-group-flush bg-transparent">
+                                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
+                                                <span class="text-muted"><i class="fa fa-hashtag me-2"></i> ID Pagamento:</span>
+                                                <strong>#{{ $payment->id }}</strong>
+                                            </li>
+                                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
+                                                <span class="text-muted"><i class="fa fa-list me-2"></i> Tipo:</span>
+                                                <strong>{{ $payment->type_of_payment }}</strong>
+                                            </li>
+                                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
+                                                <span class="text-muted"><i class="fa fa-money me-2"></i> Valor:</span>
+                                                <strong>{{ number_format($payment->value, 2, ',', '.') }} {{ $payment->currency }}</strong>
+                                            </li>
+                                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
+                                                <span class="text-muted"><i class="fa fa-barcode me-2"></i> Referência:</span>
+                                                <strong>#{{ $payment->reference }}</strong>
+                                            </li>
+                                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
+                                                <span class="text-muted"><i class="fa fa-check-circle me-2"></i> Estado:</span>
+                                                @if($payment->status)
+                                                    <strong class="text-success">Concluído / Pago</strong>
+                                                @else
+                                                    <strong class="text-warning">Pendente / Cancelado</strong>
+                                                @endif
+                                            </li>
+                                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
+                                                <span class="text-muted"><i class="fa fa-clock-o me-2"></i> Data Pagamento:</span>
+                                                <strong>{{ $payment->date ? \Carbon\Carbon::parse($payment->date)->format('d/m/Y H:i') : 'N/D' }}</strong>
+                                            </li>
+                                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
+                                                <span class="text-muted"><i class="fa fa-calendar me-2"></i> Data de Registo:</span>
+                                                <strong>{{ $payment->created_at ? $payment->created_at->format('d/m/Y H:i') : 'N/D' }}</strong>
+                                            </li>
+                                        </ul>
+
+                                        {{-- Formulário de exclusão com confirmação JS --}}
+                                        <div class="mt-4 pt-2 d-grid gap-2">
+                                            <form action="{{ route('payment.destroy', $payment->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este pagamento?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger w-100">
+                                                    <i class="fa fa-trash me-1"></i> Eliminar Pagamento
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Preservação integral do código de template estático original em comentários Blade --}}
+{{--
 <!--**********************************
             Content body start
         ***********************************-->
@@ -913,4 +1015,5 @@
         <!--**********************************
             Content body end
         ***********************************-->
+--}}
 @endsection

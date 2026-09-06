@@ -8,143 +8,142 @@
             Content body start
         ***********************************-->
 <div class="content-body">
-    {{-- Alerta de sucesso exibido se existir mensagem gravada na sessão flash --}}
+    {{-- Alerta de sucesso no modelo Alerts Alt exibido quando existe mensagem na sessão --}}
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show mb-4 me-4 ms-4" role="alert">
-            <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
+        <div class="alert alert-success alert-alt alert-dismissible fade show mb-4 me-4 ms-4" role="alert">
+            <div><strong>Sucesso!</strong> {{ session('success') }}</div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-
     <!-- Container principal com largura total -->
     <div class="container-fluid">
         <div class="row">
             <!-- Coluna Principal da Tabela ocupando 100% da largura -->
             <div class="col-xl-12">
                 <div class="card" id="accordion-one">
-                    <!-- Cabeçalho do Cartão com Título e Botão de Ação -->
-                    <div class="card-header flex-wrap px-3">
+                    <!-- Cabeçalho do Cartão no modelo Profile Datatable -->
+                    <div class="card-header flex-wrap px-3 d-flex justify-content-between align-items-center">
                         <div>
                             <h4 class="card-title">Gestão de Formadores</h4>
-                            <p class="m-0 subtitle">Lista de todos os formadores e professores registados</p>
+                            <p class="m-0 subtitle">Lista de todos os formadores e professores registados de formadores</p>
                         </div>
-                        <ul class="nav nav-tabs dzm-tabs" id="myTab" role="tablist">
+                        <div class="d-flex align-items-center">
+
                             {{-- Botão para redirecionar para a página de registo de formador --}}
                             <a href="{{ route('teacher.create') }}" class="btn btn-primary btn-sm">
-                                Adicionar Novo Formador
+                                <i class="fa fa-plus me-1"></i> Adicionar Novo Formador
                             </a>
-                        </ul>
+                        </div>
                     </div>
 
-                    <!-- Conteúdo das Abas / Tabela Datatable -->
+                    <!-- Conteúdo das Abas / Tabela Datatable Profile -->
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="Preview" role="tabpanel" aria-labelledby="home-tab">
-                            <div class="card-body p-0">
+                            <div class="card-body p-3">
                                 <div class="table-responsive">
-                                    {{-- Tabela idêntica à dos Cursos com inclusão da coluna Foto --}}
-                                    <table id="example" class="display table w-100" style="width: 100%;">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#ID</th>
-                                                            <th>Foto</th>
-                                                            <th>Nome Completo</th>
-                                                            <th>E-mail</th>
-                                                            <th>Nº do BI</th>
-                                                            <th>Telefone</th>
-                                                            <th>Especialidade</th>
-                                                            <th>Estado</th>
-                                                            <th class="text-center">Ações</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {{-- Iteração dinâmica sobre a coleção $teachers --}}
-                                                        @forelse($teachers as $teacherItem)
-                                                            <tr>
-                                                                <td><strong>#{{ $teacherItem->id }}</strong></td>
-                                                                <td>
-                                                                    {{-- Exibição da foto do formador ou imagem padrão --}}
-                                                                    @if($teacherItem->image)
-                                                                        <img src="{{ asset('storage/'.$teacherItem->image) }}" alt="Foto" class="avatar avatar-sm rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-                                                                    @else
-                                                                        <img src="{{ asset('images/avatar/8.jpg') }}" alt="Sem Foto" class="avatar avatar-sm rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-                                                                    @endif
-                                                                </td>
-                                                                <td>
-                                                                    {{-- Nome com link para os detalhes do formador --}}
-                                                                    <a href="{{ route('teacher.show', $teacherItem->id) }}" class="text-primary font-w600">
-                                                                        {{ $teacherItem->name }}
-                                                                    </a>
-                                                                </td>
-                                                                <td>{{ $teacherItem->email }}</td>
-                                                                <td>{{ $teacherItem->identity_card_number ?: 'N/D' }}</td>
-                                                                <td>
-                                                                    <i class="fa fa-phone text-muted me-1"></i> {{ $teacherItem->phone_number ?? $teacherItem->phone ?? 'N/D' }}
-                                                                </td>
-                                                                <td>
-                                                                    <span class="badge badge-info light">{{ $teacherItem->specialty ?: 'Formador' }}</span>
-                                                                </td>
-                                                                <td>
-                                                                    @if($teacherItem->status)
-                                                                        <span class="badge badge-success light">Activo</span>
-                                                                    @else
-                                                                        <span class="badge badge-danger light">Desativo</span>
-                                                                    @endif
-                                                                </td>
-                                                                <td class="text-center">
-                                                                    <div class="d-flex justify-content-center">
-                                                                        {{-- Botão Ver Detalhes --}}
-                                                                        <a href="{{ route('teacher.show', $teacherItem->id) }}" class="btn btn-info shadow btn-xs sharp me-1" title="Ver Detalhes">
-                                                                            <i class="fa fa-eye"></i>
-                                                                        </a>
-                                                                        
-                                                                        {{-- Botão Editar Formador --}}
-                                                                        <a href="{{ route('teacher.edit', $teacherItem->id) }}" class="btn btn-primary shadow btn-xs sharp me-1" title="Editar Formador">
-                                                                            <i class="fa fa-pencil"></i>
-                                                                        </a>
-                        
-                                                                        {{-- Formulário com confirmação para Eliminar --}}
-                                                                        <form action="{{ route('teacher.destroy', $teacherItem->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este formador?');" style="display: inline;">
-                                                                            @csrf
-                                                                            @method('DELETE')
-                                                                            <button type="submit" class="btn btn-danger shadow btn-xs sharp" title="Eliminar Formador">
-                                                                                <i class="fa fa-trash"></i>
-                                                                            </button>
-                                                                        </form>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        @empty
-                                                            <tr>
-                                                                <td colspan="9" class="text-center py-4 text-muted">
-                                                                    <i class="fa fa-user-times fs-24 mb-2 d-block"></i>
-                                                                    Nenhum formador encontrado.
-                                                                </td>
-                                                            </tr>
-                                                        @endforelse
-                                                    </tbody>													
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th>#ID</th>
-                                                            <th>Foto</th>
-                                                            <th>Nome Completo</th>
-                                                            <th>E-mail</th>
-                                                            <th>Nº do BI</th>
-                                                            <th>Telefone</th>
-                                                            <th>Especialidade</th>
-                                                            <th>Estado</th>
-                                                            <th class="text-center">Ações</th>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {{-- Tabela idêntica ao modelo Profile Datatable --}}
+                                    <table id="example" class="table-responsive-lg table display dataTablesCard student-tab profile-tab dataTable no-footer w-100" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>#ID</th>
+                                                <th>Foto</th>
+                                                <th>Nome Completo</th>
+                                                <th>E-mail</th>
+                                                <th>Nº do BI</th>
+                                                <th>Telefone</th>
+                                                <th>Especialidade</th>
+                                                <th>Estado</th>
+                                                <th class="text-center">Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{-- Iteração dinâmica sobre a coleção $teachers --}}
+                                            @forelse($teachers as $teacherItem)
+                                                <tr>
+                                                    <td><strong>#{{ $teacherItem->id }}</strong></td>
+                                                    <td>
+                                                        {{-- Exibição da foto do formador em avatar circular --}}
+                                                        @if($teacherItem->image)
+                                                            <img src="{{ asset('storage/'.$teacherItem->image) }}" alt="Foto" class="avatar avatar-sm rounded-circle">
+                                                        @else
+                                                            <img src="{{ asset('images/avatar/8.jpg') }}" alt="Sem Foto" class="avatar avatar-sm rounded-circle">
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        {{-- Nome com link para os detalhes do formador --}}
+                                                        <a href="{{ route('teacher.show', $teacherItem->id) }}" class="text-primary font-w600">
+                                                            {{ $teacherItem->name }}
+                                                        </a>
+                                                    </td>
+                                                    <td>{{ $teacherItem->email }}</td>
+                                                    <td>{{ $teacherItem->identity_card_number ?: 'N/D' }}</td>
+                                                    <td>
+                                                        <i class="fa fa-phone text-muted me-1"></i> {{ $teacherItem->phone_number ?? $teacherItem->phone ?? 'N/D' }}
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-info light">{{ $teacherItem->specialty ?: 'Formador' }}</span>
+                                                    </td>
+                                                    <td>
+                                                        @if($teacherItem->status)
+                                                            <span class="badge badge-success light">Activo</span>
+                                                        @else
+                                                            <span class="badge badge-danger light">Desativo</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="d-flex justify-content-center">
+                                                            {{-- Botão Ver Detalhes --}}
+                                                            <a href="{{ route('teacher.show', $teacherItem->id) }}" class="btn btn-info shadow btn-xs sharp me-1" title="Ver Detalhes">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                            
+                                                            {{-- Botão Editar Formador --}}
+                                                            <a href="{{ route('teacher.edit', $teacherItem->id) }}" class="btn btn-primary shadow btn-xs sharp me-1" title="Editar Formador">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </a>
+                                            
+                                                            {{-- Formulário com confirmação para Eliminar --}}
+                                                            <form action="{{ route('teacher.destroy', $teacherItem->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este formador?');" style="display: inline;">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger shadow btn-xs sharp" title="Eliminar Formador">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="9" class="text-center py-4 text-muted">
+                                                        <i class="fa fa-user-times fs-24 mb-2 d-block"></i>
+                                                        Nenhum formador encontrado.
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                        {{-- <tfoot>
+                                            <tr>
+                                                <th>#ID</th>
+                                                <th>Foto</th>
+                                                <th>Nome Completo</th>
+                                                <th>E-mail</th>
+                                                <th>Nº do BI</th>
+                                                <th>Telefone</th>
+                                                <th>Especialidade</th>
+                                                <th>Estado</th>
+                                                <th class="text-center">Ações</th>
+                                            </tr>
+                                        </tfoot> --}}
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div> </div>
         </div>
     </div>
 </div>

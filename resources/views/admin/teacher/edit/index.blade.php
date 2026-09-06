@@ -28,13 +28,15 @@
                         <div class="card-body">
                             {{-- Exibição de erros de validação se houver algum erro --}}
                             @if ($errors->any())
-                                <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-                                    <h6 class="alert-heading font-w600 mb-1"><i class="fa fa-exclamation-triangle me-2"></i> Erro ao atualizar formador:</h6>
-                                    <ul class="mb-0 ps-3">
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
+                                <div class="alert alert-danger alert-alt alert-dismissible fade show mb-4" role="alert">
+                                    <div>
+                                        <strong>Erro!</strong> Por favor verifique os seguintes problemas:
+                                        <ul class="mb-0 mt-1 ps-3">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             @endif

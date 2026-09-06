@@ -8,13 +8,13 @@
 @section('content')
 
 <div class="content-body">
-    {{-- Alerta de sucesso quando existe uma mensagem na sessão (flash session)
+    {{-- Alerta de sucesso no modelo Alerts Alt exibido quando existe mensagem na sessão --}}
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-            <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
+        <div class="alert alert-success alert-alt alert-dismissible fade show mb-4 me-4 ms-4" role="alert">
+            <div><strong>Sucesso!</strong> {{ session('success') }}</div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    @endif		 --}}
+    @endif
             <!-- container starts -->
             <div class="container-fluid">
                 <!-- row -->
@@ -25,111 +25,112 @@
 								<!-- Column starts -->
 								<div class="col-xl-12">
 									<div class="card" id="accordion-one">
-										<div class="card-header flex-wrap px-3">
+										<!-- Cabeçalho do Cartão no modelo Profile Datatable -->
+										<div class="card-header flex-wrap px-3 d-flex justify-content-between align-items-center">
 											<div>
 												<h4 class="card-title">Gestão de Cursos</h4>
 												<p class="m-0 subtitle">Lista de todos os cursos de formação registados</p>
 											</div>
-											<ul class="nav nav-tabs dzm-tabs" id="myTab" role="tablist">
-                                                <a href="{{ route('course.create') }}" class="btn btn-primary btn-sm">
-                                                    Adicionar Novo Curso
-                                                </a>
-												{{-- <li class="nav-item" role="presentation">
-													<button class="nav-link active " id="home-tab" data-bs-toggle="tab" data-bs-target="#Preview" type="button" role="tab"  aria-selected="true">Preview</button>
-												</li> --}}
-												{{-- <li class="nav-item" role="presentation">
-													<button class="nav-link " id="profile-tab" data-bs-toggle="tab" data-bs-target="#html" type="button" role="tab" aria-controls="html" aria-selected="false">HTML</button>
-												</li> --}}
-											</ul>
+											<div class="d-flex align-items-center">
+												<a href="{{ route('course.create') }}" class="btn btn-primary btn-sm">
+													<i class="fa fa-plus me-1"></i> Adicionar Novo Curso
+												</a>
+											</div>
 										</div>
-										<!--tab-content-->
+
+										<!-- Conteúdo das Abas / Tabela Datatable Profile -->
 										<div class="tab-content" id="myTabContent">
 											<div class="tab-pane fade show active" id="Preview" role="tabpanel" aria-labelledby="home-tab">
-											 <div class="card-body p-0">
-												<div class="table-responsive">
-													<table id="example" class="display table w-100" style="width: 100%;">
-														<thead>
-															<tr>
-                                                                 <th>#ID</th>
-                                                                 <th>Nome do Curso</th>
-                                                                 <th>Estado</th>
-                                                                 <th>Duração</th>
-                                                                 <th>Descrição</th>
-                                                                 <th class="text-center">Ações</th>
-															</tr>
-														</thead>
-														<tbody>
-                                                        {{-- Iteração dinâmica sobre a coleção $courses da base de dados --}}
-                                                        @forelse($courses as $courseItem)
-                                                            <tr>
-                                                                <td><strong>#{{ $courseItem->id }}</strong></td>
-                                                                <td>
-                                                                    <a href="{{ route('course.show', $courseItem->id) }}" class="text-primary font-w600">
-                                                                        {{ $courseItem->name }}
-                                                                    </a>
-                                                                </td>
-																	<td>
-																		@if($courseItem->status)
-																			<span class="badge badge-success light">Activo</span>
-																		@else
-																			<span class="badge badge-danger light">Desativo</span>
-																		@endif
-																	</td>
-                                                                <td>
-                                                                    <i class="fa fa-clock-o text-muted me-1"></i> {{ $courseItem->duration }} horas
-                                                                </td>
-                                                                <td>
-                                                                    {{ Str::limit($courseItem->description, 60, '...') ?: 'Sem descrição' }}
-                                                                </td>
-                                                                <td class="text-center">
-                                                                    <div class="d-flex justify-content-center">
-                                                                        {{-- Botão Ver --}}
-                                                                        <a href="{{ route('course.show', $courseItem->id) }}" class="btn btn-info shadow btn-xs sharp me-1" title="Ver Detalhes">
-                                                                            <i class="fa fa-eye"></i>
-                                                                        </a>
-                                                                        
-                                                                        {{-- Botão Editar --}}
-                                                                        <a href="{{ route('course.edit', $courseItem->id) }}" class="btn btn-primary shadow btn-xs sharp me-1" title="Editar Curso">
-                                                                            <i class="fa fa-pencil"></i>
-                                                                        </a>
-                        
-                                                                        {{-- Botão Eliminar --}}
-                                                                        <form action="{{ route('course.destroy', $courseItem->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este curso?');" style="display: inline;">
-                                                                            @csrf
-                                                                            @method('DELETE')
-                                                                            <button type="submit" class="btn btn-danger shadow btn-xs sharp" title="Eliminar Curso">
-                                                                                <i class="fa fa-trash"></i>
-                                                                            </button>
-                                                                        </form>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                                @empty
-                                                                    <tr>
-                                                                        <td colspan="6" class="text-center py-4 text-muted">
-                                                                            <i class="fa fa-folder-open-o fs-24 mb-2 d-block"></i>
-                                                                            Nenhum curso encontrado.
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforelse
-                                                            </tbody>													
-                                                            <tfoot>
-                                                                <tr>
-                                                                    <th>#ID</th>
-                                                                    <th>Nome do Curso</th>
-                                                                    <th>Estado</th>
-                                                                    <th>Duração</th>
-                                                                    <th>Descrição</th>
-                                                                    <th class="text-center">Ações</th>
-                                                                </tr>
-                                                            </tfoot>
-                                                    </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+												<div class="card-body p-3">
+													<div class="table-responsive">
+														{{-- Tabela idêntica ao modelo Profile Datatable --}}
+														<table id="example" class="table-responsive-lg table display dataTablesCard student-tab profile-tab dataTable no-footer w-100" style="width: 100%;">
+															<thead>
+																<tr>
+																	<th>#ID</th>
+																	<th>Nome do Curso</th>
+																	<th>Estado</th>
+																	<th>Duração</th>
+																	<th>Descrição</th>
+																	<th class="text-center">Ações</th>
+																</tr>
+															</thead>
+															<tbody>
+																{{-- Iteração dinâmica sobre a coleção $courses da base de dados --}}
+																@forelse($courses as $courseItem)
+																	<tr>
+																		<td><strong>#{{ $courseItem->id }}</strong></td>
+																		<td>
+																			<a href="{{ route('course.show', $courseItem->id) }}" class="text-primary font-w600">
+																				{{ $courseItem->name }}
+																			</a>
+																		</td>
+																		<td>
+																			@if($courseItem->status)
+																				<span class="badge badge-success light">Activo</span>
+																			@else
+																				<span class="badge badge-danger light">Desativo</span>
+																			@endif
+																		</td>
+																		<td>
+																			<i class="fa fa-clock-o text-muted me-1"></i> {{ $courseItem->duration }} horas
+																		</td>
+																		<td>
+																			{{ Str::limit($courseItem->description, 60, '...') ?: 'Sem descrição' }}
+																		</td>
+																		<td class="text-center">
+																			<div class="d-flex justify-content-center">
+																				{{-- Botão Ver --}}
+																				<a href="{{ route('course.show', $courseItem->id) }}" class="btn btn-info shadow btn-xs sharp me-1" title="Ver Detalhes">
+																					<i class="fa fa-eye"></i>
+																				</a>
+																				
+																				{{-- Botão Editar --}}
+																				<a href="{{ route('course.edit', $courseItem->id) }}" class="btn btn-primary shadow btn-xs sharp me-1" title="Editar Curso">
+																					<i class="fa fa-pencil"></i>
+																				</a>
+																
+																				{{-- Botão Eliminar --}}
+																				<form action="{{ route('course.destroy', $courseItem->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este curso?');" style="display: inline;">
+																					@csrf
+																					@method('DELETE')
+																					<button type="submit" class="btn btn-danger shadow btn-xs sharp" title="Eliminar Curso">
+																						<i class="fa fa-trash"></i>
+																					</button>
+																				</form>
+																			</div>
+																		</td>
+																	</tr>
+																@empty
+																	<tr>
+																		<td colspan="6" class="text-center py-4 text-muted">
+																			<i class="fa fa-folder-open-o fs-24 mb-2 d-block"></i>
+																			Nenhum curso encontrado.
+																		</td>
+																	</tr>
+																@endforelse
+															</tbody>													
+															{{-- <tfoot>
+																<tr>
+																	<th>#ID</th>
+																	<th>Nome do Curso</th>
+																	<th>Estado</th>
+																	<th>Duração</th>
+																	<th>Descrição</th>
+																	<th class="text-center">Ações</th>
+																</tr>
+															</tfoot> --}}
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
 <!--**********************************
             Content body start

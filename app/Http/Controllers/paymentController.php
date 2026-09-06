@@ -2,105 +2,116 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 
+/**
+ * Controlador responsável pela gestão completa das operações CRUD da entidade Pagamento (Payment).
+ */
 class paymentController extends Controller
 {
-        /**
-     * Exibe a listagem de todos os estudantes registados na base de dados.
+    /**
+     * Exibe a listagem de todos os pagamentos registados na base de dados.
      *
      * @return \Illuminate\View\View
      */
     public function index()
     {
-        // Procura todos os estudantes registados ordenados pelo ID decrescente
+        // Procura todos os pagamentos registados ordenados pelo ID decrescente (mais recentes primeiro)
         $payments = Payment::orderBy('id', 'desc')->get();
 
-        // Retorna a vista de listagem passando a coleção de estudantes
+        // Retorna a vista de listagem passando a coleção de pagamentos
         return view('admin.payment.list.index', ['payments' => $payments]);
     }
 
     /**
-     * Exibe o formulário de criação de um novo estudante.
+     * Exibe o formulário para registar um novo pagamento.
      *
      * @return \Illuminate\View\View
      */
     public function create()
     {
-        // Retorna a vista com o formulário para registar um novo estudante
+        // Retorna a vista contendo o formulário de criação de pagamento
         return view('admin.payment.create.index');
     }
 
     /**
-     * Valida os dados submetidos e guarda um novo estudante na base de dados.
+     * Valida os dados submetidos pelo formulário de criação e guarda um novo pagamento na base de dados.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        // Validação rigorosa dos dados recebidos do formulário de criação
+        // Validação rigorosa dos dados recebidos do formulário de criação de pagamento
         $validatedData = $request->validate([
-            'name'                 => 'required|string|max:255',
-            'email'                => 'required|email|max:255',
-            'identity_card_number' => 'required|string|max:255',
-            'phone'                => 'required|string|max:20',
-            'code'                 => 'required|integer',
-            'image'                => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'type_of_payment' => 'required|string|max:255',
+            'value'           => 'required|numeric|min:0',
+            'reference'       => 'required|integer|min:1',
+            'status'          => 'required|boolean',
+            'date'            => 'nullable|date',
+            'currency'        => 'required|string|max:10',
         ], [
-            'name.required'                 => 'O nome do estudante é obrigatório.',
-            'email.required'                => 'O email é obrigatório.',
-            'email.email'                   => 'Insira um endereço de e-mail válido.',
-            'identity_card_number.required' => 'O número do bilhete de identidade é obrigatório.',
-            'phone.required'                => 'O número de telefone é obrigatório.',
-            'code.required'                 => 'O código do estudante é obrigatório.',
-            'code.integer'                  => 'O código deve ser um número inteiro.',
-            'image.image'                   => 'O ficheiro selecionado deve ser uma imagem.',
-            'image.mimes'                   => 'A imagem deve estar no formato JPG, JPEG, PNG ou WEBP.',
-            'image.max'                     => 'A imagem não pode ter um tamanho superior a 2MB.',
+            'type_of_payment.required' => 'O tipo de pagamento é obrigatório.',
+            'type_of_payment.string'   => 'O tipo de pagamento deve ser um texto válido.',
+            'type_of_payment.max'      => 'O tipo de pagamento não pode exceder 255 carateres.',
+            'value.required'           => 'O valor do pagamento é obrigatório.',
+            'value.numeric'            => 'O valor deve ser um número válido.',
+            'value.min'                => 'O valor não pode ser negativo.',
+            'reference.required'       => 'O número de referência do pagamento é obrigatório.',
+            'reference.integer'        => 'A referência deve ser um número inteiro.',
+            'reference.min'            => 'A referência deve ser um número positivo.',
+            'status.required'          => 'Por favor selecione o estado do pagamento.',
+            'status.boolean'           => 'O estado do pagamento é inválido.',
+            'date.date'                => 'Insira uma data e hora válidas para o pagamento.',
+            'currency.required'        => 'A indicação da moeda é obrigatória.',
+            'currency.max'             => 'A moeda não pode ter mais de 10 carateres.',
         ]);
 
-        // Criação do registo na base de dados com os dados validados
+        // Se a data e hora não forem submetidas, atribui automaticamente o momento atual do sistema (data e hora)
+        if (empty($validatedData['date'])) {
+            $validatedData['date'] = now();
+        }
+
+        // Criação do registo na tabela de pagamentos com os dados validados
         Payment::create($validatedData);
 
-        // Redireciona para a listagem com mensagem de sucesso na sessão
-        return redirect()->route('payment.index')->with('success', 'Estudante registado com sucesso!');
+        // Redireciona a navegação para a listagem principal com mensagem de sucesso armazenada na sessão flash
+        return redirect()->route('payment.index')->with('success', 'Pagamento registado com sucesso!');
     }
 
     /**
-     * Exibe os detalhes de um estudante específico.
+     * Exibe a página de detalhes de um pagamento específico.
      *
      * @param  int  $id
      * @return \Illuminate\View\View
      */
     public function show($id)
     {
-        // Procura o estudante pelo ID ou lança erro 404 se não for encontrado
+        // Procura o pagamento pelo ID ou lança uma exceção de erro 404 (Not Found) se não for encontrado
         $payment = Payment::findOrFail($id);
 
-        // Retorna a vista de detalhes do estudante
+        // Retorna a vista de visualização de detalhes passando o objeto de pagamento
         return view('admin.payment.show.index', ['payment' => $payment]);
     }
 
     /**
-     * Exibe o formulário de edição para um estudante existente.
+     * Exibe o formulário de edição para alterar os dados de um pagamento existente.
      *
      * @param  int  $id
      * @return \Illuminate\View\View
      */
     public function edit($id)
     {
-        // Procura o estudante pelo ID para pré-preencher o formulário
+        // Procura o pagamento pelo ID para pré-preencher o formulário de edição
         $payment = Payment::findOrFail($id);
 
-        // Retorna a vista de edição passando os dados do estudante
+        // Retorna a vista de edição passando o objeto de pagamento encontrado
         return view('admin.payment.edit.index', ['payment' => $payment]);
     }
 
     /**
-     * Valida e atualiza os dados de um estudante existente na base de dados.
+     * Valida e atualiza os dados de um pagamento existente na base de dados.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -108,64 +119,73 @@ class paymentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Procura o estudante a ser atualizado pelo ID
+        // Procura o pagamento a ser atualizado pelo ID fornecido
         $payment = Payment::findOrFail($id);
 
-        // Validação dos dados submetidos no formulário de edição
+        // Validação dos dados submetidos no formulário de edição do pagamento
         $validatedData = $request->validate([
-            'name'                 => 'required|string|max:255',
-            'email'                => 'required|email|max:255',
-            'identity_card_number' => 'required|string|max:255',
-            'phone'                => 'required|string|max:20',
-            'code'                 => 'required|integer',
-            'image'                => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'type_of_payment' => 'required|string|max:255',
+            'value'           => 'required|numeric|min:0',
+            'reference'       => 'required|integer|min:1',
+            'status'          => 'required|boolean',
+            'date'            => 'nullable|date',
+            'currency'        => 'required|string|max:10',
         ], [
-            'name.required'                 => 'O nome do estudante é obrigatório.',
-            'email.required'                => 'O email é obrigatório.',
-            'email.email'                   => 'Insira um endereço de e-mail válido.',
-            'identity_card_number.required' => 'O número do bilhete de identidade é obrigatório.',
-            'phone.required'                => 'O número de telefone é obrigatório.',
-            'code.required'                 => 'O código do estudante é obrigatório.',
-            'code.integer'                  => 'O código deve ser um número inteiro.',
-            'image.image'                   => 'O ficheiro selecionado deve ser uma imagem.',
-            'image.mimes'                   => 'A imagem deve estar no formato JPG, JPEG, PNG ou WEBP.',
-            'image.max'                     => 'A imagem não pode ter um tamanho superior a 2MB.',
+            'type_of_payment.required' => 'O tipo de pagamento é obrigatório.',
+            'type_of_payment.string'   => 'O tipo de pagamento deve ser um texto válido.',
+            'type_of_payment.max'      => 'O tipo de pagamento não pode exceder 255 carateres.',
+            'value.required'           => 'O valor do pagamento é obrigatório.',
+            'value.numeric'            => 'O valor deve ser um número válido.',
+            'value.min'                => 'O valor não pode ser negativo.',
+            'reference.required'       => 'O número de referência do pagamento é obrigatório.',
+            'reference.integer'        => 'A referência deve ser um número inteiro.',
+            'reference.min'            => 'A referência deve ser um número positivo.',
+            'status.required'          => 'Por favor selecione o estado do pagamento.',
+            'status.boolean'           => 'O estado do pagamento é inválido.',
+            'date.date'                => 'Insira uma data e hora válidas para o pagamento.',
+            'currency.required'        => 'A indicação da moeda é obrigatória.',
+            'currency.max'             => 'A moeda não pode ter mais de 10 carateres.',
         ]);
 
-        // Atualização das propriedades do estudante na base de dados
+        // Se a data e hora não forem fornecidas na atualização, mantêm-se ou assume o momento atual
+        if (empty($validatedData['date'])) {
+            $validatedData['date'] = now();
+        }
+
+        // Atualiza os campos do modelo de pagamento com os dados validados
         $payment->update($validatedData);
 
-        // Redireciona para a listagem com mensagem de sucesso na sessão
-        return redirect()->route('payment.index')->with('success', 'Estudante atualizado com sucesso!');
+        // Redireciona para a listagem com mensagem de confirmação de atualização na sessão
+        return redirect()->route('payment.index')->with('success', 'Pagamento atualizado com sucesso!');
     }
 
     /**
-     * Remove um estudante da base de dados.
+     * Remove um pagamento da base de dados (utilizando SoftDeletes).
      *
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
+    public function destroy($id)
+    {
+        // Procura o pagamento pelo ID
+        $payment = Payment::findOrFail($id);
 
-        public function destroy($id)
-        {
-            // Procura o estudante pelo ID
-            $payment = Payment::findOrFail($id);
+        // Executa a eliminação suave (soft delete) do pagamento
+        $payment->delete();
 
-            // Apaga o registo do estudante da base de dados
-            $payment->delete();
-        
-            // Redireciona para a listagem com mensagem de sucesso na sessão
-            return redirect()->route('payment.index')->with('success', 'Estudante eliminado com sucesso!');
-        }
+        // Redireciona de volta para a listagem com mensagem explicativa de sucesso
+        return redirect()->route('payment.index')->with('success', 'Pagamento eliminado com sucesso!');
+    }
 
     /**
-     * Método auxiliar de dashboard do estudante (mantido para compatibilidade).
+     * Método auxiliar de dashboard do pagamento (mantido para compatibilidade de rotas e navegação).
      *
      * @return \Illuminate\View\View
      */
     public function dashboard()
     {
-        // Retorna a vista do dashboard principal de estudantes
-        return view('dashboard.index');
+        // Retorna a vista do dashboard principal
+        return view('admin.dashboard.index');
     }
 }
+

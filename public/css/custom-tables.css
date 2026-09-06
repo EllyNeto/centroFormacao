@@ -1,113 +1,300 @@
 /* ==========================================================================
-   Estilização Personalizada para Tabelas de Listagem (Cursos, Estudantes e Formadores)
-   Objetivo: Garantir largura total (100%), alinhamento centralizado e proporção ideal das tabelas.
+   Estilização Personalizada para o Modelo "Profile Datatable" e "Alerts Alt"
    ========================================================================== */
 
-/* Garantir que o container da tabela ocupe 100% da largura disponível */
+/* Garantir que os contêineres principais ocupem 100% da largura */
 .card#accordion-one,
 .element-area,
-.demo-view {
+.demo-view,
+.content-body .container-fluid {
     width: 100% !important;
 }
 
-/* Regras de largura e alinhamento para todas as tabelas */
+/* Estilo do Cartão e Cabeçalho do Cartão (Profile Datatable) */
+.card-header.flex-wrap {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    padding: 1.25rem 1.5rem !important;
+}
+
+.card-header .card-title {
+    font-size: 1.125rem !important;
+    font-weight: 700 !important;
+    color: #1e1b4b !important;
+}
+
+.card-header .subtitle {
+    font-size: 0.84rem !important;
+    color: #64748b !important;
+}
+
+.card-header .subtitle code {
+    color: #ef4444 !important;
+    background-color: #fef2f2 !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+}
+
+/* Botões de alteração de vista / abas de topo (Preview | HTML) */
+.dzm-tabs .nav-link {
+    border-radius: 0.375rem !important;
+    padding: 0.4rem 1rem !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+}
+
+.dzm-tabs .nav-link.active {
+    background-color: #4338ca !important;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   Estilização da Tabela de Dados (Profile Datatable)
+   ========================================================================== */
+
 .table, 
 table.dataTable,
-table.dataTable.display {
+table.dataTable.display,
+table.profile-tab {
     width: 100% !important;
-    font-size: 14px !important;
-    vertical-align: middle !important;
-    margin-bottom: 0 !important;
+    font-size: 13.5px !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
 }
 
-/* Cabeçalho da tabela - Centralizado com fonte padrão */
+/* Cabeçalho da Tabela - Fundo Roxo/Lilás Suave (Profile Datatable Header) */
 .table th, 
 table.dataTable th,
-table.dataTable thead th {
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    text-align: center !important;
+table.dataTable thead th,
+.profile-tab thead th {
+    background-color: #ede9fe !important; /* Roxo/lilás característico do Profile Datatable */
+    color: #4338ca !important;            /* Texto Roxo/Indigo */
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    text-transform: none !important;
+    padding: 14px 16px !important;
+    border-top: none !important;
+    border-bottom: none !important;
     vertical-align: middle !important;
-    padding: 14px 12px !important;
-    background-color: #f8fafc !important;
-    color: #334155 !important;
-    border-bottom: 2px solid #e2e8f0 !important;
 }
 
-/* Células da tabela - Centralizadas e proporcionais */
+.table thead th:first-child,
+table.dataTable thead th:first-child {
+    border-top-left-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
+}
+
+.table thead th:last-child,
+table.dataTable thead th:last-child {
+    border-top-right-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+}
+
+/* Ícone de ordenação (sort arrows) no cabeçalho */
+table.dataTable thead .sorting::after,
+table.dataTable thead .sorting_asc::after,
+table.dataTable thead .sorting_desc::after {
+    color: #6366f1 !important;
+    opacity: 0.8 !important;
+}
+
+/* Células do Corpo da Tabela */
 .table td, 
 table.dataTable td,
-table.dataTable tbody td {
+table.dataTable tbody td,
+.profile-tab tbody td {
     vertical-align: middle !important;
-    text-align: center !important;
-    padding: 12px 10px !important;
+    padding: 14px 16px !important;
     color: #475569 !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    background-color: #ffffff !important;
 }
 
-/* Rodapé da tabela */
-.table tfoot th, 
-table.dataTable tfoot th {
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    text-align: center !important;
-    vertical-align: middle !important;
-    padding: 12px 10px !important;
+.table tbody tr:hover td,
+table.dataTable tbody tr:hover td {
     background-color: #f8fafc !important;
-    color: #475569 !important;
-    border-top: 2px solid #e2e8f0 !important;
 }
 
-/* Alinhamento de fotos/avatares */
+/* Foto / Avatar em Miniatura Redonda */
 .table td .avatar,
-table.dataTable td .avatar {
-    margin: 0 auto !important;
-    display: inline-block !important;
+table.dataTable td .avatar,
+.profile-tab td .avatar {
+    width: 40px !important;
+    height: 40px !important;
+    object-fit: cover !important;
     border-radius: 50% !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Badges e etiquetas */
-.table td .badge {
-    font-size: 12px !important;
-    padding: 6px 12px !important;
-    font-weight: 500 !important;
-    border-radius: 4px !important;
+    border: 2px solid #e2e8f0 !important;
+    margin-right: 8px !important;
     display: inline-block !important;
 }
 
-/* Botões de ação centralizados */
+/* Destaque dos Nomes */
+.table td a.text-primary,
+table.dataTable td a.text-primary {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    transition: color 0.2s ease;
+}
+
+.table td a.text-primary:hover,
+table.dataTable td a.text-primary:hover {
+    color: #4338ca !important;
+    text-decoration: underline !important;
+}
+
+/* Botões de Ação (Ações: Lápis Azul/Roxo e Lixo Vermelho) */
 .table td .btn-xs,
-table.dataTable td .btn-xs {
-    padding: 6px 10px !important;
-    font-size: 13px !important;
+table.dataTable td .btn-xs,
+.profile-tab td .btn-xs {
     width: 32px !important;
     height: 32px !important;
-    line-height: 18px !important;
+    padding: 0 !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     border-radius: 6px !important;
+    font-size: 13px !important;
     margin: 0 2px !important;
+    border: none !important;
+    transition: transform 0.15s ease, opacity 0.15s ease !important;
 }
 
-/* Ajustes no contêiner responsivo para ocupar toda a largura da página */
-.table-responsive {
-    width: 100% !important;
-    overflow-x: auto !important;
+.table td .btn-xs:hover,
+table.dataTable td .btn-xs:hover {
+    transform: translateY(-1px) !important;
+    opacity: 0.9 !important;
+}
+
+.table td .btn-primary,
+table.dataTable td .btn-primary {
+    background-color: #4338ca !important; /* Azul/Roxo do botão Editar no Profile Datatable */
+    color: #ffffff !important;
+}
+
+.table td .btn-danger,
+table.dataTable td .btn-danger {
+    background-color: #ef4444 !important; /* Vermelho do botão Eliminar no Profile Datatable */
+    color: #ffffff !important;
+}
+
+.table td .btn-info,
+table.dataTable td .btn-info {
+    background-color: #0284c7 !important; /* Cyan/Azul do botão Ver no Profile Datatable */
+    color: #ffffff !important;
+}
+
+/* Controlos do DataTables (Search & Entries per page) */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+    padding: 10px 16px !important;
+    color: #64748b !important;
+    font-size: 13.5px !important;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 20px !important;
+    padding: 6px 14px !important;
+    outline: none !important;
+    margin-left: 8px !important;
+    transition: border-color 0.2s ease !important;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    padding: 4px 8px !important;
+    outline: none !important;
+    margin: 0 6px !important;
+}
+
+/* Paginação do DataTables */
+.dataTables_wrapper .dataTables_paginate {
+    padding: 12px 16px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    margin: 0 2px !important;
+    font-size: 13px !important;
+    border: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: #4338ca !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 4px rgba(67, 56, 202, 0.3) !important;
 }
 
 /* ==========================================================================
-   Desativação da Tela de Carregamento (Preloader) e Exibição Instantânea
+   Modelo de Alertas Personalizados - Alerts Alt (.alert-alt)
+   Fundo suave com faixa sólida na borda esquerda e texto destacado
    ========================================================================== */
+.alert.alert-alt {
+    border: 1px solid transparent !important;
+    border-left-width: 5px !important;
+    border-radius: 8px !important;
+    padding: 14px 20px !important;
+    font-size: 14px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.alert-alt.alert-success {
+    background-color: #f0fdf4 !important;
+    border-color: #dcfce7 !important;
+    border-left-color: #22c55e !important;
+    color: #15803d !important;
+}
+
+.alert-alt.alert-danger {
+    background-color: #fef2f2 !important;
+    border-color: #fee2e2 !important;
+    border-left-color: #ef4444 !important;
+    color: #b91c1c !important;
+}
+
+.alert-alt.alert-warning {
+    background-color: #fefce8 !important;
+    border-color: #fef9c3 !important;
+    border-left-color: #eab308 !important;
+    color: #a16207 !important;
+}
+
+.alert-alt.alert-info {
+    background-color: #ecfeff !important;
+    border-color: #cffafe !important;
+    border-left-color: #06b6d4 !important;
+    color: #0e7490 !important;
+}
+
+.alert-alt strong {
+    font-weight: 700 !important;
+    margin-right: 6px !important;
+}
+
+.alert-alt .btn-close {
+    padding: 1rem !important;
+    margin: -0.5rem -0.5rem -0.5rem auto !important;
+}
+
+/* Desativação completa do Preloader */
 #preloader,
 .dz-preloader {
     display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
-    pointer-events: none !important;
 }
 
-/* Forçar visualização imediata do conteúdo ao mudar de tela (sem atraso de 1s) */
 #main-wrapper {
     opacity: 1 !important;
 }

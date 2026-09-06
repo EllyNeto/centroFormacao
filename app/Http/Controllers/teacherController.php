@@ -153,7 +153,7 @@ class teacherController extends Controller
             $requestImage = $request->file('image');
             $extension = $requestImage->extension();
             $imageName = md5($requestImage->getClientOriginalName() . time()) . '.' . $extension;
-             $imagePath = $requestImage->storeAs('storage', $imageName, 'public');
+            $imagePath = $requestImage->storeAs('storage', $imageName, 'public');
 
             // Substitui o nome da imagem antiga pelo novo nome
             $validatedData['image'] = $imagePath;
@@ -203,6 +203,6 @@ class teacherController extends Controller
      */
     public function dashboard()
     {
-        return view('dashboard.index');
+        return view('admin.dashboard.index');
     }
 }

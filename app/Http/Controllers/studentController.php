@@ -212,6 +212,6 @@ class studentController extends Controller
     public function dashboard()
     {
         // Retorna a vista do dashboard principal de estudantes
-        return view('dashboard.index');
+        return view('admin.dashboard.index');
     }
 }

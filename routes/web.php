@@ -18,7 +18,7 @@ use App\Http\Controllers\paymentController;
 */
 
 Route::get('/', function () {
-    return view('dashboard.index');
+    return view('admin.dashboard.index');
 });
 
 Route::get('/dashboard/main', function () {

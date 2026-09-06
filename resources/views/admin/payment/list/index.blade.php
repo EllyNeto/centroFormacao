@@ -1,8 +1,147 @@
 @extends('layouts.main')
 
-@section('title', 'Listar pagamento')
+@section('title', 'Listar Pagamentos')
 
 @section('content')
+
+<!--**********************************
+    Módulo Dinâmico do CRUD de Pagamentos
+***********************************-->
+<div class="content-body">
+    {{-- Alerta de sucesso no modelo Alerts Alt exibido quando existe mensagem na sessão --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-alt alert-dismissible fade show mb-4 me-4 ms-4" role="alert">
+            <div><strong>Sucesso!</strong> {{ session('success') }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    {{-- Container principal ocupando a largura disponível --}}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card" id="accordion-one">
+                    <!-- Cabeçalho do Cartão no modelo Profile Datatable -->
+                    <div class="card-header flex-wrap px-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="card-title">Gestão de Pagamentos</h4>
+                            <p class="m-0 subtitle">Lista de todos os pagamentos registados</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            {{-- Botão para redirecionar para o formulário de criação de novo pagamento --}}
+                            <a href="{{ route('payment.create') }}" class="btn btn-primary btn-sm">
+                                <i class="fa fa-plus me-1"></i> Adicionar Novo Pagamento
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- Conteúdo da tabela DataTables Profile --}}
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="Preview" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="card-body p-3">
+                                <div class="table-responsive">
+                                    {{-- Tabela idêntica ao modelo Profile Datatable --}}
+                                    <table id="example" class="table-responsive-lg table display dataTablesCard student-tab profile-tab dataTable no-footer w-100" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>#ID</th>
+                                                <th>Tipo de Pagamento</th>
+                                                <th>Valor</th>
+                                                <th>Moeda</th>
+                                                <th>Referência</th>
+                                                <th>Data</th>
+                                                <th>Estado</th>
+                                                <th class="text-center">Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{-- Iteração dinâmica sobre os pagamentos passados pelo controlador --}}
+                                            @forelse($payments as $paymentItem)
+                                                <tr>
+                                                    <td><strong>#{{ $paymentItem->id }}</strong></td>
+                                                    <td>
+                                                        {{-- Nome/Tipo do pagamento com link para os detalhes --}}
+                                                        <a href="{{ route('payment.show', $paymentItem->id) }}" class="text-primary font-w600">
+                                                            {{ $paymentItem->type_of_payment }}
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <strong>{{ number_format($paymentItem->value, 2, ',', '.') }}</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-secondary light">{{ $paymentItem->currency }}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-info light">#{{ $paymentItem->reference }}</span>
+                                                    </td>
+                                                    <td>
+                                                        <i class="fa fa-calendar text-muted me-1"></i>
+                                                        {{ $paymentItem->date ? \Carbon\Carbon::parse($paymentItem->date)->format('d/m/Y H:i') : ($paymentItem->created_at ? $paymentItem->created_at->format('d/m/Y H:i') : 'N/D') }}
+                                                    </td>
+                                                    <td>
+                                                        @if($paymentItem->status)
+                                                            <span class="badge badge-success light">Concluído</span>
+                                                        @else
+                                                            <span class="badge badge-warning light">Pendente</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="d-flex justify-content-center">
+                                                            {{-- Botão Ver Detalhes --}}
+                                                            <a href="{{ route('payment.show', $paymentItem->id) }}" class="btn btn-info shadow btn-xs sharp me-1" title="Ver Detalhes">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                            
+                                                            {{-- Botão Editar --}}
+                                                            <a href="{{ route('payment.edit', $paymentItem->id) }}" class="btn btn-primary shadow btn-xs sharp me-1" title="Editar Pagamento">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </a>
+                                            
+                                                            {{-- Formulário com janela de confirmação JS para Eliminar --}}
+                                                            <form action="{{ route('payment.destroy', $paymentItem->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este pagamento?');" style="display: inline;">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger shadow btn-xs sharp" title="Eliminar Pagamento">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="8" class="text-center py-4 text-muted">
+                                                        <i class="fa fa-credit-card-alt fs-24 mb-2 d-block"></i>
+                                                        Nenhum pagamento registado.
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                        {{-- <tfoot>
+                                            <tr>
+                                                <th>#ID</th>
+                                                <th>Tipo de Pagamento</th>
+                                                <th>Valor</th>
+                                                <th>Moeda</th>
+                                                <th>Referência</th>
+                                                <th>Data</th>
+                                                <th>Estado</th>
+                                                <th class="text-center">Ações</th>
+                                            </tr>
+                                        </tfoot> --}}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Preservação integral do código de template estático original sem eliminação de código --}}
+{{--
 <!--**********************************
             Content body start
         ***********************************-->
@@ -913,4 +1052,5 @@
         <!--**********************************
             Content body end
         ***********************************-->
+--}}
 @endsection
