@@ -54,11 +54,11 @@
 
                                     {{-- Campo: Curso --}}
                                     <div class="mb-3">
-                                        <label for="course_name" class="form-label text-primary">Curso Associado</label>
-                                        <select id="course_name" name="course_name" class="default-select wide form-control">
+                                        <label for="course_id" class="form-label text-primary">Curso Associado</label>
+                                        <select id="course_id" name="course_id" class="default-select wide form-control">
                                             <option value="">Selecione um curso (Opcional)</option>
                                             @foreach($courses as $course)
-                                                <option value="{{ $course->name }}" {{ old('course_name') == $course->name ? 'selected' : '' }}>{{ $course->name }}</option>
+                                                <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>{{ $course->name }}</option>
                                             @endforeach
                                             @if($courses->isEmpty())
                                                 <option value="" >Nenhum curso foi adcicionado.</option>
@@ -68,16 +68,23 @@
 
                                     {{-- Campo: Formador Responsável --}}
                                     <div class="mb-3">
-                                        <label for="teacher_name" class="form-label text-primary">Formador Responsável</label>
-                                        <select id="teacher_name" name="teacher_name" class="default-select wide form-control">
-                                            <option value="">Selecione um formador (Opcional)</option>
+                                        <label for="teacher_id" class="form-label text-primary">Formador Responsável</label>
+                                        <select id="teacher_id" name="teacher_id" class="default-select wide form-control">
+                                            <option value="">Selecione um formador</option>
                                             @foreach($teachers as $teacher)
-                                                <option value="{{ $teacher->name }}" {{ old('teacher_name') == $teacher->name ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                                <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                                                    {{ $teacher->name }}
+                                                </option>
                                             @endforeach
-                                            @if($teachers->isEmpty())
-                                                <option value="" >Nenhum formador foi adcicionado.</option>
-                                            @endif
                                         </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="start_time" class="form-label text-primary">Hora de Início</label>
+                                        <input type="time" name="start_time" id="start_time" class="form-control" value="{{ old('start_time') }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="end_time" class="form-label text-primary">Hora de Término</label>
+                                        <input type="time" name="end_time" id="end_time" class="form-control" value="{{ old('end_time') }}">
                                     </div>
                                 </div>
 

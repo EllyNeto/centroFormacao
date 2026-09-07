@@ -15,7 +15,7 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <div>
                             <h4 class="card-title mb-0">Detalhes da Turma: {{ $class->name }}</h4>
-                            <small class="text-muted">Código: {{ $class->code }}</small>
+                            <small class="text-muted">Identificador: {{ $class->code }}</small>
                         </div>
                         <div>
                             <a href="{{ route('class.edit', $class->id) }}" class="btn btn-primary btn-sm me-1">
@@ -32,9 +32,9 @@
                             <div class="col-xl-6 col-md-6">
                                 <div class="p-3 mb-3 border rounded">
                                     <h6 class="text-primary font-w600 mb-3"><i class="fa fa-info-circle me-2"></i>Informação Geral</h6>
-                                    <p><strong>Identificador (#ID):</strong> #{{ $class->id }}</p>
+                                    <p><strong>Identificador (#ID):</strong> #{{ $class->code }}</p>
                                     <p><strong>Nome da Turma:</strong> {{ $class->name }}</p>
-                                    <p><strong>Código da Turma:</strong> <span class="badge badge-secondary light">{{ $class->code }}</span></p>
+                                    <p><strong>Duração: </strong> {{ $class->name }}</p>
                                     <p><strong>Estado:</strong> 
                                         @if($class->status)
                                             <span class="badge badge-success light">Activa</span>
@@ -47,8 +47,8 @@
                             <div class="col-xl-6 col-md-6">
                                 <div class="p-3 mb-3 border rounded">
                                     <h6 class="text-primary font-w600 mb-3"><i class="fa fa-building me-2"></i>Associação e Logística</h6>
-                                    <p><strong>Curso Associado:</strong> {{ $class->course_name ?: 'Não atribuído' }}</p>
-                                    <p><strong>Formador Responsável:</strong> {{ $class->teacher_name ?: 'Não atribuído' }}</p>
+                                    <p><strong>Curso Associado:</strong> {{ $class->course_id ?: 'Não atribuído' }}</p>
+                                    <p><strong>Formador Responsável:</strong> {{ $class->teacher_id ?: 'Não atribuído' }}</p>
                                     <p><strong>Turno das Aulas:</strong> {{ $class->shift }}</p>
                                     <p><strong>Sala / Localização:</strong> {{ $class->room ?: 'A definir' }}</p>
                                     <p><strong>Capacidade Máxima:</strong> {{ $class->capacity }} Alunos</p>

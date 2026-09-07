@@ -64,7 +64,7 @@
                                                                         {{ $classItem->name }}
                                                                     </a>
                                                                 </td>
-                                                                <td>{{ $classItem->course_name ?: 'N/A' }}</td>
+                                                                <td>{{ $classItem->course_id ?: 'N/A' }}</td>
                                                                 <td>
                                                                     <span class="badge badge-light text-dark">
                                                                         <i class="fa fa-clock-o text-primary me-1"></i>{{ $classItem->shift }}

@@ -52,6 +52,7 @@ class classController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all()); 
         // Validação dos dados recebidos do formulário de criação de turma
         $validatedData = $request->validate([
             'name'         => 'required|string|max:255',
@@ -61,6 +62,11 @@ class classController extends Controller
             'shift'        => 'required|string|max:50',
             'capacity'     => 'required|integer|min:1',
             'status'       => 'required|boolean',
+            'teacher_id'   => 'required|exists:teachers,id',
+            'course_id'    => 'nullable|string',
+            'start_time' => 'required|date_format:H:i',
+            'end_time'   => 'required|date_format:H:i',
+            
         ], [
             'name.required'     => 'O nome da turma é obrigatório.',
             'name.max'          => 'O nome da turma não pode exceder 255 carateres.',
@@ -69,7 +75,9 @@ class classController extends Controller
             'capacity.integer'  => 'A capacidade deve ser um número inteiro.',
             'capacity.min'      => 'A capacidade deve ser de pelo menos 1 aluno.',
             'status.required'   => 'Por favor selecione o estado da turma.',
-            'days_of_week' => 'Selecione algum dia da semana.'
+            'days_of_week'      => 'Selecione algum dia da semana.',
+            'teacher_id.required' => 'Por favor, selecione um formador/professor.',
+            'teacher_id.exists'   => 'O formador selecionado não existe.',
         ]);
 
         // Se o código da turma não for preenchido, gera automaticamente um código com base no ano

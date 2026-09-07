@@ -55,4 +55,9 @@ class Teacher extends Model
     protected $casts = [
         'status' => 'boolean',
     ];
+
+    public function class()
+    {
+        return $this->hasMany('App\Http\Models\_Class');
+    }
 }

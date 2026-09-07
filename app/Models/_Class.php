@@ -51,6 +51,10 @@ class _Class extends Model
         'shift',       // Turno (Manhã, Tarde, Pós-Laboral)
         'capacity',    // Capacidade máxima de estudantes
         'status',      // Estado da turma (1 = Ativa, 0 = Inativa)
+        'teacher_id',  // Dados da entidade formador
+        'course_id',  // Dados da entidade cursos
+        'start_time',
+        'end_time',
     ];
 
     /**
@@ -72,5 +76,10 @@ class _Class extends Model
     public function course()
     {
         return $this->belongsTo('App\Http\Models\Course');
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo('App\Http\Models\Teacher');
     }
 }

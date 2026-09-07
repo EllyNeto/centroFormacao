@@ -22,6 +22,10 @@ class CreateClassesTable extends Migration
             $table->string('shift')->default('Manhã');
             $table->integer('capacity')->default(25);
             $table->boolean('status')->default(true);
+            $table->time('start_time'); // Coluna para hora de início
+            $table->time('end_time');   // Coluna para hora de fim
+            $table->foreignId('teacher_id')->constrained();
+            $table->foreignId('course_id')->constrained();
             $table->timestamps();
         });
     }
