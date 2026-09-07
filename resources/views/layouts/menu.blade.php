@@ -15,6 +15,18 @@
 						</ul> --}}
 
 					</li>
+						{{-- Seção Módulo de Inscrição --}}
+					<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
+						<i class="material-symbols-outlined">app_registration</i>
+						<span class="nav-text">Inscrição</span>
+					</a>
+					<ul aria-expanded="false">
+						{{-- Link para a listagem de Inscriçãos --}}
+						<li><a href="{{ route('enrollment.index') }}">Listar</a></li>
+						{{-- Link para criação de novo Inscrição --}}
+						<li><a href="{{ route('enrollment.create') }}">Adicionar nova</a></li>
+					</ul>
+					</li>
 						{{-- Seção Módulo de pagamento --}}
 					<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">payments</i>

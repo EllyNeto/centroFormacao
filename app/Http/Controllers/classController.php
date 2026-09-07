@@ -23,7 +23,7 @@ class classController extends Controller
         $classes = _Class::orderBy('id', 'desc')->get();
 
         // Retorna a vista de listagem passando a coleção dinâmica de turmas
-        return view('admin.class.list.index', ['classes' => $classes]);
+        return view('admin._class.list.index', ['classes' => $classes]);
     }
 
     /**
@@ -38,7 +38,7 @@ class classController extends Controller
         $teachers = Teacher::where('status', 1)->get();
 
         // Retorna a vista contendo o formulário de criação de turma
-        return view('admin.class.create.index', [
+        return view('admin._class.create.index', [
             'courses' => $courses,
             'teachers' => $teachers,
         ]);
@@ -104,7 +104,7 @@ class classController extends Controller
         $class = _Class::findOrFail($id);
 
         // Retorna a vista de detalhes passando o objeto da turma
-        return view('admin.class.show.index', ['class' => $class]);
+        return view('admin._class.details.index', ['class' => $class]);
     }
 
     /**
@@ -123,7 +123,7 @@ class classController extends Controller
         $teachers = Teacher::where('status', 1)->get();
 
         // Retorna a vista de edição passando o registo dinâmico da turma
-        return view('admin.class.edit.index', [
+        return view('admin._class.edit.index', [
             'class' => $class,
             'courses' => $courses,
             'teachers' => $teachers,

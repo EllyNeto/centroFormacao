@@ -94,7 +94,7 @@ class studentController extends Controller
         $student = Student::findOrFail($id);
 
         // Retorna a vista de detalhes do estudante
-        return view('admin.student.show.index', ['student' => $student]);
+        return view('admin.student.details.index', ['student' => $student]);
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Http\Controllers\studentController;
 use App\Http\Controllers\teacherController;
 use App\Http\Controllers\paymentController;
 use App\Http\Controllers\classController;
+use App\Http\Controllers\enrollmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -175,3 +176,33 @@ Route::put('/class/update/{id}', [classController::class, 'update'])->name('clas
 
 // Rota DELETE para eliminar uma turma da base de dados por ID
 Route::delete('/class/destroy/{id}', [classController::class, 'destroy'])->name('class.destroy');
+
+/*
+|--------------------------------------------------------------------------
+| Rotas do Módulo de inscrições (Enrollment/Inscrição CRUD)
+|--------------------------------------------------------------------------
+|
+| Gestão completa de inscrições: Listar, Criar, Salvar, Ver, Editar, Atualizar e Eliminar.
+|
+*/
+
+// Rota GET para a listagem de todas as inscrições registadas
+Route::get('/enrollment/index', [enrollmentController::class, 'index'])->name('enrollment.index');
+
+// Rota GET para apresentar o formulário de registo de nova inscrição
+Route::get('/enrollment/create', [enrollmentController::class, 'create'])->name('enrollment.create');
+
+// Rota POST para processar a gravação dos dados da nova inscrição
+Route::post('/enrollment/store', [enrollmentController::class, 'store'])->name('enrollment.store');
+
+// Rota GET para visualizar os detalhes de uma inscrição específica por ID
+Route::get('/enrollment/{id}', [enrollmentController::class, 'show'])->name('enrollment.show');
+
+// Rota GET para apresentar o formulário de edição de uma inscrição existente por ID
+Route::get('/enrollment/edit/{id}', [enrollmentController::class, 'edit'])->name('enrollment.edit');
+
+// Rota PUT para processar a atualização dos dados da inscrição por ID
+Route::put('/enrollment/update/{id}', [enrollmentController::class, 'update'])->name('enrollment.update');
+
+// Rota DELETE para eliminar uma inscrição da base de dados por ID
+Route::delete('/enrollment/destroy/{id}', [enrollmentController::class, 'destroy'])->name('enrollment.destroy');

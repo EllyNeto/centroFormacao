@@ -92,7 +92,7 @@ class paymentController extends Controller
         $payment = Payment::findOrFail($id);
 
         // Retorna a vista de visualização de detalhes passando o objeto de pagamento
-        return view('admin.payment.show.index', ['payment' => $payment]);
+        return view('admin.payment.details.index', ['payment' => $payment]);
     }
 
     /**

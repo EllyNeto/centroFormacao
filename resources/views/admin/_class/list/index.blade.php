@@ -18,7 +18,7 @@
 
     <div class="container-fluid">
         {{-- Inclusão do componente de gráficos seguindo a arquitetura de componentes do projeto (resources/views/components) --}}
-       @include('components.graphic_class')
+       {{-- @include('components.graphic_class') --}}
 
         <div class="element-area">
             <div class="demo-view">

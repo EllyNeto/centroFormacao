@@ -32,8 +32,9 @@ class teacherController extends Controller
      */
     public function create()
     {
+        $teachers = Teacher::all();
         // Retorna a vista com o formulário para registar um novo formador
-        return view('admin.teacher.create.index');
+        return view('admin.teacher.create.index', ['teachers' => $teachers]);
     }
 
     /**
@@ -90,7 +91,7 @@ class teacherController extends Controller
         $teacher = Teacher::findOrFail($id);
 
         // Retorna a vista de detalhes passando o objeto $teacher
-        return view('admin.teacher.show.index', ['teacher' => $teacher]);
+        return view('admin.teacher.details.index', ['teacher' => $teacher]);
     }
 
     /**
