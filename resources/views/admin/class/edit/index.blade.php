@@ -55,11 +55,11 @@
 
                                     {{-- Campo: Curso --}}
                                     <div class="mb-3">
-                                        <label for="course_name" class="form-label text-primary">Curso Associado</label>
-                                        <select id="course_name" name="course_name" class="default-select wide form-control">
+                                        <label for="course_id" class="form-label text-primary">Curso Associado</label>
+                                        <select id="course_id" name="course_id" class="default-select wide form-control">
                                             <option value="">Selecione um curso (Opcional)</option>
                                             @foreach($courses as $course)
-                                                <option value="{{ $course->name }}" {{ old('course_name', $class->course_name) == $course->name ? 'selected' : '' }}>{{ $course->name }}</option>
+                                                <option value="{{ $course->id }}" {{ old('course_id', $class->course_id) == $course->id ? 'selected' : '' }}>{{ $course->name }}</option>
                                             @endforeach
                                             @if($courses->isEmpty())
                                                  <option value="" >Nenhum curso foi adcicionado.</option>
@@ -69,18 +69,27 @@
 
                                     {{-- Campo: Formador Responsável --}}
                                     <div class="mb-3">
-                                        <label for="teacher_name" class="form-label text-primary">Formador Responsável</label>
-                                        <select id="teacher_name" name="teacher_name" class="default-select wide form-control">
+                                        <label for="teacher_id" class="form-label text-primary">Formador Responsável</label>
+                                        <select id="teacher_id" name="teacher_id" class="default-select wide form-control">
                                             <option value="">Selecione um formador (Opcional)</option>
                                             @foreach($teachers as $teacher)
-                                                <option value="{{ $teacher->name }}" {{ old('teacher_name', $class->teacher_name) == $teacher->name ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                                <option value="{{ $teacher->id }}" {{ old('teacher_id', $class->teacher_id) == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
                                             @endforeach
                                             @if($teachers->isEmpty())
                                                 <option value="" >Nenhum formador foi adcicionado.</option>
                                             @endif
                                         </select>
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="start_time" class="form-label text-primary">Hora de Início</label>
+                                        <input type="time" name="start_time" id="start_time" class="form-control" value="{{ old('start_time') }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="end_time" class="form-label text-primary">Hora de Término</label>
+                                        <input type="time" name="end_time" id="end_time" class="form-control" value="{{ old('end_time') }}">
+                                    </div>
                                 </div>
+                                
 
                                 {{-- Coluna Direita: Sala, Turno, Capacidade e Estado --}}
                                 <div class="col-xl-6 col-sm-6">
@@ -114,31 +123,30 @@
                                             <option value="0" {{ old('status', $class->status) == '0' ? 'selected' : '' }}>Inactiva</option>
                                         </select>
                                     </div>
-                                    <div class="mb-3">
+                                      <div class="mb-3">
                                         <label class="form-label text-primary" ><ion-icon name="form-label text-primary"></ion-icon> Dias da Semana:<span class="text-danger">*</span></label>
                                         <div class="checkbox-grid">
                                             <label class="checkbox-chip text-primary">
-                                                <input type="checkbox" name="daysofweek[]" value="Segunda-feira">
+                                                <input type="checkbox" name="days_of_week[]" value="Segunda-feira">
                                                 <span>Segunda-feira</span>
                                             </label>
                                             <label class="checkbox-chip text-primary">
-                                                <input type="checkbox" name="daysofweek[]" value="Terça-feira">
+                                                <input type="checkbox" name="days_of_week[]" value="Terça-feira">
                                                 <span>Terça-feira</span>
                                             </label>
                                             <label class="checkbox-chip text-primary">
-                                                <input type="checkbox" name="daysofweek[]" value="Quarta-feira">
+                                                <input type="checkbox" name="days_of_week[]" value="Quarta-feira">
                                                 <span>Quarta-feira</span>
                                             </label>
                                             <label class="checkbox-chip text-primary">
-                                                <input type="checkbox" name="daysofweek[]" value="Quinta-feira">
+                                                <input type="checkbox" name="days_of_week[]" value="Quinta-feira">
                                                 <span>Quinta-feira</span>
                                             </label>
                                             <label class="checkbox-chip text-primary">
-                                                <input type="checkbox" name="daysofweek[]" value="Sexta-feira">
+                                                <input type="checkbox" name="days_of_week[]" value="Sexta-feira">
                                                 <span>Sexta-feira</span>
                                             </label>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -34,7 +34,8 @@
                                     <h6 class="text-primary font-w600 mb-3"><i class="fa fa-info-circle me-2"></i>Informação Geral</h6>
                                     <p><strong>Identificador (#ID):</strong> #{{ $class->code }}</p>
                                     <p><strong>Nome da Turma:</strong> {{ $class->name }}</p>
-                                    <p><strong>Duração: </strong> {{ $class->name }}</p>
+                                    <p>
+                                      <strong>Horário: </strong>{{ date('H:i', strtotime($class->start_time)) }}h as {{ date('H:i', strtotime($class->end_time)) }}h
                                     <p><strong>Estado:</strong> 
                                         @if($class->status)
                                             <span class="badge badge-success light">Activa</span>
@@ -50,8 +51,14 @@
                                     <p><strong>Curso Associado:</strong> {{ $class->course_id ?: 'Não atribuído' }}</p>
                                     <p><strong>Formador Responsável:</strong> {{ $class->teacher_id ?: 'Não atribuído' }}</p>
                                     <p><strong>Turno das Aulas:</strong> {{ $class->shift }}</p>
-                                    <p><strong>Sala / Localização:</strong> {{ $class->room ?: 'A definir' }}</p>
+                                    {{-- <p><strong>Sala / Localização:</strong> {{ $class->room ?: 'A definir' }}</p> --}}
                                     <p><strong>Capacidade Máxima:</strong> {{ $class->capacity }} Alunos</p>
+                                    <p>
+                                        <strong> Dias da semana:</strong>
+                                        @foreach($class->days_of_week as $days)
+                                            {{ $days }}
+                                        @endforeach
+                                    </p>
                                 </div>
                             </div>
                         </div>
