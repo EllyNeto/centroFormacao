@@ -84,11 +84,11 @@
 
                                 {{-- Coluna Direita: Sala, Turno, Capacidade e Estado --}}
                                 <div class="col-xl-6 col-sm-6">
-                                    {{-- Campo: Sala / Local --}}
+                                    {{-- Campo: Sala / Local
                                     <div class="mb-3">
                                         <label for="room" class="form-label text-primary">Sala / Localização</label>
                                         <input type="text" id="room" name="room" class="form-control" value="{{ old('room', $class->room) }}">
-                                    </div>
+                                    </div> --}}
 
                                     {{-- Campo: Turno --}}
                                     <div class="mb-3">
@@ -97,7 +97,6 @@
                                             <option value="Manhã" {{ old('shift', $class->shift) == 'Manhã' ? 'selected' : '' }}>Manhã</option>
                                             <option value="Tarde" {{ old('shift', $class->shift) == 'Tarde' ? 'selected' : '' }}>Tarde</option>
                                             <option value="Pós-Laboral" {{ old('shift', $class->shift) == 'Pós-Laboral' ? 'selected' : '' }}>Pós-Laboral</option>
-                                            <option value="Noite" {{ old('shift', $class->shift) == 'Noite' ? 'selected' : '' }}>Noite</option>
                                         </select>
                                     </div>
 
@@ -114,6 +113,31 @@
                                             <option value="1" {{ old('status', $class->status) == '1' ? 'selected' : '' }}>Activa</option>
                                             <option value="0" {{ old('status', $class->status) == '0' ? 'selected' : '' }}>Inactiva</option>
                                         </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" ><ion-icon name="form-label text-primary"></ion-icon> Dias da Semana:<span class="text-danger">*</span></label>
+                                        <div class="checkbox-grid">
+                                            <label class="checkbox-chip text-primary">
+                                                <input type="checkbox" name="daysofweek[]" value="Segunda-feira">
+                                                <span>Segunda-feira</span>
+                                            </label>
+                                            <label class="checkbox-chip text-primary">
+                                                <input type="checkbox" name="daysofweek[]" value="Terça-feira">
+                                                <span>Terça-feira</span>
+                                            </label>
+                                            <label class="checkbox-chip text-primary">
+                                                <input type="checkbox" name="daysofweek[]" value="Quarta-feira">
+                                                <span>Quarta-feira</span>
+                                            </label>
+                                            <label class="checkbox-chip text-primary">
+                                                <input type="checkbox" name="daysofweek[]" value="Quinta-feira">
+                                                <span>Quinta-feira</span>
+                                            </label>
+                                            <label class="checkbox-chip text-primary">
+                                                <input type="checkbox" name="daysofweek[]" value="Sexta-feira">
+                                                <span>Sexta-feira</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

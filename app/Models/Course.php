@@ -45,4 +45,9 @@ class Course extends Model
     protected $casts = [
         'status' => 'boolean',
     ];
+
+    public function classe()
+    {
+        return $this->hasMany('App\Http\Models\_Class');
+    }
 }

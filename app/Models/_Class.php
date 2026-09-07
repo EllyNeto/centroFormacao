@@ -46,10 +46,8 @@ class _Class extends Model
      */
     protected $fillable = [
         'name',        // Nome da turma
+        'days_of_week', // Dias da semana
         'code',        // Código de referência da turma
-        'course_name', // Nome do curso associado
-        'teacher_name',// Formador responsável
-        'room',        // Sala ou local da formação
         'shift',       // Turno (Manhã, Tarde, Pós-Laboral)
         'capacity',    // Capacidade máxima de estudantes
         'status',      // Estado da turma (1 = Ativa, 0 = Inativa)
@@ -63,5 +61,16 @@ class _Class extends Model
     protected $casts = [
         'status'   => 'boolean',
         'capacity' => 'integer',
+        'days_of_week' => 'array'
     ];
+
+    public function students()
+    {
+        return $this->hasMany('App\Http\Models\Student');
+    }
+
+    public function course()
+    {
+        return $this->belongsTo('App\Http\Models\Course');
+    }
 }

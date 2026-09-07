@@ -17,9 +17,8 @@ class CreateClassesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('code')->nullable();
-            $table->string('course_name')->nullable();
-            $table->string('teacher_name')->nullable();
             $table->string('room')->nullable();
+            $table->string('days_of_week');
             $table->string('shift')->default('Manhã');
             $table->integer('capacity')->default(25);
             $table->boolean('status')->default(true);

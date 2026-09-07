@@ -45,4 +45,9 @@ class Student extends Model
         'code',                 // Código de identificação do aluno
         'image',                // Nome do ficheiro de foto do estudante
     ];
+
+    public function classe()
+    {
+        return $this->belongsTo('App\Http\Models\_Class');
+    }
 }
