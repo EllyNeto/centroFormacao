@@ -23,8 +23,8 @@ class CreateCoursesTable extends Migration
             // Nome ou título do curso (ex: Programação Web)
             $table->string('name');
 
-            // Categoria do curso (ex: Tecnologia da Informação, Gestão, etc.)
-            $table->string('category');
+            // Estado do curso (ex: activo ou desaivado.)
+            $table->boolean('status')->default(true); // O curso fica ativo por padrão
 
             // Duração do curso em horas (inteiro)
             $table->integer('duration');

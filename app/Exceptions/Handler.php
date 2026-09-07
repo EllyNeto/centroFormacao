@@ -50,6 +50,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        // Tratamento elegante de exceção para uploads que excedam o tamanho limite de POST
+        if ($exception instanceof \Illuminate\Http\Exceptions\PostTooLargeException) {
+            return redirect()->back()->withErrors(['image' => 'A fotografia enviada é demasiado grande! Selecione uma imagem com menos de 2MB.'])->withInput();
+        }
+
         return parent::render($request, $exception);
     }
 }

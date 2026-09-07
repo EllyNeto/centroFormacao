@@ -21,7 +21,7 @@ class courseController extends Controller
         $courses = Course::orderBy('id', 'desc')->get();
 
         // Retorna a vista de listagem passando a coleção de cursos
-        return view('course.index.index', ['courses' => $courses]);
+        return view('admin.course.list.index', ['courses' => $courses]); 
     }
 
     /**
@@ -32,7 +32,7 @@ class courseController extends Controller
     public function create()
     {
         // Retorna a vista com o formulário para registar um novo curso
-        return view('course.create.index');
+        return view('admin.course.create.index');
     }
 
     /**
@@ -46,12 +46,12 @@ class courseController extends Controller
         // Validação dos dados recebidos do formulário
         $validatedData = $request->validate([
             'name'        => 'required|string|max:255',
-            'category'    => 'required|string|max:255',
+            'status'      => 'required|string|max:255',
             'duration'    => 'required|integer|min:1',
             'description' => 'nullable|string',
         ], [
             'name.required'     => 'O nome do curso é obrigatório.',
-            'category.required' => 'Por favor selecione a categoria do curso.',
+            'status.required'   => 'Por favor selecione a categoria/estado do curso.',
             'duration.required' => 'A duração do curso é obrigatória.',
             'duration.integer'  => 'A duração deve ser um número inteiro.',
             'duration.min'      => 'A duração deve ser de pelo menos 1 hora.',
@@ -76,7 +76,7 @@ class courseController extends Controller
         $course = Course::findOrFail($id);
 
         // Retorna a vista de detalhes do curso
-        return view('course.show.index', ['course' => $course]);
+        return view('admin.course.details.index', ['course' => $course]);
     }
 
     /**
@@ -109,12 +109,12 @@ class courseController extends Controller
         // Validação dos dados submetidos no formulário de edição
         $validatedData = $request->validate([
             'name'        => 'required|string|max:255',
-            'category'    => 'required|string|max:255',
+            'status'      => 'required|string|max:255',
             'duration'    => 'required|integer|min:1',
             'description' => 'nullable|string',
         ], [
             'name.required'     => 'O nome do curso é obrigatório.',
-            'category.required' => 'Por favor selecione a categoria do curso.',
+            'status.required'   => 'Por favor selecione a categoria/estado do curso.',
             'duration.required' => 'A duração do curso é obrigatória.',
             'duration.integer'  => 'A duração deve ser um número inteiro.',
             'duration.min'      => 'A duração deve ser de pelo menos 1 hora.',
