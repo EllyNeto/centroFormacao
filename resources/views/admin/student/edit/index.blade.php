@@ -91,10 +91,10 @@
                                                 <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $student->phone_number ?? $student->phone) }}" required>
                                             </div>
 
-                                            {{-- Campo: Código do Estudante --}}
+                                            {{-- Campo: Código do Estudante (Não Editável) --}}
                                             <div class="mb-3">
-                                                <label for="code" class="form-label text-primary">Código do Estudante <span class="text-danger">*</span></label>
-                                                <input type="number" class="form-control" id="code" name="code" value="{{ old('code', $student->code) }}" required>
+                                                <label for="code" class="form-label text-primary">Código do Estudante</label>
+                                                <input type="text" class="form-control" id="code" value="{{ $student->code }}" readonly disabled>
                                             </div>
                                         </div>
                                     </div>

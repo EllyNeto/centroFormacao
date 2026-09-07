@@ -7,37 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Modelo Eloquent representando a entidade Formador (Teacher).
- *
- * @property int $id
- * @property string $name
- * @property string $email
- * @property string|null $identity_card_number
- * @property string|null $phone_number
- * @property string|null $phone
- * @property string|null $specialty
- * @property string|null $image
- * @property boolean $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  */
 class Teacher extends Model
 {
     use SoftDeletes;
-    /**
-     * Nome da tabela associada ao modelo na base de dados.
-     *
-     * @var string
-     */
+
     protected $table = 'teachers';
 
-    // O Laravel vai tratar automaticamente a coluna 'deleted_at'
     protected $dates = ['deleted_at'];
-    
-    /**
-     * Os atributos que podem ser atribuídos em massa (Mass Assignment).
-     *
-     * @var array
-     */
+
     protected $fillable = [
         'name',                 // Nome completo do formador
         'email',                // Endereço de e-mail
@@ -47,17 +25,15 @@ class Teacher extends Model
         'status',               // Estado do registo (Ativo/Desativo)
     ];
 
-    /**
-     * Conversão de tipos de atributos (Casting).
-     *
-     * @var array
-     */
     protected $casts = [
         'status' => 'boolean',
     ];
 
-    public function class()
+    /**
+     * Relação de um-para-muitos com as turmas lecionadas pelo formador.
+     */
+    public function classes()
     {
-        return $this->hasMany('App\Http\Models\_Class');
+        return $this->hasMany(_Class::class, 'teacher_id');
     }
 }

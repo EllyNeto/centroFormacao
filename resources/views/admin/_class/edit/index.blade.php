@@ -1,17 +1,13 @@
-{{-- Extende o layout principal unificado da aplicação --}}
 @extends('layouts.main')
 
-{{-- Define o título dinâmico da página --}}
 @section('title', 'Editar Turma')
 
-{{-- Conteúdo principal da página de edição de turma --}}
 @section('content')
 <div class="content-body">
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-12">
                 <div class="card">
-                    {{-- Cabeçalho do cartão com o título e o botão para voltar --}}
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0">Editar Turma: #{{ $class->id }} - {{ $class->name }}</h4>
                         <a href="{{ route('class.index') }}" class="btn btn-secondary btn-sm">
@@ -19,13 +15,11 @@
                         </a>
                     </div>
 
-                    {{-- Formulário de edição da turma existente --}}
                     <form action="{{ route('class.update', $class->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
                         <div class="card-body">
-                            {{-- Exibição de alertas de erro de validação no modelo Alerts Alt --}}
                             @if ($errors->any())
                                 <div class="alert alert-danger alert-alt alert-dismissible fade show mb-4" role="alert">
                                     <strong>Erro!</strong> Por favor, verifique os erros abaixo ao atualizar a turma:
@@ -39,67 +33,66 @@
                             @endif
 
                             <div class="row">
-                                {{-- Coluna Esquerda: Nome, Código, Curso e Formador --}}
                                 <div class="col-xl-6 col-sm-6">
-                                    {{-- Campo: Nome da Turma --}}
                                     <div class="mb-3">
                                         <label for="name" class="form-label text-primary">Nome da Turma <span class="text-danger">*</span></label>
                                         <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $class->name) }}" required>
                                     </div>
 
-                                    {{-- Campo: Código da Turma --}}
                                     <div class="mb-3">
-                                        <label for="code" class="form-label text-primary">Código da Turma <span class="text-danger">*</span></label>
-                                        <input type="text" id="code" name="code" class="form-control" value="{{ old('code', $class->code) }}" required>
+                                        <label for="code" class="form-label text-primary">Código da Turma (Não Editável)</label>
+                                        <input type="text" id="code" class="form-control" value="{{ $class->code }}" readonly disabled>
                                     </div>
 
-                                    {{-- Campo: Curso --}}
                                     <div class="mb-3">
-                                        <label for="course_id" class="form-label text-primary">Curso Associado</label>
-                                        <select id="course_id" name="course_id" class="default-select wide form-control">
-                                            <option value="">Selecione um curso (Opcional)</option>
+                                        <label for="course_id" class="form-label text-primary">Curso Associado <span class="text-danger">*</span></label>
+                                        <select id="course_id" name="course_id" class="default-select wide form-control" required>
+                                            <option value="">Selecione um curso</option>
                                             @foreach($courses as $course)
                                                 <option value="{{ $course->id }}" {{ old('course_id', $class->course_id) == $course->id ? 'selected' : '' }}>{{ $course->name }}</option>
                                             @endforeach
-                                            @if($courses->isEmpty())
-                                                 <option value="" >Nenhum curso foi adcicionado.</option>
-                                            @endif
                                         </select>
                                     </div>
 
-                                    {{-- Campo: Formador Responsável --}}
                                     <div class="mb-3">
-                                        <label for="teacher_id" class="form-label text-primary">Formador Responsável</label>
-                                        <select id="teacher_id" name="teacher_id" class="default-select wide form-control">
-                                            <option value="">Selecione um formador (Opcional)</option>
+                                        <label for="teacher_id" class="form-label text-primary">Formador Responsável <span class="text-danger">*</span></label>
+                                        <select id="teacher_id" name="teacher_id" class="default-select wide form-control" required>
+                                            <option value="">Selecione um formador</option>
                                             @foreach($teachers as $teacher)
                                                 <option value="{{ $teacher->id }}" {{ old('teacher_id', $class->teacher_id) == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
                                             @endforeach
-                                            @if($teachers->isEmpty())
-                                                <option value="" >Nenhum formador foi adcicionado.</option>
-                                            @endif
                                         </select>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label for="start_time" class="form-label text-primary">Hora de Início</label>
-                                        <input type="time" name="start_time" id="start_time" class="form-control" value="{{ old('start_time') }}">
+                                        <label for="student_id" class="form-label text-primary">Estudante Associado (Opcional)</label>
+                                        <select id="student_id" name="student_id" class="default-select wide form-control">
+                                            <option value="">Nenhum Estudante Associado</option>
+                                            @foreach($students as $student)
+                                                <option value="{{ $student->id }}" {{ old('student_id', $class->student_id) == $student->id ? 'selected' : '' }}>
+                                                    {{ $student->name }} (BI: {{ $student->identity_card_number }})
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label for="end_time" class="form-label text-primary">Hora de Término</label>
-                                        <input type="time" name="end_time" id="end_time" class="form-control" value="{{ old('end_time') }}">
+                                        <label for="falta" class="form-label text-primary">Número de Faltas</label>
+                                        <input type="number" min="0" id="falta" name="falta" class="form-control" value="{{ old('falta', $class->falta ?? 0) }}">
                                     </div>
                                 </div>
-                                
 
-                                {{-- Coluna Direita: Sala, Turno, Capacidade e Estado --}}
                                 <div class="col-xl-6 col-sm-6">
-                                    {{-- Campo: Sala / Local
                                     <div class="mb-3">
-                                        <label for="room" class="form-label text-primary">Sala / Localização</label>
-                                        <input type="text" id="room" name="room" class="form-control" value="{{ old('room', $class->room) }}">
-                                    </div> --}}
+                                        <label for="start_time" class="form-label text-primary">Hora de Início <span class="text-danger">*</span></label>
+                                        <input type="time" name="start_time" id="start_time" class="form-control" value="{{ old('start_time', date('H:i', strtotime($class->start_time))) }}" required>
+                                    </div>
 
-                                    {{-- Campo: Turno --}}
+                                    <div class="mb-3">
+                                        <label for="end_time" class="form-label text-primary">Hora de Término <span class="text-danger">*</span></label>
+                                        <input type="time" name="end_time" id="end_time" class="form-control" value="{{ old('end_time', date('H:i', strtotime($class->end_time))) }}" required>
+                                    </div>
+
                                     <div class="mb-3">
                                         <label for="shift" class="form-label text-primary">Turno <span class="text-danger">*</span></label>
                                         <select id="shift" name="shift" class="default-select wide form-control" required>
@@ -109,49 +102,51 @@
                                         </select>
                                     </div>
 
-                                    {{-- Campo: Capacidade --}}
                                     <div class="mb-3">
                                         <label for="capacity" class="form-label text-primary">Capacidade Máxima <span class="text-danger">*</span></label>
                                         <input type="number" min="1" id="capacity" name="capacity" class="form-control" value="{{ old('capacity', $class->capacity) }}" required>
                                     </div>
 
-                                    {{-- Campo: Estado da Turma --}}
                                     <div class="mb-3">
                                         <label for="status" class="form-label text-primary">Estado da Turma <span class="text-danger">*</span></label>
                                         <select id="status" name="status" class="default-select wide form-control" required>
-                                            <option value="1" {{ old('status', $class->status) == '1' ? 'selected' : '' }}>Activa</option>
-                                            <option value="0" {{ old('status', $class->status) == '0' ? 'selected' : '' }}>Inactiva</option>
+                                            <option value="1" {{ old('status', $class->status) ? 'selected' : '' }}>Activa</option>
+                                            <option value="0" {{ !old('status', $class->status) ? 'selected' : '' }}>Inactiva</option>
                                         </select>
                                     </div>
-                                      <div class="mb-3">
-                                        <label class="form-label text-primary" ><ion-icon name="form-label text-primary"></ion-icon> Dias da Semana:<span class="text-danger">*</span></label>
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Dias da Semana <span class="text-danger">*</span></label>
+                                        @php
+                                            $selectedDays = is_array($class->days_of_week) ? $class->days_of_week : [];
+                                        @endphp
                                         <div class="checkbox-grid">
-                                            <label class="checkbox-chip text-primary">
-                                                <input type="checkbox" name="days_of_week[]" value="Segunda-feira">
+                                            <label class="checkbox-chip text-primary me-2">
+                                                <input type="checkbox" name="days_of_week[]" value="Segunda-feira" {{ in_array('Segunda-feira', $selectedDays) ? 'checked' : '' }}>
                                                 <span>Segunda-feira</span>
                                             </label>
-                                            <label class="checkbox-chip text-primary">
-                                                <input type="checkbox" name="days_of_week[]" value="Terça-feira">
+                                            <label class="checkbox-chip text-primary me-2">
+                                                <input type="checkbox" name="days_of_week[]" value="Terça-feira" {{ in_array('Terça-feira', $selectedDays) ? 'checked' : '' }}>
                                                 <span>Terça-feira</span>
                                             </label>
-                                            <label class="checkbox-chip text-primary">
-                                                <input type="checkbox" name="days_of_week[]" value="Quarta-feira">
+                                            <label class="checkbox-chip text-primary me-2">
+                                                <input type="checkbox" name="days_of_week[]" value="Quarta-feira" {{ in_array('Quarta-feira', $selectedDays) ? 'checked' : '' }}>
                                                 <span>Quarta-feira</span>
                                             </label>
-                                            <label class="checkbox-chip text-primary">
-                                                <input type="checkbox" name="days_of_week[]" value="Quinta-feira">
+                                            <label class="checkbox-chip text-primary me-2">
+                                                <input type="checkbox" name="days_of_week[]" value="Quinta-feira" {{ in_array('Quinta-feira', $selectedDays) ? 'checked' : '' }}>
                                                 <span>Quinta-feira</span>
                                             </label>
                                             <label class="checkbox-chip text-primary">
-                                                <input type="checkbox" name="days_of_week[]" value="Sexta-feira">
+                                                <input type="checkbox" name="days_of_week[]" value="Sexta-feira" {{ in_array('Sexta-feira', $selectedDays) ? 'checked' : '' }}>
                                                 <span>Sexta-feira</span>
                                             </label>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- Rodapé do cartão com botões de ação --}}
                         <div class="card-footer text-end">
                             <a href="{{ route('class.index') }}" class="btn btn-danger light me-2">Cancelar</a>
                             <button type="submit" class="btn btn-primary">Atualizar Turma</button>

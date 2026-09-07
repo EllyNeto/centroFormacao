@@ -45,7 +45,8 @@
                                         <thead>
                                             <tr>
                                                 <th>#ID</th>
-                                                <th>Tipo de Pagamento</th>
+                                                <th>Tipo de Emolumento</th>
+                                                <th>Forma</th>
                                                 <th>Valor</th>
                                                 <th>Moeda</th>
                                                 <th>Referência</th>
@@ -66,6 +67,9 @@
                                                         </a>
                                                     </td>
                                                     <td>
+                                                        <span class="badge badge-light">{{ $paymentItem->payment_method ?? 'Numerário' }}</span>
+                                                    </td>
+                                                    <td>
                                                         <strong>{{ number_format($paymentItem->value, 2, ',', '.') }}</strong>
                                                     </td>
                                                     <td>
@@ -80,7 +84,7 @@
                                                     </td>
                                                     <td>
                                                         @if($paymentItem->status)
-                                                            <span class="badge badge-success light">Concluído</span>
+                                                            <span class="badge badge-success light">Concluído / Pago</span>
                                                         @else
                                                             <span class="badge badge-warning light">Pendente</span>
                                                         @endif
@@ -110,7 +114,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="8" class="text-center py-4 text-muted">
+                                                    <td colspan="9" class="text-center py-4 text-muted">
                                                         <i class="fa fa-credit-card-alt fs-24 mb-2 d-block"></i>
                                                         Nenhum pagamento registado.
                                                     </td>

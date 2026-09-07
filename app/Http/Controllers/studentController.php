@@ -18,10 +18,7 @@ class studentController extends Controller
      */
     public function index()
     {
-        // Procura todos os estudantes registados ordenados pelo ID decrescente
         $students = Student::orderBy('id', 'desc')->get();
-
-        // Retorna a vista de listagem passando a coleção de estudantes
         return view('admin.student.list.index', ['students' => $students]);
     }
 
@@ -32,7 +29,6 @@ class studentController extends Controller
      */
     public function create()
     {
-        // Retorna a vista com o formulário para registar um novo estudante
         return view('admin.student.create.index');
     }
 
@@ -44,7 +40,13 @@ class studentController extends Controller
      */
     public function store(Request $request)
     {
-        // Validação rigorosa dos dados recebidos do formulário de criação
+        // Se o código não for fornecido ou for string não numérico, gera automaticamente um código numérico único
+        if (!$request->filled('code') || !is_numeric($request->code)) {
+            $maxCode = Student::max('code');
+            $request->merge(['code' => $maxCode ? ($maxCode + 1) : 1001]);
+        }
+
+        // Validação dos dados recebidos do formulário de criação
         $validatedData = $request->validate([
             'name'                 => 'required|string|max:255',
             'email'                => 'required|email|max:255',
@@ -65,20 +67,23 @@ class studentController extends Controller
             'image.max'                     => 'A imagem não pode ter um tamanho superior a 2MB.',
         ]);
 
-        // Processamento do upload da fotografia do estudante, se enviada
+        // Mapeia o campo 'phone' recebido do formulário para a coluna 'phone_number' da base de dados
+        $validatedData['phone_number'] = $validatedData['phone'];
+        unset($validatedData['phone']);
+
+        // Processamento do upload da fotografia do estudante
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $requestImage = $request->file('image');
             $extension = $requestImage->getClientOriginalExtension() ?: $requestImage->extension();
             $imageName = md5($requestImage->getClientOriginalName() . time()) . '.' . $extension;
             $imagePath = $requestImage->storeAs('img/student', $imageName, 'public');
 
-            // Substitui o nome da imagem antiga pelo novo nome
             $validatedData['image'] = $imagePath;
         }
-        // Criação do registo na base de dados com os dados validados
+
+        // Criação do registo na base de dados
         Student::create($validatedData);
 
-        // Redireciona para a listagem com mensagem de sucesso na sessão
         return redirect()->route('student.index')->with('success', 'Estudante registado com sucesso!');
     }
 
@@ -90,10 +95,7 @@ class studentController extends Controller
      */
     public function show($id)
     {
-        // Procura o estudante pelo ID ou lança erro 404 se não for encontrado
         $student = Student::findOrFail($id);
-
-        // Retorna a vista de detalhes do estudante
         return view('admin.student.details.index', ['student' => $student]);
     }
 
@@ -105,10 +107,7 @@ class studentController extends Controller
      */
     public function edit($id)
     {
-        // Procura o estudante pelo ID para pré-preencher o formulário
         $student = Student::findOrFail($id);
-
-        // Retorna a vista de edição passando os dados do estudante
         return view('admin.student.edit.index', ['student' => $student]);
     }
 
@@ -121,16 +120,13 @@ class studentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Procura o estudante a ser atualizado pelo ID
         $student = Student::findOrFail($id);
 
-        // Validação dos dados submetidos no formulário de edição
         $validatedData = $request->validate([
             'name'                 => 'required|string|max:255',
             'email'                => 'required|email|max:255',
             'identity_card_number' => 'required|string|max:255',
             'phone'                => 'required|string|max:20',
-            'code'                 => 'required|integer',
             'image'                => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ], [
             'name.required'                 => 'O nome do estudante é obrigatório.',
@@ -138,39 +134,34 @@ class studentController extends Controller
             'email.email'                   => 'Insira um endereço de e-mail válido.',
             'identity_card_number.required' => 'O número do bilhete de identidade é obrigatório.',
             'phone.required'                => 'O número de telefone é obrigatório.',
-            'code.required'                 => 'O código do estudante é obrigatório.',
-            'code.integer'                  => 'O código deve ser um número inteiro.',
             'image.image'                   => 'O ficheiro selecionado deve ser uma imagem.',
             'image.mimes'                   => 'A imagem deve estar no formato JPG, JPEG, PNG ou WEBP.',
             'image.max'                     => 'A imagem não pode ter um tamanho superior a 2MB.',
         ]);
 
-        // 1. Verifica se o estudante tem uma imagem registada
-        if ($student->image) {
-            // 2. Reconstrói o caminho correto dentro de storage/app/public/
-            $caminhoCompleto = 'img/student/' . $student->image;
-    
-            // 3. Apaga o ficheiro do disco público se ele existir lá
-            if (Storage::exists($caminhoCompleto)) {
-                Storage::disk('public')->delete($caminhoCompleto);
-            }
-        }
+        $validatedData['phone_number'] = $validatedData['phone'];
+        unset($validatedData['phone']);
+        // Garante que o código do estudante não seja modificado
+        $validatedData['code'] = $student->code;
 
-        // Processamento do upload da nova fotografia, se fornecida
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            if ($student->image) {
+                $caminhoCompleto = 'img/student/' . $student->image;
+                if (Storage::exists($caminhoCompleto)) {
+                    Storage::disk('public')->delete($caminhoCompleto);
+                }
+            }
+
             $requestImage = $request->file('image');
             $extension = $requestImage->getClientOriginalExtension() ?: $requestImage->extension();
             $imageName = md5($requestImage->getClientOriginalName() . time()) . '.' . $extension;
             $imagePath = $requestImage->storeAs('img/student', $imageName, 'public');
 
-            // Substitui o nome da imagem antiga pelo novo nome
             $validatedData['image'] = $imagePath;
         }
 
-        // Atualização das propriedades do estudante na base de dados
         $student->update($validatedData);
 
-        // Redireciona para a listagem com mensagem de sucesso na sessão
         return redirect()->route('student.index')->with('success', 'Estudante atualizado com sucesso!');
     }
 
@@ -180,38 +171,24 @@ class studentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
-
-        public function destroy($id)
-        {
-            // Procura o estudante pelo ID
-            $student = Student::findOrFail($id);
-        
-            // 1. Verifica se o estudante tem uma imagem registada
-            if ($student->image) {
-                // 2. Reconstrói o caminho correto dentro de storage/app/public/
-                $caminhoCompleto = 'img/student/' . $student->image;
-        
-                // 3. Apaga o ficheiro do disco público se ele existir lá
-                if (Storage::exists($caminhoCompleto)) {
-                    Storage::disk('public')->delete($caminhoCompleto);
-                }
+    public function destroy($id)
+    {
+        $student = Student::findOrFail($id);
+    
+        if ($student->image) {
+            $caminhoCompleto = 'img/student/' . $student->image;
+            if (Storage::exists($caminhoCompleto)) {
+                Storage::disk('public')->delete($caminhoCompleto);
             }
-
-            // Apaga o registo do estudante da base de dados
-            $student->delete();
-        
-            // Redireciona para a listagem com mensagem de sucesso na sessão
-            return redirect()->route('student.index')->with('success', 'Estudante eliminado com sucesso!');
         }
 
-    /**
-     * Método auxiliar de dashboard do estudante (mantido para compatibilidade).
-     *
-     * @return \Illuminate\View\View
-     */
+        $student->delete();
+    
+        return redirect()->route('student.index')->with('success', 'Estudante eliminado com sucesso!');
+    }
+
     public function dashboard()
     {
-        // Retorna a vista do dashboard principal de estudantes
         return view('admin.dashboard.index');
     }
 }
