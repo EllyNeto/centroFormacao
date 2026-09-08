@@ -39,6 +39,18 @@
 						<li><a href="{{ route('payment.create') }}">Adicionar novo</a></li>
 					</ul>
 					</li>
+					{{-- Seção Módulo de Fatura --}}
+					<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
+						<i class="material-symbols-outlined">receipt_long</i>
+						<span class="nav-text">Fatura</span>
+					</a>
+					<ul aria-expanded="false">
+						{{-- Link para a listagem de faturas --}}
+						<li><a href="{{ route('invoice.index') }}">Listar</a></li>
+						{{-- Link para emissão de nova fatura --}}
+						<li><a href="{{ route('invoice.create') }}">Emitir Nova</a></li>
+					</ul>
+					</li>
 					{{-- Seção Módulo de Estudante --}}
 					<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">school</i>

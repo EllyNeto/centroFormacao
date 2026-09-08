@@ -206,3 +206,35 @@ Route::put('/enrollment/update/{id}', [enrollmentController::class, 'update'])->
 
 // Rota DELETE para eliminar uma inscrição da base de dados por ID
 Route::delete('/enrollment/destroy/{id}', [enrollmentController::class, 'destroy'])->name('enrollment.destroy');
+
+/*
+|--------------------------------------------------------------------------
+| Rotas do Módulo de Faturas (Invoice/Fatura CRUD)
+|--------------------------------------------------------------------------
+|
+| Gestão completa de faturas: Listar, Criar, Salvar, Ver, Editar, Atualizar e Eliminar.
+|
+*/
+
+use App\Http\Controllers\invoiceController;
+
+// Rota GET para a listagem de todas as faturas registadas
+Route::get('/invoice/index', [invoiceController::class, 'index'])->name('invoice.index');
+
+// Rota GET para apresentar o formulário de emissão de nova fatura
+Route::get('/invoice/create', [invoiceController::class, 'create'])->name('invoice.create');
+
+// Rota POST para processar a gravação da nova fatura
+Route::post('/invoice/store', [invoiceController::class, 'store'])->name('invoice.store');
+
+// Rota GET para visualizar os detalhes de uma fatura específica por ID
+Route::get('/invoice/{id}', [invoiceController::class, 'show'])->name('invoice.show');
+
+// Rota GET para apresentar o formulário de edição de uma fatura existente por ID
+Route::get('/invoice/edit/{id}', [invoiceController::class, 'edit'])->name('invoice.edit');
+
+// Rota PUT para processar a atualização dos dados da fatura por ID
+Route::put('/invoice/update/{id}', [invoiceController::class, 'update'])->name('invoice.update');
+
+// Rota DELETE para eliminar uma fatura da base de dados por ID
+Route::delete('/invoice/destroy/{id}', [invoiceController::class, 'destroy'])->name('invoice.destroy');

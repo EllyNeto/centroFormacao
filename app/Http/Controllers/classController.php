@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\_Class;
 use App\Models\Course;
 use App\Models\Teacher;
+use App\Models\Student;
 
 /**
  * Controlador responsável pela gestão dinâmica e completa das operações CRUD da entidade Turma (_Class).
@@ -19,28 +20,25 @@ class classController extends Controller
      */
     public function index()
     {
-        // Procura todas as turmas registadas na base de dados ordenadas pelo ID decrescente (mais recentes primeiro)
-        $classes = _Class::orderBy('id', 'desc')->get();
-
-        // Retorna a vista de listagem passando a coleção dinâmica de turmas
-        return view('admin._class.list.index', ['classes' => $classes]);
+        $classes = _Class::with(['course', 'teacher', 'student'])->orderBy('id', 'desc')->get();
+        return view('admin.room.list.index', ['classes' => $classes]);
     }
 
     /**
-     * Exibe o formulário para registar uma nova turma com os cursos e formadores dinâmicos.
+     * Exibe o formulário para registar uma nova turma com cursos, formadores e estudantes.
      *
      * @return \Illuminate\View\View
      */
     public function create()
     {
-        // Procura os cursos e formadores activos para popular os dropdowns de seleção
         $courses = Course::where('status', 1)->get();
         $teachers = Teacher::where('status', 1)->get();
+        $students = Student::all();
 
-        // Retorna a vista contendo o formulário de criação de turma
-        return view('admin._class.create.index', [
-            'courses' => $courses,
+        return view('admin.room.create.index', [
+            'courses'  => $courses,
             'teachers' => $teachers,
+            'students' => $students,
         ]);
     }
 
@@ -52,81 +50,74 @@ class classController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all()); 
-        // Validação dos dados recebidos do formulário de criação de turma
         $validatedData = $request->validate([
             'name'         => 'required|string|max:255',
             'days_of_week' => 'required',
             'code'         => 'nullable|string|max:100',
-            'room'         => 'nullable|string|max:100',
             'shift'        => 'required|string|max:50',
             'capacity'     => 'required|integer|min:1',
             'status'       => 'required|boolean',
             'teacher_id'   => 'required|exists:teachers,id',
-            'course_id'    => 'nullable|string',
-            'start_time' => 'required|date_format:H:i',
-            'end_time'   => 'required|date_format:H:i',
-            
+            'course_id'    => 'required|exists:courses,id',
+            'student_id'   => 'nullable|exists:students,id',
+            'falta'        => 'nullable|integer|min:0',
+            'start_time'   => 'required|date_format:H:i',
+            'end_time'     => 'required|date_format:H:i',
         ], [
-            'name.required'     => 'O nome da turma é obrigatório.',
-            'name.max'          => 'O nome da turma não pode exceder 255 carateres.',
-            'shift.required'    => 'Por favor escolha o turno da turma.',
-            'capacity.required' => 'A capacidade da turma é obrigatória.',
-            'capacity.integer'  => 'A capacidade deve ser um número inteiro.',
-            'capacity.min'      => 'A capacidade deve ser de pelo menos 1 aluno.',
-            'status.required'   => 'Por favor selecione o estado da turma.',
-            'days_of_week'      => 'Selecione algum dia da semana.',
+            'name.required'       => 'O nome da turma é obrigatório.',
+            'shift.required'      => 'Por favor escolha o turno da turma.',
+            'capacity.required'   => 'A capacidade da turma é obrigatória.',
+            'status.required'     => 'Por favor selecione o estado da turma.',
+            'days_of_week'        => 'Selecione algum dia da semana.',
             'teacher_id.required' => 'Por favor, selecione um formador/professor.',
             'teacher_id.exists'   => 'O formador selecionado não existe.',
+            'course_id.required'  => 'Por favor, selecione um curso associado.',
+            'course_id.exists'    => 'O curso selecionado não existe.',
         ]);
 
-        // Se o código da turma não for preenchido, gera automaticamente um código com base no ano
         if (empty($validatedData['code'])) {
             $validatedData['code'] = 'TURMA-' . date('Y') . '-' . rand(100, 999);
         }
 
-        // Criação dinâmica do registo na tabela 'classes'
+        if (!isset($validatedData['falta'])) {
+            $validatedData['falta'] = 0;
+        }
+
         _Class::create($validatedData);
 
-        // Redireciona a navegação para a listagem principal com mensagem de sucesso armazenada na sessão
         return redirect()->route('class.index')->with('success', 'Turma registada com sucesso!');
     }
 
     /**
-     * Exibe a página de detalhes de uma turma dinâmica específica pelo ID.
+     * Exibe a página de detalhes de uma turma específica pelo ID.
      *
      * @param  int  $id
      * @return \Illuminate\View\View
      */
     public function show($id)
     {
-        // Procura dinamicamente a turma na base de dados pelo ID
-        $class = _Class::findOrFail($id);
-
-        // Retorna a vista de detalhes passando o objeto da turma
-        return view('admin._class.details.index', ['class' => $class]);
+        $class = _Class::with(['course', 'teacher', 'student'])->findOrFail($id);
+        return view('admin.room.details.index', ['class' => $class]);
     }
 
     /**
-     * Exibe o formulário de edição para alterar os dados de uma turma existente na base de dados.
+     * Exibe o formulário de edição para alterar os dados de uma turma existente.
      *
      * @param  int  $id
      * @return \Illuminate\View\View
      */
     public function edit($id)
     {
-        // Procura a turma na base de dados pelo ID
         $class = _Class::findOrFail($id);
-
-        // Procura os cursos e formadores activos para seleção
         $courses = Course::where('status', 1)->get();
         $teachers = Teacher::where('status', 1)->get();
+        $students = Student::all();
 
-        // Retorna a vista de edição passando o registo dinâmico da turma
-        return view('admin._class.edit.index', [
-            'class' => $class,
-            'courses' => $courses,
+        return view('admin.room.edit.index', [
+            'class'    => $class,
+            'courses'  => $courses,
             'teachers' => $teachers,
+            'students' => $students,
         ]);
     }
 
@@ -139,40 +130,42 @@ class classController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Procura a turma a ser atualizada
         $class = _Class::findOrFail($id);
 
-        // Validação dos dados submetidos no formulário de edição da turma
         $validatedData = $request->validate([
             'name'         => 'required|string|max:255',
             'days_of_week' => 'required',
             'code'         => 'nullable|string|max:100',
-            'room'         => 'nullable|string|max:100',
             'shift'        => 'required|string|max:50',
             'capacity'     => 'required|integer|min:1',
             'status'       => 'required|boolean',
             'teacher_id'   => 'required|exists:teachers,id',
-            'course_id'    => 'nullable|string',
-            'start_time' => 'required|date_format:H:i',
-            'end_time'   => 'required|date_format:H:i',
-            
+            'course_id'    => 'required|exists:courses,id',
+            'student_id'   => 'nullable|exists:students,id',
+            'falta'        => 'nullable|integer|min:0',
+            'start_time'   => 'required|date_format:H:i',
+            'end_time'     => 'required|date_format:H:i',
         ], [
-            'name.required'     => 'O nome da turma é obrigatório.',
-            'name.max'          => 'O nome da turma não pode exceder 255 carateres.',
-            'shift.required'    => 'Por favor escolha o turno da turma.',
-            'capacity.required' => 'A capacidade da turma é obrigatória.',
-            'capacity.integer'  => 'A capacidade deve ser um número inteiro.',
-            'capacity.min'      => 'A capacidade deve ser de pelo menos 1 aluno.',
-            'status.required'   => 'Por favor selecione o estado da turma.',
-            'days_of_week'      => 'Selecione algum dia da semana.',
+            'name.required'       => 'O nome da turma é obrigatório.',
+            'shift.required'      => 'Por favor escolha o turno da turma.',
+            'capacity.required'   => 'A capacidade da turma é obrigatória.',
+            'status.required'     => 'Por favor selecione o estado da turma.',
+            'days_of_week'        => 'Selecione algum dia da semana.',
             'teacher_id.required' => 'Por favor, selecione um formador/professor.',
             'teacher_id.exists'   => 'O formador selecionado não existe.',
+            'course_id.required'  => 'Por favor, selecione um curso associado.',
+            'course_id.exists'    => 'O curso selecionado não existe.',
         ]);
 
-        // Atualização dos campos na base de dados
+        if (!isset($validatedData['falta'])) {
+            $validatedData['falta'] = 0;
+        }
+
+        // Garante que o código da turma não seja modificado na atualização
+        $validatedData['code'] = $class->code;
+
         $class->update($validatedData);
 
-        // Redireciona para a listagem com mensagem de confirmação
         return redirect()->route('class.index')->with('success', 'Turma atualizada com sucesso!');
     }
 
@@ -184,13 +177,9 @@ class classController extends Controller
      */
     public function destroy($id)
     {
-        // Procura a turma pelo ID
         $class = _Class::findOrFail($id);
-
-        // Executa a eliminação suave (soft delete) da turma
         $class->delete();
 
-        // Redireciona para a listagem com mensagem de sucesso
         return redirect()->route('class.index')->with('success', 'Turma eliminada com sucesso!');
     }
 }

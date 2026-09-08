@@ -7,19 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Modelo Eloquent representando a entidade Turma (Class/_Class).
- *
- * @property int $id
- * @property string $name
- * @property string $code
- * @property string|null $course_name
- * @property string|null $teacher_name
- * @property string|null $room
- * @property string|null $shift
- * @property int|null $capacity
- * @property boolean $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  */
 class _Class extends Model
 {
@@ -45,14 +32,16 @@ class _Class extends Model
      * @var array
      */
     protected $fillable = [
-        'name',        // Nome da turma
+        'name',         // Nome da turma
         'days_of_week', // Dias da semana
-        'code',        // Código de referência da turma
-        'shift',       // Turno (Manhã, Tarde, Pós-Laboral)
-        'capacity',    // Capacidade máxima de estudantes
-        'status',      // Estado da turma (1 = Ativa, 0 = Inativa)
-        'teacher_id',  // Dados da entidade formador
-        'course_id',  // Dados da entidade cursos
+        'code',         // Código de referência da turma
+        'shift',        // Turno (Manhã, Tarde, Pós-Laboral)
+        'capacity',     // Capacidade máxima de estudantes
+        'status',       // Estado da turma (1 = Ativa, 0 = Inativa)
+        'teacher_id',   // Formador responsável
+        'course_id',    // Curso associado
+        'student_id',   // Aluno associado à turma
+        'falta',        // Número de faltas
         'start_time',
         'end_time',
     ];
@@ -63,23 +52,33 @@ class _Class extends Model
      * @var array
      */
     protected $casts = [
-        'status'   => 'boolean',
-        'capacity' => 'integer',
+        'status'       => 'boolean',
+        'capacity'     => 'integer',
+        'falta'        => 'integer',
         'days_of_week' => 'array'
     ];
 
-    public function students()
+    /**
+     * Relação de pertença com o estudante associado à turma (opcional).
+     */
+    public function student()
     {
-        return $this->hasMany('App\Http\Models\Student');
+        return $this->belongsTo(Student::class, 'student_id');
     }
 
+    /**
+     * Relação de pertença com o curso associado à turma.
+     */
     public function course()
     {
-        return $this->belongsTo('App\Http\Models\Course');
+        return $this->belongsTo(Course::class, 'course_id');
     }
 
+    /**
+     * Relação de pertença com o formador responsável pela turma.
+     */
     public function teacher()
     {
-        return $this->belongsTo('App\Http\Models\Teacher');
+        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 }

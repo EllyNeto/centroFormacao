@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Payment;
+use App\Models\Invoice;
+use App\Models\Enrollment;
 
 /**
  * Controlador responsável pela gestão completa das operações CRUD da entidade Pagamento (Payment).
@@ -17,10 +19,7 @@ class paymentController extends Controller
      */
     public function index()
     {
-        // Procura todos os pagamentos registados ordenados pelo ID decrescente (mais recentes primeiro)
         $payments = Payment::orderBy('id', 'desc')->get();
-
-        // Retorna a vista de listagem passando a coleção de pagamentos
         return view('admin.payment.list.index', ['payments' => $payments]);
     }
 
@@ -31,52 +30,53 @@ class paymentController extends Controller
      */
     public function create()
     {
-        // Retorna a vista contendo o formulário de criação de pagamento
         return view('admin.payment.create.index');
     }
 
     /**
-     * Valida os dados submetidos pelo formulário de criação e guarda um novo pagamento na base de dados.
+     * Valida os dados submetidos e guarda um novo pagamento.
+     * Se o pagamento for marcado como concluído (status = 1), atualiza a inscrição associada.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        // Validação rigorosa dos dados recebidos do formulário de criação de pagamento
+        // Se a referência for gerada automaticamente no frontend ou não enviada, gera um número inteiro automático de 8 dígitos
+        if (!$request->has('reference') || empty($request->reference)) {
+            $request->merge(['reference' => rand(10000000, 99999999)]);
+        }
+
         $validatedData = $request->validate([
             'type_of_payment' => 'required|string|max:255',
             'value'           => 'required|numeric|min:0',
-            'reference'       => 'required|integer|min:1',
+            'reference'       => 'required|integer',
             'status'          => 'required|boolean',
+            'payment_method'  => 'required|string|max:255',
             'date'            => 'nullable|date',
             'currency'        => 'required|string|max:10',
         ], [
-            'type_of_payment.required' => 'O tipo de pagamento é obrigatório.',
-            'type_of_payment.string'   => 'O tipo de pagamento deve ser um texto válido.',
-            'type_of_payment.max'      => 'O tipo de pagamento não pode exceder 255 carateres.',
+            'type_of_payment.required' => 'O tipo de emolumento/pagamento é obrigatório.',
             'value.required'           => 'O valor do pagamento é obrigatório.',
-            'value.numeric'            => 'O valor deve ser um número válido.',
-            'value.min'                => 'O valor não pode ser negativo.',
-            'reference.required'       => 'O número de referência do pagamento é obrigatório.',
-            'reference.integer'        => 'A referência deve ser um número inteiro.',
-            'reference.min'            => 'A referência deve ser um número positivo.',
             'status.required'          => 'Por favor selecione o estado do pagamento.',
-            'status.boolean'           => 'O estado do pagamento é inválido.',
-            'date.date'                => 'Insira uma data e hora válidas para o pagamento.',
+            'payment_method.required'  => 'Selecione a forma de pagamento.',
             'currency.required'        => 'A indicação da moeda é obrigatória.',
-            'currency.max'             => 'A moeda não pode ter mais de 10 carateres.',
         ]);
 
-        // Se a data e hora não forem submetidas, atribui automaticamente o momento atual do sistema (data e hora)
         if (empty($validatedData['date'])) {
             $validatedData['date'] = now();
         }
 
-        // Criação do registo na tabela de pagamentos com os dados validados
-        Payment::create($validatedData);
+        $payment = Payment::create($validatedData);
 
-        // Redireciona a navegação para a listagem principal com mensagem de sucesso armazenada na sessão flash
+        // Se o pagamento estiver como Pago/Concluído (status = 1), marca a inscrição associada como confirmada (status = 1)
+        if ($payment->status) {
+            $invoice = Invoice::where('payment_id', $payment->id)->first();
+            if ($invoice && $invoice->enrollment_id) {
+                Enrollment::where('id', $invoice->enrollment_id)->update(['status' => 1]);
+            }
+        }
+
         return redirect()->route('payment.index')->with('success', 'Pagamento registado com sucesso!');
     }
 
@@ -88,10 +88,7 @@ class paymentController extends Controller
      */
     public function show($id)
     {
-        // Procura o pagamento pelo ID ou lança uma exceção de erro 404 (Not Found) se não for encontrado
         $payment = Payment::findOrFail($id);
-
-        // Retorna a vista de visualização de detalhes passando o objeto de pagamento
         return view('admin.payment.details.index', ['payment' => $payment]);
     }
 
@@ -103,15 +100,13 @@ class paymentController extends Controller
      */
     public function edit($id)
     {
-        // Procura o pagamento pelo ID para pré-preencher o formulário de edição
         $payment = Payment::findOrFail($id);
-
-        // Retorna a vista de edição passando o objeto de pagamento encontrado
         return view('admin.payment.edit.index', ['payment' => $payment]);
     }
 
     /**
      * Valida e atualiza os dados de um pagamento existente na base de dados.
+     * Atualiza automaticamente a inscrição se o pagamento for concluído.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -119,43 +114,36 @@ class paymentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Procura o pagamento a ser atualizado pelo ID fornecido
         $payment = Payment::findOrFail($id);
 
-        // Validação dos dados submetidos no formulário de edição do pagamento
         $validatedData = $request->validate([
             'type_of_payment' => 'required|string|max:255',
             'value'           => 'required|numeric|min:0',
-            'reference'       => 'required|integer|min:1',
             'status'          => 'required|boolean',
-            'date'            => 'nullable|date',
+            'payment_method'  => 'required|string|max:255',
             'currency'        => 'required|string|max:10',
         ], [
-            'type_of_payment.required' => 'O tipo de pagamento é obrigatório.',
-            'type_of_payment.string'   => 'O tipo de pagamento deve ser um texto válido.',
-            'type_of_payment.max'      => 'O tipo de pagamento não pode exceder 255 carateres.',
+            'type_of_payment.required' => 'O tipo de emolumento/pagamento é obrigatório.',
             'value.required'           => 'O valor do pagamento é obrigatório.',
-            'value.numeric'            => 'O valor deve ser um número válido.',
-            'value.min'                => 'O valor não pode ser negativo.',
-            'reference.required'       => 'O número de referência do pagamento é obrigatório.',
-            'reference.integer'        => 'A referência deve ser um número inteiro.',
-            'reference.min'            => 'A referência deve ser um número positivo.',
             'status.required'          => 'Por favor selecione o estado do pagamento.',
-            'status.boolean'           => 'O estado do pagamento é inválido.',
-            'date.date'                => 'Insira uma data e hora válidas para o pagamento.',
+            'payment_method.required'  => 'Selecione a forma de pagamento.',
             'currency.required'        => 'A indicação da moeda é obrigatória.',
-            'currency.max'             => 'A moeda não pode ter mais de 10 carateres.',
         ]);
 
-        // Se a data e hora não forem fornecidas na atualização, mantêm-se ou assume o momento atual
-        if (empty($validatedData['date'])) {
-            $validatedData['date'] = now();
-        }
+        // Impede alteração do número de referência e da data original do pagamento
+        $validatedData['reference'] = $payment->reference;
+        $validatedData['date']      = $payment->date;
 
-        // Atualiza os campos do modelo de pagamento com os dados validados
         $payment->update($validatedData);
 
-        // Redireciona para a listagem com mensagem de confirmação de atualização na sessão
+        // Se o pagamento for atualizado para Pago/Concluído (status = 1), marca a inscrição associada como confirmada (status = 1)
+        if ($payment->status) {
+            $invoice = Invoice::where('payment_id', $payment->id)->first();
+            if ($invoice && $invoice->enrollment_id) {
+                Enrollment::where('id', $invoice->enrollment_id)->update(['status' => 1]);
+            }
+        }
+
         return redirect()->route('payment.index')->with('success', 'Pagamento atualizado com sucesso!');
     }
 
@@ -167,25 +155,14 @@ class paymentController extends Controller
      */
     public function destroy($id)
     {
-        // Procura o pagamento pelo ID
         $payment = Payment::findOrFail($id);
-
-        // Executa a eliminação suave (soft delete) do pagamento
         $payment->delete();
 
-        // Redireciona de volta para a listagem com mensagem explicativa de sucesso
         return redirect()->route('payment.index')->with('success', 'Pagamento eliminado com sucesso!');
     }
 
-    /**
-     * Método auxiliar de dashboard do pagamento (mantido para compatibilidade de rotas e navegação).
-     *
-     * @return \Illuminate\View\View
-     */
     public function dashboard()
     {
-        // Retorna a vista do dashboard principal
         return view('admin.dashboard.index');
     }
 }
-

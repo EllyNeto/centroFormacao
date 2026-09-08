@@ -89,8 +89,8 @@
 													
 													{{-- Campo: Código do Estudante --}}
 													<div class="mb-3">
-													  <label for="code" class="form-label text-primary">Código do Estudante <span class="text-danger">*</span></label>
-													  <input type="number" class="form-control" id="code" name="code" placeholder="Ex: 1001" value="{{ old('code') }}" required>
+													  <label for="code" class="form-label text-primary">Código do Estudante</label>
+													  <input type="text" class="form-control" id="code" name="code" placeholder="Gerado automaticamente" value="{{ old('code') }}" readonly>
 													</div>
 												</div>
 											</div>
