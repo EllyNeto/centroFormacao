@@ -21,7 +21,7 @@ class classController extends Controller
     public function index()
     {
         $classes = _Class::with(['course', 'teacher', 'student'])->orderBy('id', 'desc')->get();
-        return view('admin._class.list.index', ['classes' => $classes]);
+        return view('admin.room.list.index', ['classes' => $classes]);
     }
 
     /**
@@ -35,7 +35,7 @@ class classController extends Controller
         $teachers = Teacher::where('status', 1)->get();
         $students = Student::all();
 
-        return view('admin._class.create.index', [
+        return view('admin.room.create.index', [
             'courses'  => $courses,
             'teachers' => $teachers,
             'students' => $students,
@@ -97,7 +97,7 @@ class classController extends Controller
     public function show($id)
     {
         $class = _Class::with(['course', 'teacher', 'student'])->findOrFail($id);
-        return view('admin._class.details.index', ['class' => $class]);
+        return view('admin.room.details.index', ['class' => $class]);
     }
 
     /**
@@ -113,7 +113,7 @@ class classController extends Controller
         $teachers = Teacher::where('status', 1)->get();
         $students = Student::all();
 
-        return view('admin._class.edit.index', [
+        return view('admin.room.edit.index', [
             'class'    => $class,
             'courses'  => $courses,
             'teachers' => $teachers,
