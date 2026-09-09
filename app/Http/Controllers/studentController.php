@@ -67,10 +67,6 @@ class studentController extends Controller
             'image.max'                     => 'A imagem não pode ter um tamanho superior a 2MB.',
         ]);
 
-        // Mapeia o campo 'phone' recebido do formulário para a coluna 'phone_number' da base de dados
-        $validatedData['phone_number'] = $validatedData['phone'];
-        unset($validatedData['phone']);
-
         // Processamento do upload da fotografia do estudante
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $requestImage = $request->file('image');
@@ -139,8 +135,7 @@ class studentController extends Controller
             'image.max'                     => 'A imagem não pode ter um tamanho superior a 2MB.',
         ]);
 
-        $validatedData['phone_number'] = $validatedData['phone'];
-        unset($validatedData['phone']);
+  
         // Garante que o código do estudante não seja modificado
         $validatedData['code'] = $student->code;
 
@@ -187,6 +182,11 @@ class studentController extends Controller
         return redirect()->route('student.index')->with('success', 'Estudante eliminado com sucesso!');
     }
 
+    /**
+     * Exibe o painel principal do sistema (Dashboard).
+     *
+     * @return \Illuminate\View\View
+     */
     public function dashboard()
     {
         return view('admin.dashboard.index');

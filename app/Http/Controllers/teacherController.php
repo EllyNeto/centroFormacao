@@ -172,6 +172,11 @@ class teacherController extends Controller
         return redirect()->route('teacher.index')->with('success', 'Formador eliminado com sucesso!');
     }
 
+    /**
+     * Exibe o painel principal do sistema (Dashboard).
+     *
+     * @return \Illuminate\View\View
+     */
     public function dashboard()
     {
         return view('admin.dashboard.index');

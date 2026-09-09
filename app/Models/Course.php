@@ -18,8 +18,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Course extends Model
 {
-    //Activar SoftDeletes
+    // Ativar a funcionalidade de exclusão lógica (Soft Deletes)
     use SoftDeletes;
+
     /**
      * Nome da tabela associada ao modelo na base de dados.
      *
@@ -27,7 +28,11 @@ class Course extends Model
      */
     protected $table = 'courses';
 
-    // O Laravel vai tratar automaticamente a coluna 'deleted_at'
+    /**
+     * Tratamento automático da coluna 'deleted_at' pelo Eloquent.
+     *
+     * @var array
+     */
     protected $dates = ['deleted_at']; 
     
     /**
@@ -36,18 +41,29 @@ class Course extends Model
      * @var array
      */
     protected $fillable = [
-        'name',        // Nome do curso
-        'status',      // Estado do curso
-        'duration',    // Carga horária total (em horas)
-        'description', // Descrição/Ementa do curso
+        'name',        // Nome completo do curso
+        'status',      // Estado do curso (Ativo/Inativo)
+        'duration',    // Carga horária total do curso
+        'description', // Descrição detalhada ou ementa do curso
     ];
 
+    /**
+     * Conversão automática de tipos de dados.
+     *
+     * @var array
+     */
     protected $casts = [
         'status' => 'boolean',
     ];
 
+    /**
+     * Relação de um-para-muitos com o modelo de Turmas (_Class).
+     * Um curso pode conter várias turmas associadas.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function classe()
     {
-        return $this->hasMany('App\Http\Models\_Class');
+        return $this->hasMany(_Class::class, 'course_id');
     }
 }

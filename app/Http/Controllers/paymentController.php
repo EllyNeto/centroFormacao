@@ -161,6 +161,11 @@ class paymentController extends Controller
         return redirect()->route('payment.index')->with('success', 'Pagamento eliminado com sucesso!');
     }
 
+    /**
+     * Exibe o painel principal do sistema (Dashboard).
+     *
+     * @return \Illuminate\View\View
+     */
     public function dashboard()
     {
         return view('admin.dashboard.index');
