@@ -100,6 +100,7 @@
 							<li><a href="{{ route('class.create') }}">Adicionar novo</a></li>
 						</ul>
 					</li>
+
 {{-- 
 					</li>
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">

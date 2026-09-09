@@ -1,0 +1,30 @@
+/* Custom styles for Payment Form Emolument Cards */
+.emolument-card {
+    transition: all 0.2s ease-in-out;
+    border-radius: 12px !important;
+}
+.emolument-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    border-color: var(--primary) !important;
+}
+.emolument-card.active {
+    border-color: var(--primary) !important;
+    background-color: rgba(var(--primary-rgb), 0.04) !important;
+}
+.icon-box {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.bg-primary-light { background-color: rgba(13, 110, 253, 0.12); }
+.bg-success-light { background-color: rgba(25, 135, 84, 0.12); }
+.bg-info-light { background-color: rgba(13, 202, 240, 0.12); }
+.bg-warning-light { background-color: rgba(255, 193, 7, 0.16); }
+.bg-secondary-light { background-color: rgba(108, 117, 125, 0.12); }
+.bg-danger-light { background-color: rgba(220, 53, 69, 0.12); }
+.bg-purple-light { background-color: rgba(111, 66, 193, 0.12); }
+.bg-dark-light { background-color: rgba(33, 37, 41, 0.12); }
+.text-purple { color: #6f42c1; }
