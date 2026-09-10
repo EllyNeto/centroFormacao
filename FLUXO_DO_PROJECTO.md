@@ -54,15 +54,16 @@ flowchart TD
 
 ---
 
-### 2.3. Admissão e Inscrição de Estudantes
+### 2.3. Admissão e Inscrição de Candidatos / Estudantes
 
-1. **Estudantes (`Student`)**:
-   - Registo de dados pessoais (Nome completo, BI, E-mail, Telefone, Fotografia).
-   - **Geração Automática de Código**: Caso o código do aluno não seja fornecido, o sistema atribui automaticamente um número sequencial único (ex: `1001`, `1002`).
+1. **Unificação do Formulário de Inscrição e Candidato (`Enrollment` + `Student`)**:
+   - Os candidatos realizam primeiro a sua inscrição no sistema através do formulário de inscrição (`enrollment.create`).
+   - O formulário recolhe simultaneamente os dados pessoais do candidato (Nome completo, BI, E-mail, Telefone, Fotografia de perfil) e a seleção do Curso pretendido.
+   - **Geração Automática de Código**: O sistema cria o registo do estudante na base de dados e gera automaticamente um código numérico sequencial único (ex: `1001`, `1002`).
 
-2. **Inscrições (`Enrollment`)**:
-   - Vincula um **Estudante** a um **Curso**.
-   - Inicialmente, a inscrição pode ficar com o estado **Pendente** (`status = 0`).
+2. **Condição para Estudante Ativo (Após Pagamento)**:
+   - A inscrição é criada inicialmente com o estado **Pendente** (`status = 0`).
+   - O candidato só é considerado formando / estudante ativo na listagem de estudantes após a liquidação do pagamento e confirmação da inscrição (`status = 1`).
 
 ---
 

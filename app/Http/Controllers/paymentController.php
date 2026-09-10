@@ -26,11 +26,18 @@ class paymentController extends Controller
     /**
      * Exibe o formulário para registar um novo pagamento.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('admin.payment.create.index');
+        $selectedEnrollmentId = $request->query('enrollment_id');
+        $selectedEnrollment   = $selectedEnrollmentId ? Enrollment::with(['student', 'course'])->find($selectedEnrollmentId) : null;
+
+        return view('admin.payment.create.index', [
+            'selectedEnrollmentId' => $selectedEnrollmentId,
+            'selectedEnrollment'   => $selectedEnrollment,
+        ]);
     }
 
     /**
@@ -55,6 +62,7 @@ class paymentController extends Controller
             'payment_method'  => 'required|string|max:255',
             'date'            => 'nullable|date',
             'currency'        => 'required|string|max:10',
+            'enrollment_id'   => 'nullable|exists:enrollments,id',
         ], [
             'type_of_payment.required' => 'O tipo de emolumento/pagamento é obrigatório.',
             'value.required'           => 'O valor do pagamento é obrigatório.',
@@ -67,14 +75,29 @@ class paymentController extends Controller
             $validatedData['date'] = now();
         }
 
+        $enrollmentId = $request->input('enrollment_id');
+
+        // Criação do pagamento
         $payment = Payment::create($validatedData);
 
         // Se o pagamento estiver como Pago/Concluído (status = 1), marca a inscrição associada como confirmada (status = 1)
         if ($payment->status) {
-            $invoice = Invoice::where('payment_id', $payment->id)->first();
-            if ($invoice && $invoice->enrollment_id) {
-                Enrollment::where('id', $invoice->enrollment_id)->update(['status' => 1]);
+            if ($enrollmentId) {
+                Enrollment::where('id', $enrollmentId)->update(['status' => 1]);
+            } else {
+                $invoice = Invoice::where('payment_id', $payment->id)->first();
+                if ($invoice && $invoice->enrollment_id) {
+                    Enrollment::where('id', $invoice->enrollment_id)->update(['status' => 1]);
+                }
             }
+        }
+
+        // Se veio do fluxo de inscrição ou clicou em "Salvar e Emitir Fatura", redireciona para a emissão da fatura
+        if ($request->input('action') === 'save_and_invoice' || $enrollmentId) {
+            return redirect()->route('invoice.create', [
+                'enrollment_id' => $enrollmentId,
+                'payment_id'    => $payment->id,
+            ])->with('success', 'Pagamento registado com sucesso! Emita agora a fatura/recibo.');
         }
 
         return redirect()->route('payment.index')->with('success', 'Pagamento registado com sucesso!');

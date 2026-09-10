@@ -42,7 +42,7 @@
                                                 <option value="{{ $enrollment->id }}" 
                                                         data-course-id="{{ $enrollment->course_id }}"
                                                         data-course-name="{{ $enrollment->course->name ?? '' }}"
-                                                        {{ old('enrollment_id') == $enrollment->id ? 'selected' : '' }}>
+                                                        {{ old('enrollment_id', $selectedEnrollmentId ?? '') == $enrollment->id ? 'selected' : '' }}>
                                                     #INS-{{ sprintf('%04d', $enrollment->id) }} - {{ $enrollment->student->name ?? 'Estudante' }} ({{ $enrollment->course->name ?? 'Curso' }})
                                                 </option>
                                             @endforeach
@@ -63,7 +63,7 @@
                                             @foreach($payments as $payment)
                                                 <option value="{{ $payment->id }}" 
                                                         data-value="{{ number_format($payment->value, 2, '.', '') }}"
-                                                        {{ old('payment_id') == $payment->id ? 'selected' : '' }}>
+                                                        {{ old('payment_id', $selectedPaymentId ?? '') == $payment->id ? 'selected' : '' }}>
                                                     #PAG-{{ sprintf('%04d', $payment->id) }} - {{ $payment->type_of_payment }} ({{ number_format($payment->value, 2, ',', '.') }} Kz)
                                                 </option>
                                             @endforeach
@@ -138,15 +138,21 @@
         }
 
         // Preenchimento automático do valor pago ao selecionar o registo de pagamento
-        if (paymentSelect) {
-            paymentSelect.addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
+        function updatePaymentValue() {
+            if (!paymentSelect) return;
+            const selectedOption = paymentSelect.options[paymentSelect.selectedIndex];
+            if (selectedOption) {
                 const paymentVal = selectedOption.getAttribute('data-value');
-                if (paymentVal !== null && paymentVal !== undefined && amountPaidInput) {
+                if (paymentVal !== null && paymentVal !== undefined && paymentVal !== "" && amountPaidInput) {
                     amountPaidInput.value = paymentVal;
                     updateCalculations();
                 }
-            });
+            }
+        }
+
+        if (paymentSelect) {
+            paymentSelect.addEventListener('change', updatePaymentValue);
+            updatePaymentValue();
         }
 
         // Cálculo de Troco e Valor em Falta

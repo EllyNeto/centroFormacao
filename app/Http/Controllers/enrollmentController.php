@@ -7,6 +7,9 @@ use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\Course;
 
+/**
+ * Controlador responsável pelas operações de Inscrição (Enrollment) e Registo de Candidatos.
+ */
 class enrollmentController extends Controller
 {
     /**
@@ -21,22 +24,20 @@ class enrollmentController extends Controller
     }
 
     /**
-     * Exibe o formulário de registo de nova inscrição.
+     * Exibe o formulário de registo de nova inscrição de candidato.
      *
      * @return \Illuminate\View\View
      */
     public function create()
     {
-        $students = Student::all();
-        $courses  = Course::where('status', 1)->get();
+        $courses = Course::where('status', 1)->get();
         return view('admin.enrollment.create.index', [
-            'students' => $students,
-            'courses'  => $courses,
+            'courses' => $courses,
         ]);
     }
 
     /**
-     * Valida e salva uma nova inscrição na base de dados.
+     * Valida os dados do candidato e da inscrição, garante BI único por candidato e regista a inscrição.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -44,22 +45,83 @@ class enrollmentController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'course_id'  => 'required|exists:courses,id',
-            'date'        => 'required|date',
-            'status'      => 'required|boolean',
+            'name'                 => 'required|string|max:255',
+            'email'                => 'required|email|max:255',
+            'identity_card_number' => 'required|string|max:255',
+            'phone'                => 'required|string|max:20',
+            'image'                => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'course_id'            => 'required|exists:courses,id',
+            'date'                 => 'required|date',
+            'status'               => 'required|boolean',
         ], [
-            'student_id.required' => 'Por favor selecione ou pesquise o estudante.',
-            'student_id.exists'   => 'O estudante selecionado é inválido.',
-            'course_id.required'  => 'Por favor selecione ou pesquise o curso.',
-            'course_id.exists'    => 'O curso selecionado é inválido.',
-            'date.required'       => 'A data da inscrição é obrigatória.',
-            'status.required'     => 'Selecione o estado da inscrição.',
+            'name.required'                 => 'O nome do candidato é obrigatório.',
+            'email.required'                => 'O email é obrigatório.',
+            'email.email'                   => 'Insira um endereço de e-mail válido.',
+            'identity_card_number.required' => 'O número do bilhete de identidade é obrigatório.',
+            'phone.required'                => 'O número de telefone é obrigatório.',
+            'image.image'                   => 'O ficheiro selecionado deve ser uma imagem.',
+            'image.mimes'                   => 'A imagem deve estar no formato JPG, JPEG, PNG ou WEBP.',
+            'image.max'                     => 'A imagem não pode ter um tamanho superior a 2MB.',
+            'course_id.required'            => 'Por favor selecione o curso.',
+            'course_id.exists'              => 'O curso selecionado é inválido.',
+            'date.required'                 => 'A data da inscrição é obrigatória.',
+            'status.required'               => 'Selecione o estado da inscrição.',
         ]);
 
-        Enrollment::create($validatedData);
+        // Procura por candidato/estudante existente com o mesmo número de BI (Garantia de BI Único)
+        $student = Student::where('identity_card_number', $validatedData['identity_card_number'])->first();
 
-        return redirect()->route('enrollment.index')->with('success', 'Inscrição efetuada com sucesso!');
+        if ($student) {
+            // Verifica se o estudante já possui inscrição registada no mesmo curso
+            $existingEnrollment = Enrollment::where('student_id', $student->id)
+                ->where('course_id', $validatedData['course_id'])
+                ->first();
+
+            if ($existingEnrollment) {
+                return back()->withInput()->withErrors([
+                    'identity_card_number' => 'O candidato com o BI "' . $validatedData['identity_card_number'] . '" já se encontra inscrito neste curso.'
+                ]);
+            }
+        } else {
+            // Upload da fotografia de perfil do candidato se fornecida
+            $imagePath = null;
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                $requestImage = $request->file('image');
+                $extension = $requestImage->getClientOriginalExtension() ?: $requestImage->extension();
+                $imageName = md5($requestImage->getClientOriginalName() . time()) . '.' . $extension;
+                $imagePath = $requestImage->storeAs('img/student', $imageName, 'public');
+            }
+
+            // Gera o código único sequencial do estudante
+            $maxCode = Student::max('code');
+            $studentCode = $maxCode ? ($maxCode + 1) : 1001;
+
+            // Cria o registo do candidato na tabela de estudantes
+            $student = Student::create([
+                'name'                 => $validatedData['name'],
+                'email'                => $validatedData['email'],
+                'identity_card_number' => $validatedData['identity_card_number'],
+                'phone'                => $validatedData['phone'],
+                'code'                 => $studentCode,
+                'image'                => $imagePath,
+            ]);
+        }
+
+        // Cria a inscrição associada ao candidato e curso
+        $enrollment = Enrollment::create([
+            'student_id' => $student->id,
+            'course_id'  => $validatedData['course_id'],
+            'date'        => $validatedData['date'],
+            'status'      => $validatedData['status'],
+        ]);
+
+        // Se o utilizador clicou em "Guardar e Ir para Pagamento", redireciona para o formulário de pagamento
+        if ($request->input('action') === 'save_and_pay') {
+            return redirect()->route('payment.create', ['enrollment_id' => $enrollment->id])
+                ->with('success', 'Inscrição efetuada com sucesso! Proceda com o pagamento da inscrição.');
+        }
+
+        return redirect()->route('enrollment.index')->with('success', 'Inscrição de candidato efetuada com sucesso!');
     }
 
     /**

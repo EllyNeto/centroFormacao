@@ -52,16 +52,16 @@
 					</ul>
 					</li>
 					{{-- Seção Módulo de Estudante --}}
-					<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
+					<li><a href="{{ route('student.index') }}">
 						<i class="material-symbols-outlined">school</i>
-						<span class="nav-text">Estudante</span>
+						<span class="nav-text">Formando</span>
 					</a>
-					<ul aria-expanded="false">
+					{{-- <ul aria-expanded="false"> --}}
 						{{-- Link para a listagem de estudantes --}}
-						<li><a href="{{ route('student.index') }}">Listar</a></li>
+						{{-- <li><a href="{{ route('student.index') }}">Listar</a></li> --}}
 						{{-- Link para criação de novo estudante --}}
-						<li><a href="{{ route('student.create') }}">Adicionar novo</a></li>
-					</ul>
+						{{-- <li><a href="{{ route('student.create') }}">Adicionar novo</a></li>
+					</ul> --}}
 					</li>
 
 					{{-- Seção Módulo de Formador --}}

@@ -24,6 +24,16 @@
                         {{-- Diretiva CSRF obrigatória do Laravel para validação de segurança do formulário --}}
                         @csrf
                         
+                        @if(isset($selectedEnrollment) && $selectedEnrollment)
+                            <input type="hidden" name="enrollment_id" value="{{ $selectedEnrollment->id }}">
+                            <div class="alert alert-info alert-alt alert-dismissible fade show mb-4 me-4 ms-4 mt-3" role="alert">
+                                <i class="fa fa-info-circle me-2"></i>
+                                <strong>Inscrição Associada:</strong> #INS-{{ sprintf('%04d', $selectedEnrollment->id) }} — <strong>{{ $selectedEnrollment->student->name ?? 'Candidato' }}</strong> (Curso: {{ $selectedEnrollment->course->name ?? 'N/D' }})
+                            </div>
+                        @elseif(isset($selectedEnrollmentId) && $selectedEnrollmentId)
+                            <input type="hidden" name="enrollment_id" value="{{ $selectedEnrollmentId }}">
+                        @endif
+
                         <div class="card-body">
                             {{-- Exibição do painel de erros de validação caso algum campo não cumpra as regras --}}
                             @if ($errors->any())
@@ -41,29 +51,88 @@
                             @endif
 
                             <div class="row">
-                                {{-- Coluna Esquerda: Tipo de Emolumento, Valor, Forma de Pagamento e Moeda --}}
+                                {{-- Coluna Esquerda: Seleção Múltipla de Emolumentos, Valor, Forma de Pagamento e Moeda --}}
                                 <div class="col-xl-6 col-sm-6">
-                                    {{-- Campo: Tipo de Emolumento (Select com preços automáticos) --}}
+                                    {{-- Campo: Seleção Múltipla de Emolumentos (Checkboxes) --}}
                                     <div class="mb-3">
-                                        <label for="type_of_payment" class="form-label text-primary">Tipo de Emolumento <span class="text-danger">*</span></label>
-                                        <select id="type_of_payment" name="type_of_payment" class="default-select wide form-control" required>
-                                            <option value="">Selecione o Emolumento...</option>
-                                            <option value="Inscrição" data-price="15000.00" {{ old('type_of_payment') == 'Inscrição' ? 'selected' : '' }}>Inscrição - 15.000,00 Kz</option>
-                                            <option value="Propina Mensal" data-price="35000.00" {{ old('type_of_payment') == 'Propina Mensal' ? 'selected' : '' }}>Propina Mensal - 35.000,00 Kz</option>
-                                            <option value="Matrícula / Confirmação" data-price="20000.00" {{ old('type_of_payment') == 'Matrícula / Confirmação' ? 'selected' : '' }}>Matrícula / Confirmação - 20.000,00 Kz</option>
-                                            <option value="Certificado" data-price="10000.00" {{ old('type_of_payment') == 'Certificado' ? 'selected' : '' }}>Certificado - 10.000,00 Kz</option>
-                                            <option value="Declaração" data-price="5000.00" {{ old('type_of_payment') == 'Declaração' ? 'selected' : '' }}>Declaração - 5.000,00 Kz</option>
-                                            <option value="Cartão de Estudante" data-price="3000.00" {{ old('type_of_payment') == 'Cartão de Estudante' ? 'selected' : '' }}>Cartão de Estudante - 3.000,00 Kz</option>
-                                            <option value="Exame de Recurso" data-price="8000.00" {{ old('type_of_payment') == 'Exame de Recurso' ? 'selected' : '' }}>Exame de Recurso - 8.000,00 Kz</option>
-                                            <option value="Outro Emolumento" data-price="0.00" {{ old('type_of_payment') == 'Outro Emolumento' ? 'selected' : '' }}>Outro Emolumento</option>
-                                        </select>
+                                        <label class="form-label text-primary font-w600">Selecione os Emolumentos a Pagar <span class="text-danger">*</span></label>
+                                        <div class="card p-3 border shadow-none mb-2" style="background-color: #f8fafc; border-radius: 10px;">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input emolumento-check" type="checkbox" value="Inscrição" data-price="15000.00" id="emol_1">
+                                                        <label class="form-check-label font-w500" for="emol_1">
+                                                            Inscrição — <strong>15.000,00 Kz</strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input emolumento-check" type="checkbox" value="Propina Mensal" data-price="35000.00" id="emol_2">
+                                                        <label class="form-check-label font-w500" for="emol_2">
+                                                            Propina Mensal — <strong>35.000,00 Kz</strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input emolumento-check" type="checkbox" value="Matrícula / Confirmação" data-price="20000.00" id="emol_3">
+                                                        <label class="form-check-label font-w500" for="emol_3">
+                                                            Matrícula — <strong>20.000,00 Kz</strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input emolumento-check" type="checkbox" value="Certificado" data-price="10000.00" id="emol_4">
+                                                        <label class="form-check-label font-w500" for="emol_4">
+                                                            Certificado — <strong>10.000,00 Kz</strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input emolumento-check" type="checkbox" value="Declaração" data-price="5000.00" id="emol_5">
+                                                        <label class="form-check-label font-w500" for="emol_5">
+                                                            Declaração — <strong>5.000,00 Kz</strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input emolumento-check" type="checkbox" value="Cartão de Estudante" data-price="3000.00" id="emol_6">
+                                                        <label class="form-check-label font-w500" for="emol_6">
+                                                            Cartão de Estudante — <strong>3.000,00 Kz</strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input emolumento-check" type="checkbox" value="Exame de Recurso" data-price="8000.00" id="emol_7">
+                                                        <label class="form-check-label font-w500" for="emol_7">
+                                                            Exame de Recurso — <strong>8.000,00 Kz</strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input emolumento-check" type="checkbox" value="Outro Emolumento" data-price="0.00" id="emol_8">
+                                                        <label class="form-check-label font-w500" for="emol_8">
+                                                            Outro Emolumento
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="type_of_payment" id="type_of_payment" value="{{ old('type_of_payment') }}" required>
+                                        <small class="text-muted d-block">Pode selecionar um ou mais emolumentos em simultâneo.</small>
                                     </div>
 
-                                    {{-- Campo: Valor do Pagamento (Preenchido automaticamente ao selecionar o emolumento) --}}
+                                    {{-- Campo: Valor Total do Pagamento --}}
                                     <div class="mb-3">
-                                        <label for="value" class="form-label text-primary">Valor (Kz) <span class="text-danger">*</span></label>
-                                        <input type="number" step="0.01" min="0" id="value" name="value" class="form-control" value="{{ old('value', '0.00') }}" placeholder="Preço do emolumento..." required>
-                                        <small class="text-muted">Valor atualizado automaticamente ao escolher o emolumento.</small>
+                                        <label for="value" class="form-label text-primary">Valor Total (Kz) <span class="text-danger">*</span></label>
+                                        <input type="number" step="0.01" min="0" id="value" name="value" class="form-control" value="{{ old('value', '0.00') }}" placeholder="0.00" required>
+                                        <small class="text-muted">Calculado automaticamente ao selecionar os emolumentos (pode ajustar manualmente).</small>
                                     </div>
 
                                     {{-- Campo: Forma de Pagamento (Select) --}}
@@ -119,10 +188,15 @@
                             </div>
                         </div>
 
-                        {{-- Rodapé do cartão com os botões de ação para Salvar ou Cancelar --}}
+                        {{-- Rodapé do cartão com os botões de ação para Salvar ou Emitir Fatura --}}
                         <div class="card-footer text-end">
                             <a href="{{ route('payment.index') }}" class="btn btn-danger light me-2">Cancelar</a>
-                            <button type="submit" class="btn btn-primary">Salvar Pagamento</button>
+                            <button type="submit" name="action" value="save" class="btn btn-secondary light me-2">
+                                <i class="fa fa-save me-1"></i> Salvar Apenas Pagamento
+                            </button>
+                            <button type="submit" name="action" value="save_and_invoice" class="btn btn-primary">
+                                <i class="fa fa-file-text-o me-1"></i> Salvar e Emitir Fatura
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -134,17 +208,40 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const typeSelect = document.getElementById('type_of_payment');
+        const checkboxes = document.querySelectorAll('.emolumento-check');
+        const typeHiddenInput = document.getElementById('type_of_payment');
         const valueInput = document.getElementById('value');
 
-        if (typeSelect && valueInput) {
-            typeSelect.addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                const price = selectedOption.getAttribute('data-price');
-                if (price !== null && price !== undefined) {
-                    valueInput.value = price;
+        function updatePaymentSummary() {
+            let selectedNames = [];
+            let totalSum = 0;
+
+            checkboxes.forEach(function(cb) {
+                if (cb.checked) {
+                    selectedNames.push(cb.value);
+                    totalSum += parseFloat(cb.getAttribute('data-price')) || 0;
                 }
             });
+
+            typeHiddenInput.value = selectedNames.join(', ');
+            if (selectedNames.length > 0) {
+                valueInput.value = totalSum.toFixed(2);
+            }
+        }
+
+        checkboxes.forEach(function(cb) {
+            cb.addEventListener('change', updatePaymentSummary);
+        });
+
+        // Caso existam valores antigos (old input), pré-seleciona as caixas correspondentes
+        if (typeHiddenInput && typeHiddenInput.value) {
+            const oldTypes = typeHiddenInput.value.split(',').map(s => s.trim());
+            checkboxes.forEach(function(cb) {
+                if (oldTypes.includes(cb.value)) {
+                    cb.checked = true;
+                }
+            });
+            updatePaymentSummary();
         }
     });
 </script>

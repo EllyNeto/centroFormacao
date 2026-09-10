@@ -28,11 +28,6 @@
                             <p class="m-0 subtitle">Lista de todos os alunos em formação registados</p>
                         </div>
                         <div class="d-flex align-items-center">
-
-                            {{-- Botão para redirecionar para a página de criação de estudante --}}
-                            <a href="{{ route('student.create') }}" class="btn btn-primary btn-sm">
-                                <i class="fa fa-plus me-1"></i> Adicionar Novo Estudante
-                            </a>
                         </div>
                     </div>
 

@@ -12,13 +12,17 @@ use App\Models\Student;
 class studentController extends Controller
 {
     /**
-     * Exibe a listagem de todos os estudantes registados na base de dados.
+     * Exibe a listagem de todos os estudantes (formandos) com inscrição paga/confirmada.
      *
      * @return \Illuminate\View\View
      */
     public function index()
     {
-        $students = Student::orderBy('id', 'desc')->get();
+        // Apenas candidatos que efetuaram o pagamento e têm inscrição confirmada (status = 1) passam a ser listados como estudantes
+        $students = Student::whereHas('enrollments', function ($query) {
+            $query->where('status', 1);
+        })->orderBy('id', 'desc')->get();
+
         return view('admin.student.list.index', ['students' => $students]);
     }
 
@@ -50,7 +54,7 @@ class studentController extends Controller
         $validatedData = $request->validate([
             'name'                 => 'required|string|max:255',
             'email'                => 'required|email|max:255',
-            'identity_card_number' => 'required|string|max:255',
+            'identity_card_number' => 'required|string|max:255|unique:students,identity_card_number',
             'phone'                => 'required|string|max:20',
             'code'                 => 'required|integer',
             'image'                => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -59,6 +63,7 @@ class studentController extends Controller
             'email.required'                => 'O email é obrigatório.',
             'email.email'                   => 'Insira um endereço de e-mail válido.',
             'identity_card_number.required' => 'O número do bilhete de identidade é obrigatório.',
+            'identity_card_number.unique'   => 'Este número de BI já se encontra registado no sistema.',
             'phone.required'                => 'O número de telefone é obrigatório.',
             'code.required'                 => 'O código do estudante é obrigatório.',
             'code.integer'                  => 'O código deve ser um número inteiro.',
@@ -121,7 +126,7 @@ class studentController extends Controller
         $validatedData = $request->validate([
             'name'                 => 'required|string|max:255',
             'email'                => 'required|email|max:255',
-            'identity_card_number' => 'required|string|max:255',
+            'identity_card_number' => 'required|string|max:255|unique:students,identity_card_number,' . $id,
             'phone'                => 'required|string|max:20',
             'image'                => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ], [
@@ -129,6 +134,7 @@ class studentController extends Controller
             'email.required'                => 'O email é obrigatório.',
             'email.email'                   => 'Insira um endereço de e-mail válido.',
             'identity_card_number.required' => 'O número do bilhete de identidade é obrigatório.',
+            'identity_card_number.unique'   => 'Este número de BI já se encontra registado por outro estudante.',
             'phone.required'                => 'O número de telefone é obrigatório.',
             'image.image'                   => 'O ficheiro selecionado deve ser uma imagem.',
             'image.mimes'                   => 'A imagem deve estar no formato JPG, JPEG, PNG ou WEBP.',

@@ -50,9 +50,6 @@
                                                         <a href="{{ route('enrollment.show', $item->id) }}" class="text-primary font-w600">
                                                             {{ $item->student->name ?? 'Estudante Removido' }}
                                                         </a>
-                                                        @if(isset($item->student->code))
-                                                            <small class="d-block text-muted">Cód: {{ $item->student->code }}</small>
-                                                        @endif
                                                     </td>
                                                     <td>
                                                         <span class="badge badge-info light">

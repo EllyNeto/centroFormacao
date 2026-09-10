@@ -61,10 +61,37 @@
                                                 <tr>
                                                     <td><strong>#{{ $paymentItem->id }}</strong></td>
                                                     <td>
-                                                        {{-- Nome/Tipo do pagamento com link para os detalhes --}}
-                                                        <a href="{{ route('payment.show', $paymentItem->id) }}" class="text-primary font-w600">
-                                                            {{ $paymentItem->type_of_payment }}
-                                                        </a>
+                                                        {{-- Exibição simplificada e elegante dos emolumentos em etiquetas badge curtas --}}
+                                                        @php
+                                                            $rawTypes = array_filter(array_map('trim', explode(',', $paymentItem->type_of_payment)));
+                                                            $shortMap = [
+                                                                'Inscrição'               => 'Inscrição',
+                                                                'Propina Mensal'          => 'Propina',
+                                                                'Matrícula / Confirmação' => 'Matrícula',
+                                                                'Certificado'             => 'Certificado',
+                                                                'Declaração'              => 'Declaração',
+                                                                'Cartão de Estudante'     => 'Cartão Est.',
+                                                                'Exame de Recurso'        => 'Exame Rec.',
+                                                                'Outro Emolumento'        => 'Outro',
+                                                            ];
+                                                            $totalItems = count($rawTypes);
+                                                            $maxVisible = 3;
+                                                            $visibleItems = array_slice($rawTypes, 0, $maxVisible);
+                                                            $hiddenCount = $totalItems - $maxVisible;
+                                                        @endphp
+                                                        <div class="d-flex flex-wrap align-items-center" title="{{ implode(', ', $rawTypes) }}">
+                                                            @foreach($visibleItems as $t)
+                                                                @php $shortLabel = $shortMap[$t] ?? $t; @endphp
+                                                                <a href="{{ route('payment.show', $paymentItem->id) }}" class="badge badge-primary light me-1 mb-1" style="font-size: 11px; padding: 4px 8px;">
+                                                                    {{ $shortLabel }}
+                                                                </a>
+                                                            @endforeach
+                                                            @if($hiddenCount > 0)
+                                                                <a href="{{ route('payment.show', $paymentItem->id) }}" class="badge badge-secondary light me-1 mb-1" style="font-size: 11px; padding: 4px 8px;" title="{{ implode(', ', array_slice($rawTypes, $maxVisible)) }}">
+                                                                    +{{ $hiddenCount }} mais
+                                                                </a>
+                                                            @endif
+                                                        </div>
                                                     </td>
                                                     <td>
                                                         <span class="badge badge-light">{{ $paymentItem->payment_method ?? 'Numerário' }}</span>

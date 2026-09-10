@@ -24,18 +24,24 @@ class invoiceController extends Controller
     /**
      * Exibe o formulário de emissão de nova fatura.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(Request $request)
     {
         $enrollments = Enrollment::with(['student', 'course'])->get();
         $courses     = Course::where('status', 1)->get();
         $payments    = Payment::all();
 
+        $selectedEnrollmentId = $request->query('enrollment_id');
+        $selectedPaymentId    = $request->query('payment_id');
+
         return view('admin.invoice.create.index', [
-            'enrollments' => $enrollments,
-            'courses'     => $courses,
-            'payments'    => $payments,
+            'enrollments'          => $enrollments,
+            'courses'              => $courses,
+            'payments'             => $payments,
+            'selectedEnrollmentId' => $selectedEnrollmentId,
+            'selectedPaymentId'    => $selectedPaymentId,
         ]);
     }
 
