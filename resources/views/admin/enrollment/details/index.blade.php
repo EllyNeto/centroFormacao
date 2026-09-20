@@ -51,6 +51,7 @@
                                     <h6 class="text-primary font-w600 mb-3"><i class="fa fa-user me-2"></i>Informação do Candidato</h6>
                                     <p class="mb-2"><strong>Nome:</strong> {{ $enrollment->student->name ?? 'N/D' }}</p>
                                     <p class="mb-2"><strong>Código do Estudante:</strong> {{ $enrollment->student->code ?? 'N/D' }}</p>
+                                    <p class="mb-2"><strong>Género:</strong> {{ $enrollment->student->gender ?? 'N/D' }}</p>
                                     <p class="mb-2"><strong>E-mail:</strong> {{ $enrollment->student->email ?? 'N/D' }}</p>
                                     <p class="mb-2"><strong>Nº do BI:</strong> {{ $enrollment->student->identity_card_number ?? 'N/D' }}</p>
                                     {{-- Exibição garantida do número de telefone através dos atributos 'phone_number' ou 'phone' --}}

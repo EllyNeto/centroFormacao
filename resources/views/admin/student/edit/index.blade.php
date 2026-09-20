@@ -88,7 +88,7 @@
                                             {{-- Campo: Género --}}
                                             <div class="mb-3">
                                                 <label for="gender" class="form-label text-primary">Género</label>
-                                                <select id="gender" name="gender" class="default-select wide form-control">
+                                                <select id="gender" name="gender" class="form-control">
                                                     <option value="">Selecione o género...</option>
                                                     <option value="Masculino" {{ old('gender', $student->gender) == 'Masculino' ? 'selected' : '' }}>Masculino</option>
                                                     <option value="Feminino" {{ old('gender', $student->gender) == 'Feminino' ? 'selected' : '' }}>Feminino</option>

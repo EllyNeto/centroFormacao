@@ -61,6 +61,7 @@ class enrollmentController extends Controller
             'name'                 => 'required|string|max:255',
             'email'                => 'required|email|max:255',
             'identity_card_number' => 'required|string|max:255',
+            'gender'               => 'nullable|string|in:Masculino,Feminino,Outro',
             'phone'                => 'required|string|max:20',
             'image'                => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'course_id'            => 'required|exists:courses,id',
@@ -96,9 +97,10 @@ class enrollmentController extends Controller
                 ]);
             }
 
-            // Se o candidato já existir no sistema mas sem inscrição neste curso, atualiza o contacto telefónico
+            // Se o candidato já existir no sistema mas sem inscrição neste curso, atualiza o contacto telefónico e género
             $student->update([
                 'phone_number' => $validatedData['phone'],
+                'gender'       => $validatedData['gender'] ?? $student->gender,
             ]);
         } else {
             // Processamento do upload da fotografia de perfil do candidato se fornecida
@@ -119,6 +121,7 @@ class enrollmentController extends Controller
                 'name'                 => $validatedData['name'],
                 'email'                => $validatedData['email'],
                 'identity_card_number' => $validatedData['identity_card_number'],
+                'gender'               => $validatedData['gender'] ?? null,
                 'phone_number'         => $validatedData['phone'],
                 'code'                 => $studentCode,
                 'image'                => $imagePath,
@@ -192,6 +195,7 @@ class enrollmentController extends Controller
             'name'                 => 'required|string|max:255',
             'email'                => 'required|email|max:255',
             'identity_card_number' => 'required|string|max:255',
+            'gender'               => 'nullable|string|in:Masculino,Feminino,Outro',
             'phone'                => 'required|string|max:20',
             'course_id'            => 'required|exists:courses,id',
             'image'                => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -231,6 +235,7 @@ class enrollmentController extends Controller
             $student->name                 = $validatedData['name'];
             $student->email                = $validatedData['email'];
             $student->identity_card_number = $validatedData['identity_card_number'];
+            $student->gender               = $validatedData['gender'] ?? $student->gender;
             $student->phone_number         = $validatedData['phone'];
             $student->save();
         }

@@ -94,6 +94,19 @@
                                             </div>
                                         </div>
 
+                                        {{-- Campo: Género --}}
+                                        <div class="col-xl-6 col-sm-6">
+                                            <div class="mb-3">
+                                                <label for="gender" class="form-label text-primary">Género</label>
+                                                <select id="gender" name="gender" class="form-control">
+                                                    <option value="">Selecione o género...</option>
+                                                    <option value="Masculino" {{ old('gender', $enrollment->student->gender ?? '') == 'Masculino' ? 'selected' : '' }}>Masculino</option>
+                                                    <option value="Feminino" {{ old('gender', $enrollment->student->gender ?? '') == 'Feminino' ? 'selected' : '' }}>Feminino</option>
+                                                    <option value="Outro" {{ old('gender', $enrollment->student->gender ?? '') == 'Outro' ? 'selected' : '' }}>Outro</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         {{-- Campo: Número de Telefone --}}
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
@@ -102,11 +115,11 @@
                                             </div>
                                         </div>
 
-                                        {{-- Campo: Curso Pretendido (Lista Suspensa sem rótulo de pesquisa) --}}
-                                        <div class="col-xl-12">
+                                        {{-- Campo: Curso Pretendido --}}
+                                        <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label for="course_id" class="form-label text-primary">Curso Pretendido <span class="text-danger">*</span></label>
-                                                <select id="course_id" name="course_id" class="default-select wide form-control" required>
+                                                <select id="course_id" name="course_id" class="form-control" required>
                                                     <option value="">Selecione o Curso Pretendido...</option>
                                                     @foreach($courses as $course)
                                                         <option value="{{ $course->id }}" {{ old('course_id', $enrollment->course_id) == $course->id ? 'selected' : '' }}>
