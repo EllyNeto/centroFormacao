@@ -98,7 +98,7 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label for="gender" class="form-label text-primary">Género</label>
-                                                <select id="gender" name="gender" class="form-control">
+                                                <select id="gender" name="gender" class="form-control" style="background-color: #ffffff !important;">
                                                     <option value="">Selecione o género...</option>
                                                     <option value="Masculino" {{ old('gender', $enrollment->student->gender ?? '') == 'Masculino' ? 'selected' : '' }}>Masculino</option>
                                                     <option value="Feminino" {{ old('gender', $enrollment->student->gender ?? '') == 'Feminino' ? 'selected' : '' }}>Feminino</option>
@@ -119,7 +119,7 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label for="course_id" class="form-label text-primary">Curso Pretendido <span class="text-danger">*</span></label>
-                                                <select id="course_id" name="course_id" class="form-control" required>
+                                                <select id="course_id" name="course_id" class="form-control" style="background-color: #ffffff !important;" required>
                                                     <option value="">Selecione o Curso Pretendido...</option>
                                                     @foreach($courses as $course)
                                                         <option value="{{ $course->id }}" {{ old('course_id', $enrollment->course_id) == $course->id ? 'selected' : '' }}>
@@ -130,11 +130,11 @@
                                             </div>
                                         </div>
 
-                                        {{-- Campo: Data da Inscrição (Leitura apenas - inalterável) --}}
+                                        {{-- Campo: Data da Inscrição (Leitura apenas - inalterável com fundo cinza) --}}
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label for="date_display" class="form-label text-primary">Data da Inscrição</label>
-                                                <input type="text" class="form-control" id="date_display" value="{{ date('d/m/Y', strtotime($enrollment->date)) }}" readonly disabled>
+                                                <input type="text" class="form-control uneditable-field" id="date_display" value="{{ date('d/m/Y', strtotime($enrollment->date)) }}" style="background-color: #e9ecef !important;" readonly disabled>
                                             </div>
                                         </div>
 

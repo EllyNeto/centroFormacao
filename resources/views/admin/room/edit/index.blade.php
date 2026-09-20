@@ -41,7 +41,7 @@
 
                                     <div class="mb-3">
                                         <label for="code" class="form-label text-primary">Código da Turma</label>
-                                        <input type="text" id="code" class="form-control" value="{{ $class->code }}" readonly disabled>
+                                        <input type="text" id="code" class="form-control uneditable-field" value="{{ $class->code }}" style="background-color: #e9ecef !important; cursor: not-allowed; border: 1px solid #cbd5e1;" readonly disabled>
                                     </div>
 
                                     <div class="mb-3">

@@ -83,7 +83,7 @@
 													{{-- Campo: Género --}}
 													<div class="mb-3">
 														<label for="gender" class="form-label text-primary">Género</label>
-														<select id="gender" name="gender" class="form-control">
+														<select id="gender" name="gender" class="form-control" style="background-color: #ffffff !important;">
 															<option value="">Selecione o género...</option>
 															<option value="Masculino" {{ old('gender') == 'Masculino' ? 'selected' : '' }}>Masculino</option>
 															<option value="Feminino" {{ old('gender') == 'Feminino' ? 'selected' : '' }}>Feminino</option>

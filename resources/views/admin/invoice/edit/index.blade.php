@@ -82,7 +82,7 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="change_display" class="form-label text-success font-w600">Troco a Devolver</label>
+                                        <label for="change_display" class="form-label text-success font-w600">Saldo a Favor / Crédito</label>
                                         <input type="text" id="change_display" class="form-control font-w600 text-success" readonly value="{{ number_format($invoice->change, 2, '.', '') }} Kz">
                                     </div>
 

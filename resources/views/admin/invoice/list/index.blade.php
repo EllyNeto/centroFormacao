@@ -39,7 +39,7 @@
                                                 <th>Curso</th>
                                                 <th>Valor por Pagar</th>
                                                 <th>Valor Pago</th>
-                                                <th>Troco</th>
+                                                <th>Saldo</th>
                                                 <th>Ações</th>
                                             </tr>
                                         </thead>
@@ -63,11 +63,11 @@
                                                             $diff = $invoiceItem->amount_paid - $invoiceItem->amount_to_pay;
                                                         @endphp
                                                         @if($diff > 0)
-                                                            <span class="badge badge-success light" title="Troco devolvido">Troco: {{ number_format($diff, 2, ',', '.') }} Kz</span>
+                                                            <span class="badge badge-success light" title="Saldo a favor do formando">Saldo: {{ number_format($diff, 2, ',', '.') }} Kz</span>
                                                         @elseif($diff < 0)
                                                             <span class="badge badge-danger light" title="Valor em falta">Falta: {{ number_format(abs($diff), 2, ',', '.') }} Kz</span>
                                                         @else
-                                                            <span class="badge badge-light text-muted">0,00 Kz (Sem Troco)</span>
+                                                            <span class="badge badge-light text-muted">0,00 Kz (Sem Saldo)</span>
                                                         @endif
                                                     </td>
                                                     <td class="text-center">

@@ -6,12 +6,17 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 
 /**
- * Controlador responsável pela gestão das operações CRUD de Cursos (Course).
+ * =========================================================================================
+ * CONTROLADOR: Gestão de Cursos (courseController)
+ * =========================================================================================
+ * Este controlador é responsável pela gestão completa das operações CRUD da entidade Curso (Course).
+ * Permite criar novos cursos de formação, atualizar carga horária, categorias e alterar estados de ativação.
  */
 class courseController extends Controller
 {
     /**
      * Exibe a listagem de todos os cursos registados na base de dados.
+     * Ordena os cursos do mais recente para o mais antigo.
      *
      * @return \Illuminate\View\View
      */
@@ -36,28 +41,28 @@ class courseController extends Controller
     }
 
     /**
-     * Valida os dados submetidos e guarda um novo curso na base de dados.
+     * Valida os dados submetidos no formulário e guarda um novo curso na base de dados.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        // Validação dos dados recebidos do formulário
+        // Validação rigorosa dos campos recebidos do formulário
         $validatedData = $request->validate([
             'name'        => 'required|string|max:255',
             'status'      => 'required|string|max:255',
             'duration'    => 'required|integer|min:1',
             'description' => 'nullable|string',
         ], [
-            'name.required'     => 'O nome do curso é obrigatório.',
-            'status.required'   => 'Por favor selecione a categoria/estado do curso.',
-            'duration.required' => 'A duração do curso é obrigatória.',
-            'duration.integer'  => 'A duração deve ser um número inteiro.',
+            'name.required'     => 'O nome do curso é de preenchimento obrigatório.',
+            'status.required'   => 'Por favor selecione o estado/categoria do curso.',
+            'duration.required' => 'A carga horária do curso é de preenchimento obrigatório.',
+            'duration.integer'  => 'A duração deve ser um número inteiro de horas.',
             'duration.min'      => 'A duração deve ser de pelo menos 1 hora.',
         ]);
 
-        // Criação do registo na base de dados com os dados validados
+        // Criação do registo do curso na base de dados
         Course::create($validatedData);
 
         // Redireciona para a listagem com mensagem de sucesso
@@ -65,14 +70,14 @@ class courseController extends Controller
     }
 
     /**
-     * Exibe os detalhes de um curso específico.
+     * Exibe a página com os detalhes de um curso específico.
      *
      * @param  int  $id
      * @return \Illuminate\View\View
      */
     public function show($id)
     {
-        // Procura o curso pelo ID ou lança erro 404 se não for encontrado
+        // Procura o curso pelo ID ou devolve erro 404 se não for encontrado
         $course = Course::findOrFail($id);
 
         // Retorna a vista de detalhes do curso
@@ -80,14 +85,14 @@ class courseController extends Controller
     }
 
     /**
-     * Exibe o formulário de edição para um curso existente.
+     * Exibe o formulário para editar um curso existente.
      *
      * @param  int  $id
      * @return \Illuminate\View\View
      */
     public function edit($id)
     {
-        // Procura o curso pelo ID para pré-preencher o formulário
+        // Procura o curso pelo ID para pré-preencher o formulário de alteração
         $course = Course::findOrFail($id);
 
         // Retorna a vista de edição passando os dados do curso
@@ -103,7 +108,7 @@ class courseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Procura o curso a ser atualizado
+        // Localiza o curso a ser atualizado
         $course = Course::findOrFail($id);
 
         // Validação dos dados submetidos no formulário de edição
@@ -120,10 +125,10 @@ class courseController extends Controller
             'duration.min'      => 'A duração deve ser de pelo menos 1 hora.',
         ]);
 
-        // Atualização das propriedades do curso na base de dados
+        // Atualiza os dados do curso na base de dados
         $course->update($validatedData);
 
-        // Redireciona para a listagem com mensagem de sucesso
+        // Redireciona para a listagem com mensagem de confirmação
         return redirect()->route('course.index')->with('success', 'Curso atualizado com sucesso!');
     }
 
@@ -135,13 +140,12 @@ class courseController extends Controller
      */
     public function destroy($id)
     {
-        // Procura o curso pelo ID
+        // Procura e remove o registo do curso selecionado
         $course = Course::findOrFail($id);
-
-        // Apaga o registo do curso
         $course->delete();
 
-        // Redireciona para a listagem com mensagem de aviso/sucesso
+        // Redireciona para a listagem de cursos com mensagem de confirmação
         return redirect()->route('course.index')->with('success', 'Curso eliminado com sucesso!');
     }
 }
+

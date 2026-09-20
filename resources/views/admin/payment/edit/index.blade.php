@@ -53,6 +53,7 @@
                                         <label for="student_id" class="form-label text-primary font-w600">Formando <span class="text-danger">*</span></label>
                                         @php
                                             $studentIdVal = old('student_id', $payment->student_id);
+                                            $currentStudent = $currentStudent ?? $payment->student;
                                         @endphp
                                         <select id="student_id" name="student_id" class="form-control select2-student" required>
                                             <option value="">Pesquise e selecione o formando...</option>
@@ -168,7 +169,7 @@
                                     {{-- Campo: Forma de Pagamento --}}
                                     <div class="mb-3">
                                         <label for="payment_method" class="form-label text-primary font-w600">Forma de Pagamento <span class="text-danger">*</span></label>
-                                        <select id="payment_method" name="payment_method" class="form-control" required>
+                                        <select id="payment_method" name="payment_method" class="form-control" style="background-color: #ffffff !important;" required>
                                             <option value="Numerário" {{ old('payment_method', $payment->payment_method ?? 'Numerário') == 'Numerário' ? 'selected' : '' }}>Numerário</option>
                                             <option value="Cartão" {{ old('payment_method', $payment->payment_method) == 'Cartão' ? 'selected' : '' }}>Cartão / TPA</option>
                                             <option value="Transferência" {{ old('payment_method', $payment->payment_method) == 'Transferência' ? 'selected' : '' }}>Transferência Bancária</option>
@@ -178,7 +179,7 @@
                                     {{-- Campo: Moeda --}}
                                     <div class="mb-3">
                                         <label for="currency" class="form-label text-primary font-w600">Moeda <span class="text-danger">*</span></label>
-                                        <select id="currency" name="currency" class="form-control" required>
+                                        <select id="currency" name="currency" class="form-control" style="background-color: #ffffff !important;" required>
                                             <option value="AOA" {{ old('currency', $payment->currency) == 'AOA' ? 'selected' : '' }}>AOA - Kwanza (Kz)</option>
                                             <option value="USD" {{ old('currency', $payment->currency) == 'USD' ? 'selected' : '' }}>USD - Dólar ($)</option>
                                             <option value="EUR" {{ old('currency', $payment->currency) == 'EUR' ? 'selected' : '' }}>EUR - Euro (€)</option>
@@ -204,10 +205,10 @@
                                         <small class="text-muted d-block mt-1">Os pagamentos mantêm o estado de liquidação concluída.</small>
                                     </div>
 
-                                    {{-- Campo: Data e Hora do Pagamento --}}
+                                    {{-- Campo: Data e Hora do Pagamento (Inalterável com fundo cinza) --}}
                                     <div class="mb-3">
                                         <label for="date" class="form-label text-primary font-w600">Data e Hora do Pagamento</label>
-                                        <input type="text" id="date" class="form-control" value="{{ $payment->date ? date('d/m/Y H:i', strtotime($payment->date)) : 'N/D' }}" readonly disabled>
+                                        <input type="text" id="date" class="form-control uneditable-field" value="{{ $payment->date ? date('d/m/Y H:i', strtotime($payment->date)) : 'N/D' }}" style="background-color: #e9ecef !important; cursor: not-allowed;" readonly disabled>
                                     </div>
                                 </div>
                             </div>

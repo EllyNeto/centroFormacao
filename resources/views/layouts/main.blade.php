@@ -36,13 +36,6 @@
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
 	{{-- Folha de Estilos Personalizada para Tabelas Centralizadas e Ampliadas --}}
     <link href="{{asset('css/custom-tables.css')}}" rel="stylesheet">
-	{{-- Estilos para Campos Inalteráveis com Fundo Cinza --}}
-    <link href="{{asset('css/uneditable-fields.css')}}" rel="stylesheet">
-	{{-- Estilos para Selects Nativos com Fundo Cinza Elegante --}}
-    <link href="{{asset('css/custom-selects.css')}}" rel="stylesheet">
-	{{-- Melhorias de Responsividade Mobile --}}
-    <link href="{{asset('css/mobile-responsive.css')}}" rel="stylesheet">
-
 	<!-- Datatable -->
     <link href="{{asset('vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
@@ -50,6 +43,8 @@
     <link href="{{asset('vendor/select2/css/select2.min.css')}}" rel="stylesheet">
     <!-- Custom Stylesheet -->
 	<link href="{{asset('vendor/jquery-nice-select/css/nice-select.css')}}" rel="stylesheet">
+	{{-- Estilos para Selects Nativos com Fundo Branco Limpo --}}
+    <link href="{{asset('css/custom-selects.css')}}" rel="stylesheet">
 
 	@stack('styles')
 	

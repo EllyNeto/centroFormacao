@@ -40,7 +40,7 @@
 
                                     <div class="mb-3">
                                         <label for="code" class="form-label text-primary">Código da Turma <span class="text-danger">*</span></label>
-                                        <input type="text" id="code" name="code" class="form-control" readonly value="{{ old('code', 'TURMA-'.date('Y').'-'.rand(10,99)) }}" required>
+                                        <input type="text" id="code" name="code" class="form-control uneditable-field" value="{{ old('code', $autoCode ?? ('TURMA-'.date('Y').'-01')) }}" style="background-color: #e9ecef !important; cursor: not-allowed; border: 1px solid #cbd5e1;" readonly required>
                                     </div>
 
                                     <div class="mb-3">

@@ -105,17 +105,13 @@
                                         <small class="text-muted">Digite o valor entregue pelo formando.</small>
                                     </div>
 
-                                     {{-- Campo de Troco ou Saldo Presente na Conta Calculado --}}
-                                     <div class="mb-3">
-                                         <label for="change_display" id="change_label" class="form-label text-success font-w600">
-                                             @if(isset($selectedPayment) && !empty($selectedPayment->payment_method) && !str_contains(strtolower($selectedPayment->payment_method), 'numerári') && !str_contains(strtolower($selectedPayment->payment_method), 'numerari'))
-                                                 Saldo Presente na Conta
-                                             @else
-                                                 Troco a Devolver
-                                             @endif
-                                         </label>
-                                         <input type="text" id="change_display" class="form-control font-w600 text-success" readonly value="0.00 Kz">
-                                     </div>
+                                      {{-- Campo de Saldo a Favor do Formando --}}
+                                      <div class="mb-3">
+                                          <label for="change_display" id="change_label" class="form-label text-success font-w600">
+                                              Saldo a Favor / Crédito
+                                          </label>
+                                          <input type="text" id="change_display" class="form-control font-w600 text-success" readonly value="0.00 Kz">
+                                      </div>
 
                                     {{-- Campo de Valor em Falta --}}
                                     <div class="mb-3">

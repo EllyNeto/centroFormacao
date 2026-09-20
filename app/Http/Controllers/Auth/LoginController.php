@@ -6,30 +6,28 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+/**
+ * =========================================================================================
+ * CONTROLADOR: Autenticação / Login de Utilizadores (LoginController)
+ * =========================================================================================
+ * Este controlador gere o processo de início e encerramento de sessão (login/logout) no sistema.
+ * Utiliza o Trait 'AuthenticatesUsers' do Laravel para gerir validações de credenciais e redirecionamentos.
+ */
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
+     * Rota de destino/redirecionamento dos utilizadores após autenticação com sucesso.
      *
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
-     * Create a new controller instance.
+     * Construtor do controlador.
+     * Aplica o middleware 'guest' para impedir acesso de utilizadores já autenticados à tela de login,
+     * excecionando a funcionalidade de 'logout'.
      *
      * @return void
      */
@@ -38,3 +36,4 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 }
+

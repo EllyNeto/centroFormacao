@@ -28,6 +28,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Preenche automaticamente o campo de Data e Hora do Pagamento com a data e hora exata do computador do cliente
+    const paymentDateInput = document.getElementById('date');
+    if (paymentDateInput && (paymentDateInput.type === 'datetime-local' || paymentDateInput.tagName === 'INPUT')) {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        paymentDateInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
     // Inicializa o plugin Select2 no campo de seleção de formando
     if (window.jQuery && jQuery.fn.select2 && studentSelect) {
         jQuery(studentSelect).select2({

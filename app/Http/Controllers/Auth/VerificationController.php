@@ -6,30 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 
+/**
+ * =========================================================================================
+ * CONTROLADOR: Verificação de E-mail de Utilizadores (VerificationController)
+ * =========================================================================================
+ * Este controlador gere a verificação formal do endereço de e-mail dos novos utilizadores do sistema.
+ * Utiliza o Trait 'VerifiesEmails' do Laravel.
+ */
 class VerificationController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Email Verification Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling email verification for any
-    | user that recently registered with the application. Emails may also
-    | be re-sent if the user didn't receive the original email message.
-    |
-    */
-
     use VerifiesEmails;
 
     /**
-     * Where to redirect users after verification.
+     * Rota de redirecionamento dos utilizadores após a verificação bem-sucedida do e-mail.
      *
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
-     * Create a new controller instance.
+     * Construtor da classe.
+     * Aplica os middlewares de autenticação, verificação de assinatura digital ('signed') e limites de taxa de requisições ('throttle').
      *
      * @return void
      */
@@ -40,3 +37,4 @@ class VerificationController extends Controller
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
 }
+

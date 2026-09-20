@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+/**
+ * =========================================================================================
+ * CONTROLADOR: Página Inicial / Dashboard Padrão (HomeController)
+ * =========================================================================================
+ * Responsável pelo reencaminhamento dos utilizadores autenticados para a vista inicial do sistema.
+ */
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Construtor da classe.
+     * Aplica o middleware de autenticação ('auth') para garantir que apenas utilizadores com sessão ativa acedem à página.
      *
      * @return void
      */
@@ -17,7 +24,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Exibe o painel de boas-vindas / dashboard inicial da aplicação.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
@@ -26,3 +33,4 @@ class HomeController extends Controller
         return view('home');
     }
 }
+

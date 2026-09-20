@@ -9,15 +9,22 @@ use App\Models\Student;
 use App\Models\Course;
 
 /**
- * Controlador responsável pelas operações de Inscrição (Enrollment) e Registo de Candidatos.
- * Esta classe gere todo o ciclo de vida da inscrição: listagem, registo de novo candidato,
- * edição dos dados do formando/curso, visualização de detalhes e eliminação do registo.
+ * =========================================================================================
+ * CONTROLADOR: Inscrições e Registo de Candidatos (enrollmentController)
+ * =========================================================================================
+ * Este controlador é responsável por gerir todo o ciclo de vida das inscrições e pré-candidaturas.
+ * 
+ * Principais Funcionalidades:
+ *  - Validação de BI Único por Candidato e Inscrição Única por Curso.
+ *  - Criação Automática do Estudante (código de estudante sequencial único: 1001, 1002...).
+ *  - Upload e Gestão de Fotografia do Formando (`img/student`).
+ *  - Atribuição do Estado Inicial da Inscrição como Pendente (status = 0).
  */
 class enrollmentController extends Controller
 {
     /**
      * Exibe a listagem de todas as inscrições registadas no sistema.
-     * Carrega antecipadamente (Eager Loading) os relacionamentos 'student' e 'course' para evitar N+1 queries.
+     * Carrega antecipadamente (Eager Loading) os relacionamentos 'student' e 'course' para evitar consultas N+1.
      *
      * @return \Illuminate\View\View
      */
@@ -56,7 +63,9 @@ class enrollmentController extends Controller
      */
     public function store(Request $request)
     {
-        // Validação rigorosa de todos os campos recebidos do formulário de inscrição
+        // ---------------------------------------------------------------------------------
+        // 1. VALIDAÇÃO DOS DADOS DO CANDIDATO E INSCRIÇÃO
+        // ---------------------------------------------------------------------------------
         $validatedData = $request->validate([
             'name'                 => 'required|string|max:255',
             'email'                => 'required|email|max:255',
@@ -68,42 +77,45 @@ class enrollmentController extends Controller
             'date'                 => 'required|date',
             'status'               => 'nullable|boolean',
         ], [
-            'name.required'                 => 'O nome do candidato é obrigatório.',
-            'email.required'                => 'O email é obrigatório.',
+            'name.required'                 => 'O nome do candidato é de preenchimento obrigatório.',
+            'email.required'                => 'O e-mail é de preenchimento obrigatório.',
             'email.email'                   => 'Insira um endereço de e-mail válido.',
-            'identity_card_number.required' => 'O número do bilhete de identidade é obrigatório.',
-            'phone.required'                => 'O número de telefone é obrigatório.',
-            'image.image'                   => 'O ficheiro selecionado deve ser uma imagem.',
+            'identity_card_number.required' => 'O número do bilhete de identidade é de preenchimento obrigatório.',
+            'phone.required'                => 'O número de telefone é de preenchimento obrigatório.',
+            'image.image'                   => 'O ficheiro selecionado deve ser uma imagem válida.',
             'image.mimes'                   => 'A imagem deve estar no formato JPG, JPEG, PNG ou WEBP.',
             'image.max'                     => 'A imagem não pode ter um tamanho superior a 2MB.',
-            'course_id.required'            => 'Por favor selecione o curso.',
-            'course_id.exists'              => 'O curso selecionado é inválido.',
-            'date.required'                 => 'A data da inscrição é obrigatória.',
+            'course_id.required'            => 'Por favor selecione o curso pretendido.',
+            'course_id.exists'              => 'O curso selecionado é inválido ou não existe.',
+            'date.required'                 => 'A data da inscrição é de preenchimento obrigatório.',
         ]);
 
-        // Procura por candidato/estudante existente com o mesmo número de BI (Garantia de BI Único)
+        // ---------------------------------------------------------------------------------
+        // 2. VERIFICAÇÃO DE BI EXISTENTE E INSCRIÇÃO DUPLICADA NO MESMO CURSO
+        // ---------------------------------------------------------------------------------
         $student = Student::where('identity_card_number', $validatedData['identity_card_number'])->first();
 
         if ($student) {
-            // Verifica se o estudante já possui inscrição registada no mesmo curso pretendido
+            // Impede a inscrição duplicada no mesmo curso para o mesmo candidato
             $existingEnrollment = Enrollment::where('student_id', $student->id)
                 ->where('course_id', $validatedData['course_id'])
                 ->first();
 
             if ($existingEnrollment) {
-                // Se já estiver inscrito no mesmo curso, reencaminha de volta com mensagem de erro
                 return back()->withInput()->withErrors([
                     'identity_card_number' => 'O candidato com o BI "' . $validatedData['identity_card_number'] . '" já se encontra inscrito neste curso.'
                 ]);
             }
 
-            // Se o candidato já existir no sistema mas sem inscrição neste curso, atualiza o contacto telefónico e género
+            // Atualiza o contacto telefónico e género do formando se o candidato já existir
             $student->update([
                 'phone_number' => $validatedData['phone'],
                 'gender'       => $validatedData['gender'] ?? $student->gender,
             ]);
         } else {
-            // Processamento do upload da fotografia de perfil do candidato se fornecida
+            // -----------------------------------------------------------------------------
+            // 3. UPLOAD DE FOTOGRAFIA E REGISTO DE NOVO ESTUDANTE
+            // -----------------------------------------------------------------------------
             $imagePath = null;
             if ($request->hasFile('image') && $request->file('image')->isValid()) {
                 $requestImage = $request->file('image');
@@ -112,11 +124,11 @@ class enrollmentController extends Controller
                 $imagePath = $requestImage->storeAs('img/student', $imageName, 'public');
             }
 
-            // Gera o código numérico sequencial único do estudante (Ex: 1001, 1002...)
+            // Gera o código numérico sequencial do estudante (ex: 1001, 1002...)
             $maxCode = Student::max('code');
             $studentCode = $maxCode ? ($maxCode + 1) : 1001;
 
-            // Cria o registo do novo candidato na tabela 'students'
+            // Regista o novo estudante
             $student = Student::create([
                 'name'                 => $validatedData['name'],
                 'email'                => $validatedData['email'],
@@ -128,7 +140,9 @@ class enrollmentController extends Controller
             ]);
         }
 
-        // Regista a inscrição na tabela 'enrollments'. O estado é sempre definido automaticamente como 0 (Pendente )
+        // ---------------------------------------------------------------------------------
+        // 4. CRIAÇÃO DA INSCRIÇÃO COM ESTADO INICIAL PENDENTE (status = 0)
+        // ---------------------------------------------------------------------------------
         $enrollment = Enrollment::create([
             'student_id' => $student->id,
             'course_id'  => $validatedData['course_id'],
@@ -136,7 +150,7 @@ class enrollmentController extends Controller
             'status'      => 0, // Estado automático inicial: Pendente
         ]);
 
-        // Redireciona para a listagem principal com mensagem flash de sucesso
+        // Redireciona para a listagem principal com mensagem de sucesso
         return redirect()->route('enrollment.index')->with('success', 'Inscrição de candidato efetuada com sucesso!');
     }
 
@@ -240,7 +254,7 @@ class enrollmentController extends Controller
             $student->save();
         }
 
-        // Atualiza a inscrição (curso associado)
+        // Atualiza o curso associado à inscrição
         $enrollment->update([
             'course_id' => $validatedData['course_id'],
         ]);
@@ -265,3 +279,4 @@ class enrollmentController extends Controller
         return redirect()->route('enrollment.index')->with('success', 'Inscrição eliminada com sucesso!');
     }
 }
+

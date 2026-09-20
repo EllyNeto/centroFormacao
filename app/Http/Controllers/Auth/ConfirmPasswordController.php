@@ -6,30 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
 
+/**
+ * =========================================================================================
+ * CONTROLADOR: Confirmação de Palavra-Passe (ConfirmPasswordController)
+ * =========================================================================================
+ * Solicita a re-confirmação da palavra-passe antes de permitir o acesso a áreas sensíveis do sistema.
+ * Utiliza o Trait 'ConfirmsPasswords' do Laravel.
+ */
 class ConfirmPasswordController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Confirm Password Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password confirmations and
-    | uses a simple trait to include the behavior. You're free to explore
-    | this trait and override any functions that require customization.
-    |
-    */
-
     use ConfirmsPasswords;
 
     /**
-     * Where to redirect users when the intended url fails.
+     * Rota de redirecionamento caso o acesso à URL pretendida falhe.
      *
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
-     * Create a new controller instance.
+     * Construtor da classe.
+     * Aplica o middleware de autenticação ('auth').
      *
      * @return void
      */
@@ -38,3 +35,4 @@ class ConfirmPasswordController extends Controller
         $this->middleware('auth');
     }
 }
+

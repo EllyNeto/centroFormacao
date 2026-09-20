@@ -92,7 +92,7 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label for="gender" class="form-label text-primary">Género</label>
-                                                <select id="gender" name="gender" class="form-control">
+                                                <select id="gender" name="gender" class="form-control" style="background-color: #ffffff !important;">
                                                     <option value="">Selecione o género...</option>
                                                     <option value="Masculino" {{ old('gender') == 'Masculino' ? 'selected' : '' }}>Masculino</option>
                                                     <option value="Feminino" {{ old('gender') == 'Feminino' ? 'selected' : '' }}>Feminino</option>
@@ -113,7 +113,7 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label for="course_id" class="form-label text-primary">Curso Pretendido <span class="text-danger">*</span></label>
-                                                <select id="course_id" name="course_id" class="form-control" required>
+                                                <select id="course_id" name="course_id" class="form-control" style="background-color: #ffffff !important;" required>
                                                     <option value="">Selecione o Curso Pretendido...</option>
                                                     @foreach($courses as $course)
                                                         <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
@@ -124,11 +124,11 @@
                                             </div>
                                         </div>
 
-                                        {{-- Campo: Data da Inscrição --}}
+                                         {{-- Campo: Data da Inscrição (Fundo cinza e leitura apenas) --}}
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label for="date" class="form-label text-primary">Data da Inscrição <span class="text-danger">*</span></label>
-                                                <input type="date" class="form-control" id="date" name="date" value="{{ old('date', date('Y-m-d')) }}" required>
+                                                <input type="date" class="form-control uneditable-field" id="date" name="date" value="{{ old('date', date('Y-m-d')) }}" style="background-color: #e9ecef !important;" readonly required>
                                             </div>
                                         </div>
 

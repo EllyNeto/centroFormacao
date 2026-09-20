@@ -116,12 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const changeLabel   = document.getElementById('change_label');
 
         if (changeLabel) {
-            const isNumerario = !paymentMethod || paymentMethod.includes('numerári') || paymentMethod.includes('numerari');
-            if (isNumerario) {
-                changeLabel.textContent = 'Troco a Devolver';
-            } else {
-                changeLabel.textContent = 'Saldo Presente na Conta';
-            }
+            changeLabel.textContent = 'Saldo a Favor / Crédito';
         }
 
         if (amountPaid > amountToPay) {

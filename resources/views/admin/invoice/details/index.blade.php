@@ -37,7 +37,7 @@
 
                             <div class="col-xl-6 col-md-6">
                                 <div class="p-3 border rounded">
-                                    <h6 class="text-primary font-w600 mb-3"><i class="fa fa-money me-2"></i>Valores, Troco e Pendências</h6>
+                                    <h6 class="text-primary font-w600 mb-3"><i class="fa fa-money me-2"></i>Valores, Saldo e Pendências</h6>
                                     <p><strong>Valor por Pagar:</strong> <span class="font-w600">{{ number_format($invoice->amount_to_pay, 2, ',', '.') }} Kz</span></p>
                                     <p><strong>Valor Pago:</strong> <span class="text-success font-w600">{{ number_format($invoice->amount_paid, 2, ',', '.') }} Kz</span></p>
                                     
@@ -46,7 +46,7 @@
                                     @endphp
 
                                     @if($diff >= 0)
-                                        <p><strong>Troco Devolvido:</strong> <span class="badge badge-success light">{{ number_format($diff, 2, ',', '.') }} Kz</span></p>
+                                        <p><strong>Saldo:</strong> <span class="badge badge-success light">{{ number_format($diff, 2, ',', '.') }} Kz</span></p>
                                         <p><strong>Estado Financeiro:</strong> <span class="badge badge-success light">Pago na Totalidade</span></p>
                                     @else
                                         <p><strong>Valor em Falta:</strong> <span class="badge badge-danger light">{{ number_format(abs($diff), 2, ',', '.') }} Kz</span></p>

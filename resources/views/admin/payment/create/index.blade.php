@@ -186,7 +186,7 @@
                                     {{-- Campo: Forma de Pagamento (Select) --}}
                                     <div class="mb-3">
                                         <label for="payment_method" class="form-label text-primary font-w600">Forma de Pagamento <span class="text-danger">*</span></label>
-                                        <select id="payment_method" name="payment_method" class="form-control" required>
+                                        <select id="payment_method" name="payment_method" class="form-control" style="background-color: #ffffff !important;" required>
                                             <option value="Numerário" {{ old('payment_method', 'Numerário') == 'Numerário' ? 'selected' : '' }}>Numerário</option>
                                             <option value="Cartão" {{ old('payment_method') == 'Cartão' ? 'selected' : '' }}>Cartão / TPA</option>
                                             <option value="Transferência" {{ old('payment_method') == 'Transferência' ? 'selected' : '' }}>Transferência Bancária</option>
@@ -196,7 +196,7 @@
                                     {{-- Campo: Moeda --}}
                                     <div class="mb-3">
                                         <label for="currency" class="form-label text-primary font-w600">Moeda <span class="text-danger">*</span></label>
-                                        <select id="currency" name="currency" class="form-control" required>
+                                        <select id="currency" name="currency" class="form-control" style="background-color: #ffffff !important;" required>
                                             <option value="AOA" {{ old('currency', 'AOA') == 'AOA' ? 'selected' : '' }}>AOA - Kwanza (Kz)</option>
                                             <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>USD - Dólar ($)</option>
                                             <option value="EUR" {{ old('currency') == 'EUR' ? 'selected' : '' }}>EUR - Euro (€)</option>
@@ -227,10 +227,10 @@
                                         <small class="text-muted d-block mt-1">Ao registar o pagamento, a inscrição do formando é automaticamente confirmada.</small>
                                     </div>
 
-                                    {{-- Campo: Data e Hora do Pagamento --}}
+                                    {{-- Campo: Data e Hora do Pagamento (Inalterável, fundo cinza e preenchido pelo computador) --}}
                                     <div class="mb-3">
                                         <label for="date" class="form-label text-primary font-w600">Data e Hora do Pagamento <span class="text-danger">*</span></label>
-                                        <input type="datetime-local" id="date" name="date" class="form-control" value="{{ old('date', date('Y-m-d\TH:i')) }}" required>
+                                        <input type="datetime-local" id="date" name="date" class="form-control uneditable-field" value="{{ old('date', date('Y-m-d\TH:i')) }}" style="background-color: #e9ecef !important; cursor: not-allowed; pointer-events: none;" readonly required>
                                     </div>
                                 </div>
                             </div>
