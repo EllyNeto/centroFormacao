@@ -2,10 +2,9 @@
  * Script responsável pelas interações dinâmicas nos formulários de pagamento (Payment Create / Edit).
  * Suporta:
  * 1. Seleção de formando via Select2.
- * 2. Geração de boxes de valor dinâmicas por emolumento com placeholder="0,00".
- * 3. Formatação em tempo real ao digitar (dezenas, milhares, milhões).
- * 4. Abatimento automático de Saldo do Aluno e cálculo da diferença a cobrar.
- * 5. Preservação e sincronização rigorosa do tipo de pagamento (type_of_payment).
+ * 2. Formatação em tempo real ao digitar (dezenas, milhares, milhões).
+ * 3. Abatimento automático de Saldo do Aluno e cálculo da diferença a cobrar.
+ * 4. Preservação e sincronização rigorosa do tipo de pagamento (type_of_payment).
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -18,11 +17,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const studentSelect        = document.getElementById('student_id');
     const balanceDisplayCard   = document.getElementById('student_balance_card');
     const currentBalanceSpan   = document.getElementById('current_balance_text');
-    
-    const dynamicBoxesCard     = document.getElementById('dynamic_emolument_boxes');
-    const emolumentsInputsList = document.getElementById('emoluments_inputs_list');
 
     let currentStudentBalance = 0;
+    let userManuallyEditedValue = false;
+
+    // Se o utilizador digita manualmente no campo 'value', marca a flag para não sobrescrever
+    if (valueInput) {
+        valueInput.addEventListener('input', function() {
+            userManuallyEditedValue = true;
+        });
+    }
 
     // Inicializa o plugin Select2 no campo de seleção de formando
     if (window.jQuery && jQuery.fn.select2 && studentSelect) {
@@ -78,12 +82,18 @@ document.addEventListener('DOMContentLoaded', function() {
             usedBalanceInput.value = usedBalance.toFixed(2);
         }
 
-        // Atualiza o valor total a cobrar no campo principal (diferença em dinheiro)
+        // Atualiza o valor total a cobrar no campo principal apenas se o utilizador não editou manualmente
         if (valueInput) {
-            if (diferencaACobrar > 0) {
-                valueInput.value = window.CurrencyFormatter ? window.CurrencyFormatter.format(diferencaACobrar) : diferencaACobrar.toFixed(2);
-            } else if (totalEmoluments > 0 && diferencaACobrar === 0) {
-                valueInput.value = "0,00";
+            if (!userManuallyEditedValue || !valueInput.value.trim()) {
+                if (diferencaACobrar > 0) {
+                    valueInput.value = window.CurrencyFormatter ? window.CurrencyFormatter.format(diferencaACobrar) : diferencaACobrar.toFixed(2);
+                } else if (totalEmoluments > 0) {
+                    valueInput.value = "0,00";
+                } else if (checkboxes.length > 0 && Array.from(checkboxes).some(c => c.checked)) {
+                    if (!valueInput.value.trim()) {
+                        valueInput.value = "0,00";
+                    }
+                }
             }
         }
 
@@ -115,19 +125,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        userManuallyEditedValue = false;
         calculateTotalsAndBalance();
     }
 
     /**
-     * Sincroniza o estado inicial dos checkboxes com base no tipo de pagamento já existente (old input ou edit model)
-     * ou automaticamente pre-seleciona "Inscrição" quando vindo de uma Inscrição.
+     * Sincroniza o estado inicial dos checkboxes com base no tipo de pagamento já existente
      */
     function syncInitialState() {
         const initialTypeValue = typeHiddenInput ? typeHiddenInput.value.trim() : '';
 
         if (initialTypeValue) {
             const names = initialTypeValue.split(',').map(s => s.trim()).filter(Boolean);
-            const standardValues = ["Inscrição", "Valor do Curso", "Cartão do Formando", "Certificado", "Exame de Recurso"];
 
             names.forEach(name => {
                 let matched = false;
@@ -142,11 +151,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (outroCb) {
                         outroCb.checked = true;
                         outroCb.setAttribute('data-custom-name', name);
+                        const customDescInput = document.getElementById('custom_emolument_desc');
+                        if (customDescInput) {
+                            customDescInput.value = name;
+                        }
                     }
                 }
             });
         } else {
-            // Se veio da rota de inscrição (com enrollment_id), marca automaticamente 'Inscrição'
             const enrollmentHidden = document.querySelector('input[name="enrollment_id"]');
             if (enrollmentHidden && enrollmentHidden.value) {
                 const inscricaoCb = document.querySelector('.emolumento-check[value="Inscrição"]');
@@ -156,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        renderDynamicEmolumentBoxes();
+        calculateTotalsAndBalance();
     }
 
     /**
@@ -207,6 +219,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (paymentForm) {
         paymentForm.addEventListener('submit', function(e) {
             calculateTotalsAndBalance();
+
+            if (studentSelect && !studentSelect.value) {
+                e.preventDefault();
+                alert('Por favor, selecione um formando.');
+                if (window.jQuery && jQuery.fn.select2) {
+                    jQuery(studentSelect).select2('open');
+                } else {
+                    studentSelect.focus();
+                }
+                return false;
+            }
+
             if (!typeHiddenInput || !typeHiddenInput.value.trim()) {
                 e.preventDefault();
                 alert('Por favor, selecione pelo menos um emolumento a pagar.');
@@ -214,6 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (emolCard) {
                     emolCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
+                return false;
             }
         });
     }
@@ -222,4 +247,3 @@ document.addEventListener('DOMContentLoaded', function() {
     handleStudentSelection();
     syncInitialState();
 });
-

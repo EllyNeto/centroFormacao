@@ -60,9 +60,41 @@ class paymentController extends Controller
      */
     public function store(Request $request)
     {
+        // Converte valores monetários formatados (ex: "26.000,00" ou "26 000,00") para formato numérico do PHP ("26000.00")
+        $cleanCurrency = function ($val) {
+            if (is_null($val) || $val === '') return 0.00;
+            if (is_numeric($val)) return (float)$val;
+            $cleaned = preg_replace('/[^\d,.-]/', '', (string)$val);
+            if (strpos($cleaned, ',') !== false) {
+                $cleaned = str_replace('.', '', $cleaned);
+                $cleaned = str_replace(',', '.', $cleaned);
+            }
+            return is_numeric($cleaned) ? (float)$cleaned : 0.00;
+        };
+
+        if ($request->has('value')) {
+            $request->merge(['value' => $cleanCurrency($request->input('value'))]);
+        }
+        if ($request->has('used_balance')) {
+            $request->merge(['used_balance' => $cleanCurrency($request->input('used_balance'))]);
+        }
+        if ($request->has('add_to_balance')) {
+            $request->merge(['add_to_balance' => $cleanCurrency($request->input('add_to_balance'))]);
+        }
+
+        // Se student_id ou enrollment_id vierem como string vazia, converte em null para não falhar a regra de chave estrangeira
+        if (!$request->filled('student_id')) {
+            $request->merge(['student_id' => null]);
+        }
+        if (!$request->filled('enrollment_id')) {
+            $request->merge(['enrollment_id' => null]);
+        }
+
         // Se a referência for gerada automaticamente no frontend ou não enviada, gera um número inteiro automático de 8 dígitos
         if (!$request->has('reference') || empty($request->reference)) {
             $request->merge(['reference' => rand(10000000, 99999999)]);
+        } else {
+            $request->merge(['reference' => (int)$request->input('reference')]);
         }
 
         // Caso o tipo de pagamento esteja vazio mas uma inscrição esteja associada, assume "Inscrição" por omissão
@@ -77,16 +109,15 @@ class paymentController extends Controller
             'type_of_payment' => 'required|string|max:255',
             'value'           => 'required|numeric|min:0',
             'reference'       => 'required|integer',
-            'status'          => 'required|boolean',
+            'status'          => 'nullable|boolean',
             'payment_method'  => 'required|string|max:255',
-            'date'            => 'nullable|date',
+            'date'            => 'nullable',
             'currency'        => 'required|string|max:10',
             'used_balance'    => 'nullable|numeric|min:0',
             'add_to_balance'  => 'nullable|numeric|min:0',
         ], [
             'type_of_payment.required' => 'O tipo de emolumento/pagamento é obrigatório.',
             'value.required'           => 'O valor do pagamento é obrigatório.',
-            'status.required'          => 'Por favor selecione o estado do pagamento.',
             'payment_method.required'  => 'Selecione a forma de pagamento.',
             'currency.required'        => 'A indicação da moeda é obrigatória.',
         ]);
@@ -232,6 +263,20 @@ class paymentController extends Controller
     public function update(Request $request, $id)
     {
         $payment = Payment::findOrFail($id);
+
+        $cleanCurrency = function ($val) {
+            if (is_null($val) || $val === '') return null;
+            $cleaned = preg_replace('/[^\d,.-]/', '', (string)$val);
+            if (strpos($cleaned, ',') !== false) {
+                $cleaned = str_replace('.', '', $cleaned);
+                $cleaned = str_replace(',', '.', $cleaned);
+            }
+            return is_numeric($cleaned) ? (float)$cleaned : $val;
+        };
+
+        if ($request->has('value')) {
+            $request->merge(['value' => $cleanCurrency($request->input('value'))]);
+        }
 
         $validatedData = $request->validate([
             'student_id'      => 'nullable|exists:students,id',
