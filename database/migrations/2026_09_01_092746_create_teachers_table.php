@@ -29,6 +29,9 @@ class CreateTeachersTable extends Migration
             // Número do Bilhete de Identidade (BI) ou documento de identificação
             $table->string('identity_card_number')->nullable();
 
+            // Género do formador (Masculino / Feminino / Outro)
+            $table->string('gender')->nullable();
+
             // Número de telefone de contacto do formador
             $table->string('phone_number')->nullable();
 

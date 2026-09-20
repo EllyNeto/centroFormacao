@@ -61,9 +61,13 @@
                                             <td>{{ $user->email }}</td>
                                             <td>
                                                 @if($user->isSuperAdmin())
-                                                    <span class="badge badge-primary light"><i class="fa fa-shield me-1"></i> Super Admin</span>
+                                                    <span class="badge badge-primary light"><i class="fa fa-shield me-1"></i> Administrador</span>
+                                                @elseif($user->role === 'secretaria')
+                                                    <span class="badge badge-info light"><i class="fa fa-folder-open me-1"></i> Operador — Secretaria</span>
+                                                @elseif($user->role === 'financas')
+                                                    <span class="badge badge-success light"><i class="fa fa-calculator me-1"></i> Operador — Finanças</span>
                                                 @else
-                                                    <span class="badge badge-info light"><i class="fa fa-user-circle me-1"></i> Administrador</span>
+                                                    <span class="badge badge-secondary light"><i class="fa fa-user-circle me-1"></i> {{ $user->role_name }}</span>
                                                 @endif
                                             </td>
                                             <td>

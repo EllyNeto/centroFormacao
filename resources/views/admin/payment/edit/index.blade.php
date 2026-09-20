@@ -148,10 +148,11 @@
                                                 </div>
                                             </div>
 
-                                            {{-- Contentor Simples para Descrição de Outro Emolumento --}}
+                                            {{-- Contentor Opcional para Valor do Outro Emolumento --}}
                                             <div id="outro_emolumento_container" class="mt-2 pt-2 border-top d-none">
-                                                <label for="custom_emolument_desc" class="form-label text-primary font-w600 fs-13 mb-1">Descrição do Outro Emolumento:</label>
-                                                <input type="text" id="custom_emolument_desc" class="form-control form-control-sm" placeholder="Ex: Multa por Atraso, Segunda Via de Cartão..." value="Outro Emolumento">
+                                                <label for="custom_emolument_price" class="form-label text-primary font-w600 fs-13 mb-1">Valor do Outro Emolumento (Kz):</label>
+                                                <input type="text" id="custom_emolument_price" class="form-control form-control-sm currency-input" placeholder="0,00" value="0,00">
+                                                <small class="text-muted d-block mt-1">Este valor será somado automaticamente ao valor total dos emolumentos.</small>
                                             </div>
                                         </div>
                                         <input type="hidden" name="type_of_payment" id="type_of_payment" value="{{ old('type_of_payment', $payment->type_of_payment) }}" required>

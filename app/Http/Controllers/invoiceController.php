@@ -128,20 +128,24 @@ class invoiceController extends Controller
         // Cálculo do troco / saldo acumulado
         $validatedData['change'] = max(0, $amountPaid - $amountToPay);
 
-        // Se houver troco/excedente e o método de pagamento não for Numerário (Transferência ou Cartão/TPA), adiciona ao saldo do formando
-        if ($validatedData['change'] > 0 && !empty($validatedData['payment_id'])) {
+        // Gestão de Saldo do Formando: Qualquer valor pago a mais (excesso / troco) é guardado no saldo do formando para utilização em futuros pagamentos
+        $targetStudent = null;
+        if (!empty($validatedData['payment_id'])) {
             $paymentObj = Payment::find($validatedData['payment_id']);
             if ($paymentObj && $paymentObj->student_id) {
-                $pMethod = strtolower($paymentObj->payment_method ?? '');
-                $isNumerario = str_contains($pMethod, 'numerári') || str_contains($pMethod, 'numerari');
-                if (!$isNumerario) {
-                    $student = \App\Models\Student::find($paymentObj->student_id);
-                    if ($student) {
-                        $student->balance += $validatedData['change'];
-                        $student->save();
-                    }
-                }
+                $targetStudent = Student::find($paymentObj->student_id);
             }
+        }
+        if (!$targetStudent && !empty($validatedData['enrollment_id'])) {
+            $enrollmentObj = Enrollment::find($validatedData['enrollment_id']);
+            if ($enrollmentObj && $enrollmentObj->student_id) {
+                $targetStudent = Student::find($enrollmentObj->student_id);
+            }
+        }
+
+        if ($targetStudent && $validatedData['change'] > 0) {
+            $targetStudent->balance += $validatedData['change'];
+            $targetStudent->save();
         }
 
         // Criação do registo da fatura na base de dados
@@ -152,7 +156,7 @@ class invoiceController extends Controller
             Enrollment::where('id', $validatedData['enrollment_id'])->update(['status' => 1]);
         }
 
-        return redirect()->route('payment.index')->with('success', 'Fatura emitida com sucesso!');
+        return redirect()->route('invoice.show', $invoice->id)->with('success', 'Fatura confirmada e emitida com sucesso!');
     }
 
     /**
@@ -175,7 +179,7 @@ class invoiceController extends Controller
      */
     public function edit($id)
     {
-        $invoice = Invoice::findOrFail($id);
+        $invoice = Invoice::with(['enrollment.student', 'enrollment.course', 'course', 'payment'])->findOrFail($id);
         $enrollments = Enrollment::with(['student', 'course'])->get();
         $courses     = Course::where('status', 1)->get();
         $payments    = Payment::all();

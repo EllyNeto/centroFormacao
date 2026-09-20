@@ -201,25 +201,11 @@ class paymentController extends Controller
             }
         }
 
-        // Criação automática da Fatura correspondente ao pagamento
-        $targetEnrollment = null;
-        if ($payment->enrollment_id) {
-            $targetEnrollment = Enrollment::find($payment->enrollment_id);
-        } elseif ($payment->student_id) {
-            $targetEnrollment = Enrollment::where('student_id', $payment->student_id)->first();
-        }
-
-        $invoice = Invoice::create([
-            'enrollment_id' => $targetEnrollment ? $targetEnrollment->id : null,
-            'course_id'     => $targetEnrollment ? $targetEnrollment->course_id : null,
+        // Redireciona o utilizador para a tela de Emissão de Fatura para confirmação manual antes de gerar a fatura final
+        return redirect()->route('invoice.create', [
             'payment_id'    => $payment->id,
-            'amount_to_pay' => $payment->value,
-            'amount_paid'   => $payment->value,
-            'change'        => 0.00,
-        ]);
-
-        // Redireciona o utilizador diretamente para a página de detalhes da fatura recém-criada
-        return redirect()->route('invoice.show', $invoice->id)->with('success', 'Pagamento registado e Fatura gerada com sucesso!');
+            'enrollment_id' => $payment->enrollment_id,
+        ])->with('success', 'Pagamento guardado com sucesso! Verifique os dados e clique em "Confirmar e Gerar Fatura".');
     }
 
     /**

@@ -50,14 +50,16 @@ document.addEventListener('DOMContentLoaded', function() {
             if (cb.checked) {
                 let name = cb.value;
                 let price = parseFloat(cb.getAttribute('data-price')) || 0;
-                totalEmoluments += price;
 
                 if (name === 'Outro Emolumento') {
-                    const customDescInput = document.getElementById('custom_emolument_desc');
-                    if (customDescInput && customDescInput.value.trim()) {
-                        name = customDescInput.value.trim();
+                    const customPriceInput = document.getElementById('custom_emolument_price');
+                    if (customPriceInput) {
+                        price = window.CurrencyFormatter ? window.CurrencyFormatter.parseRaw(customPriceInput.value) : (parseFloat(customPriceInput.value) || 0);
                     }
                 }
+
+                totalEmoluments += price;
+
                 if (name && !selectedNames.includes(name)) {
                     selectedNames.push(name);
                 }
@@ -97,6 +99,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        // Calcula excesso/troco pago a mais que irá acumular como crédito no saldo do formando
+        let currentValueEntered = window.CurrencyFormatter ? window.CurrencyFormatter.parseRaw(valueInput ? valueInput.value : 0) : (parseFloat(valueInput ? valueInput.value : 0) || 0);
+        let excessPaid = 0;
+        if (currentValueEntered > diferencaACobrar && totalEmoluments > 0) {
+            excessPaid = currentValueEntered - diferencaACobrar;
+        }
+        if (addToBalanceInput) {
+            addToBalanceInput.value = excessPaid.toFixed(2);
+        }
+
         // Atualiza o aviso informativo no cartão de saldo
         const balanceNotice = document.getElementById('balance_notice_text');
         if (balanceNotice) {
@@ -104,6 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 let fmtUsed = window.CurrencyFormatter ? window.CurrencyFormatter.format(usedBalance) : usedBalance.toFixed(2);
                 let fmtDif  = window.CurrencyFormatter ? window.CurrencyFormatter.format(diferencaACobrar) : diferencaACobrar.toFixed(2);
                 balanceNotice.innerHTML = `<span class="text-success font-w600"><i class="fa fa-info-circle me-1"></i> Saldo de ${fmtUsed} Kz aplicado automaticamente. Cobrar apenas a diferença de ${fmtDif} Kz ao formando.</span>`;
+            } else if (excessPaid > 0) {
+                let fmtExcess = window.CurrencyFormatter ? window.CurrencyFormatter.format(excessPaid) : excessPaid.toFixed(2);
+                balanceNotice.innerHTML = `<span class="text-primary font-w600"><i class="fa fa-plus-circle me-1"></i> Excesso de ${fmtExcess} Kz será acumulado no saldo de crédito do formando.</span>`;
             } else {
                 balanceNotice.textContent = "O formando pode utilizar este crédito acumulado em futuros emolumentos ou gerar novo saldo ao pagar a mais.";
             }
@@ -111,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Alterna a visibilidade do campo de descrição do "Outro Emolumento" quando selecionado.
+     * Alterna a visibilidade do campo de valor do "Outro Emolumento" quando a checkbox é marcada.
      */
     function renderDynamicEmolumentBoxes() {
         const outroCb = document.querySelector('.emolumento-check[value="Outro Emolumento"]');
@@ -150,11 +165,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     const outroCb = document.querySelector('.emolumento-check[value="Outro Emolumento"]');
                     if (outroCb) {
                         outroCb.checked = true;
-                        outroCb.setAttribute('data-custom-name', name);
-                        const customDescInput = document.getElementById('custom_emolument_desc');
-                        if (customDescInput) {
-                            customDescInput.value = name;
-                        }
                     }
                 }
             });
@@ -203,6 +213,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (checkboxes && checkboxes.length > 0) {
         checkboxes.forEach(function(cb) {
             cb.addEventListener('change', renderDynamicEmolumentBoxes);
+        });
+    }
+
+    // Regista ouvinte de evento para o campo de valor do Outro Emolumento
+    const customPriceInput = document.getElementById('custom_emolument_price');
+    if (customPriceInput) {
+        ['input', 'keyup', 'blur', 'change'].forEach(function(evtName) {
+            customPriceInput.addEventListener(evtName, function() {
+                userManuallyEditedValue = false;
+                calculateTotalsAndBalance();
+            });
         });
     }
 

@@ -58,7 +58,7 @@ class userController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'role'     => 'required|string|in:super_admin,admin',
+            'role'     => 'required|string|in:super_admin,admin,secretaria,financas',
         ], [
             'name.required'     => 'O nome completo é obrigatório.',
             'email.required'    => 'O endereço de e-mail é obrigatório.',
@@ -79,7 +79,7 @@ class userController extends Controller
         ]);
 
         // Redireciona para a lista com mensagem de sucesso
-        return redirect()->route('user.index')->with('success', 'Novo utilizador/administrador registado com sucesso!');
+        return redirect()->route('user.index')->with('success', 'Novo utilizador registado com sucesso!');
     }
 
     /**
@@ -109,7 +109,7 @@ class userController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users,email,' . $id,
             'password' => 'nullable|string|min:6|confirmed',
-            'role'     => 'required|string|in:super_admin,admin',
+            'role'     => 'required|string|in:super_admin,admin,secretaria,financas',
             'status'   => 'required|boolean',
         ], [
             'name.required'  => 'O nome completo é obrigatório.',

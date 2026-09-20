@@ -48,23 +48,53 @@ class User extends Authenticatable
     ];
 
     /**
-     * Verifica se o utilizador possui o perfil de Super Administrador (Super Admin).
-     * O Super Admin tem acesso total à plataforma, incluindo o módulo de Gestão de Utilizadores.
+     * Verifica se o utilizador possui o perfil de Administrador / Super Administrador (Acesso Total).
+     * O Administrador/Super Admin tem acesso a todas as definições e gestão de utilizadores.
      *
      * @return bool
      */
     public function isSuperAdmin()
     {
-        return $this->role === 'super_admin';
+        return $this->role === 'super_admin' || $this->role === 'admin';
     }
 
     /**
-     * Verifica se o utilizador possui perfil de Administrador / Operador normal.
+     * Verifica se o utilizador possui o perfil de Operador da Secretaria (Gestão de Inscrições e Formandos).
      *
      * @return bool
      */
-    public function isAdmin()
+    public function isSecretaria()
     {
-        return $this->role === 'admin' || $this->role === 'super_admin';
+        return $this->role === 'secretaria';
+    }
+
+    /**
+     * Verifica se o utilizador possui o perfil de Operador das Finanças (Gestão de Pagamentos e Faturas).
+     *
+     * @return bool
+     */
+    public function isFinancas()
+    {
+        return $this->role === 'financas';
+    }
+
+    /**
+     * Accessor para obter a designação legível em português do perfil do utilizador.
+     *
+     * @return string
+     */
+    public function getRoleNameAttribute()
+    {
+        switch ($this->role) {
+            case 'super_admin':
+            case 'admin':
+                return 'Administrador (Super Admin)';
+            case 'secretaria':
+                return 'Operador - Secretaria';
+            case 'financas':
+                return 'Operador - Finanças';
+            default:
+                return ucfirst($this->role ?? 'Operador');
+        }
     }
 }

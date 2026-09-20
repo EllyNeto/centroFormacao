@@ -30,6 +30,9 @@ class CreateStudentsTable extends Migration
             // Número do Bilhete de Identidade (BI) ou documento de identificação legal
             $table->string('identity_card_number');
 
+            // Género do estudante (Masculino / Feminino / Outro)
+            $table->string('gender')->nullable();
+
             // Número de telefone de contacto principal do estudante
             $table->string('phone_number')->nullable();
 

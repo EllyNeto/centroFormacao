@@ -34,40 +34,37 @@
 
                             <div class="row">
                                 <div class="col-xl-6 col-sm-6">
+                                    {{-- Inscrição Associada (Inalterável / Preenchida Automaticamente) --}}
                                     <div class="mb-3">
-                                        <label for="enrollment_id" class="form-label text-primary">Inscrição Associada <span class="text-danger">*</span></label>
-                                        <select id="enrollment_id" name="enrollment_id" class="form-control" required>
-                                            <option value="">Selecione uma Inscrição</option>
-                                            @foreach($enrollments as $enrollment)
-                                                <option value="{{ $enrollment->id }}" 
-                                                        data-course-id="{{ $enrollment->course_id }}"
-                                                        data-course-name="{{ $enrollment->course->name ?? '' }}"
-                                                        {{ old('enrollment_id', $invoice->enrollment_id) == $enrollment->id ? 'selected' : '' }}>
-                                                    #INS-{{ sprintf('%04d', $enrollment->id) }} - {{ $enrollment->student->name ?? 'Estudante' }} ({{ $enrollment->course->name ?? 'Curso' }})
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <label for="enrollment_display" class="form-label text-primary font-w600">Inscrição Associada <span class="text-danger">*</span></label>
+                                        @php
+                                            $enrollmentObj = $invoice->enrollment;
+                                            $enrollmentText = $enrollmentObj 
+                                                ? '#INS-' . sprintf('%04d', $enrollmentObj->id) . ' - ' . ($enrollmentObj->student->name ?? 'Estudante') . ' (' . ($enrollmentObj->course->name ?? 'Curso') . ')'
+                                                : 'N/D';
+                                        @endphp
+                                        <input type="text" id="enrollment_display" class="form-control font-w600 text-dark" value="{{ $enrollmentText }}" style="background-color: #e9ecef !important; cursor: not-allowed; border: 1px solid #cbd5e1;" readonly disabled>
+                                        <input type="hidden" name="enrollment_id" value="{{ $invoice->enrollment_id }}">
                                     </div>
 
-                                    {{-- Curso Associado (Preenchido Automaticamente a partir da Inscrição) --}}
+                                    {{-- Curso Associado (Inalterável / Preenchido Automaticamente a partir da Inscrição) --}}
                                     <div class="mb-3">
-                                        <label for="course_name_display" class="form-label text-primary">Curso Associado</label>
-                                        <input type="text" id="course_name_display" class="form-control" value="{{ $invoice->course->name ?? '' }}" readonly disabled>
-                                        <input type="hidden" name="course_id" id="course_id" value="{{ old('course_id', $invoice->course_id) }}">
+                                        <label for="course_name_display" class="form-label text-primary font-w600">Curso Associado</label>
+                                        <input type="text" id="course_name_display" class="form-control font-w600 text-dark" value="{{ $invoice->course->name ?? ($invoice->enrollment->course->name ?? 'N/D') }}" style="background-color: #e9ecef !important; cursor: not-allowed; border: 1px solid #cbd5e1;" readonly disabled>
+                                        <input type="hidden" name="course_id" id="course_id" value="{{ $invoice->course_id }}">
                                     </div>
 
+                                    {{-- Registo de Pagamento Associado (Inalterável / Preenchido Automaticamente) --}}
                                     <div class="mb-3">
-                                        <label for="payment_id" class="form-label text-primary">Registo de Pagamento Associado</label>
-                                        <select id="payment_id" name="payment_id" class="form-control">
-                                            <option value="">Selecione um Pagamento (Opcional)</option>
-                                            @foreach($payments as $payment)
-                                                <option value="{{ $payment->id }}" 
-                                                        data-value="{{ number_format($payment->value, 2, '.', '') }}"
-                                                        {{ old('payment_id', $invoice->payment_id) == $payment->id ? 'selected' : '' }}>
-                                                    #PAG-{{ sprintf('%04d', $payment->id) }} - {{ $payment->type_of_payment }} ({{ number_format($payment->value, 2, ',', '.') }} Kz)
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <label for="payment_display" class="form-label text-primary font-w600">Registo de Pagamento Associado</label>
+                                        @php
+                                            $paymentObj = $invoice->payment;
+                                            $paymentText = $paymentObj 
+                                                ? '#PAG-' . sprintf('%04d', $paymentObj->id) . ' - ' . $paymentObj->type_of_payment . ' (' . number_format($paymentObj->value, 2, ',', '.') . ' Kz)'
+                                                : 'N/D';
+                                        @endphp
+                                        <input type="text" id="payment_display" class="form-control font-w600 text-dark" value="{{ $paymentText }}" style="background-color: #e9ecef !important; cursor: not-allowed; border: 1px solid #cbd5e1;" readonly disabled>
+                                        <input type="hidden" name="payment_id" value="{{ $invoice->payment_id }}">
                                     </div>
                                 </div>
 

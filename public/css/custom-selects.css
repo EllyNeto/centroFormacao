@@ -1,8 +1,8 @@
-/* Custom Styles for Clean Grey Native Select Elements */
+/* Custom Styles for Clean White Native Select Elements */
 select.form-control,
 select.custom-select-grey,
 .form-group select.form-control {
-    background-color: #f3f4f6 !important; /* Soft grey background */
+    background-color: #ffffff !important; /* Clean white background */
     border: 1px solid #d1d5db !important; /* Clean neutral border */
     color: #1f2937 !important; /* Dark legible text */
     border-radius: 0.5rem !important; /* Soft rounded corners */
@@ -25,7 +25,7 @@ select.custom-select-grey,
 }
 
 select.form-control:hover {
-    background-color: #e5e7eb !important;
+    background-color: #ffffff !important;
     border-color: #9ca3af !important;
 }
 
