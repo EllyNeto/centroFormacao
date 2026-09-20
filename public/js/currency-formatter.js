@@ -83,11 +83,11 @@ window.CurrencyFormatter = {
         inputs.forEach(function(input) {
             // Define o modo de entrada numérico para telemóveis e dispositivos móveis
             input.setAttribute('inputmode', 'decimal');
-            input.setAttribute('pattern', '[0-9.,]*');
+            input.removeAttribute('pattern');
 
             // Bloqueia diretamente no teclado qualquer tecla de letra (A-Z) ou caracteres não numéricos
             input.addEventListener('keydown', function(e) {
-                // Permite teclas de navegação e controlo (Backspace, Delete, Tab, Enter, Setas, etc)
+                // Permite teclas de navegação e controlo (Backspace, Delete, Tab, Escape, Enter, Setas, etc)
                 if (['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) {
                     return;
                 }
@@ -95,8 +95,8 @@ window.CurrencyFormatter = {
                 if (e.ctrlKey || e.metaKey) {
                     return;
                 }
-                // Impede explicitamente letras e caracteres que não sejam dígitos (0-9), vírgula (,) ou ponto (.)
-                if (!/^[0-9.,]$/.test(e.key)) {
+                // Impede explicitamente letras e caracteres que não sejam dígitos (0-9), vírgula (,), ponto (.) ou espaço (' ')
+                if (!/^[0-9., ]$/.test(e.key)) {
                     e.preventDefault();
                     return false;
                 }
@@ -106,7 +106,7 @@ window.CurrencyFormatter = {
             input.addEventListener('paste', function(e) {
                 let pastedData = (e.clipboardData || window.clipboardData).getData('text');
                 if (pastedData) {
-                    let sanitized = pastedData.replace(/[^0-9.,]/g, '');
+                    let sanitized = pastedData.replace(/[^0-9., ]/g, '');
                     if (sanitized !== pastedData) {
                         e.preventDefault();
                         this.value = window.CurrencyFormatter.formatLiveDigits(sanitized);
@@ -117,7 +117,7 @@ window.CurrencyFormatter = {
 
             // Ao digitar (input event), purga letras residualmente e aplica a autoformatação em tempo real
             input.addEventListener('input', function() {
-                let sanitized = this.value.replace(/[^0-9.,]/g, '');
+                let sanitized = this.value.replace(/[^0-9., ]/g, '');
                 if (sanitized !== this.value) {
                     this.value = sanitized;
                 }
