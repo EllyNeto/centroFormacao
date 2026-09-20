@@ -43,6 +43,7 @@
                                                 <th>#ID</th>
                                                 <th>Foto</th>
                                                 <th>Nome</th>
+                                                <th>Género</th>
                                                 <th>E-mail</th>
                                                 <th>Nº do BI</th>
                                                 <th>Telefone</th>
@@ -69,6 +70,7 @@
                                                             {{ $studentItem->name }}
                                                         </a>
                                                     </td>
+                                                    <td>{{ $studentItem->gender ?? 'N/D' }}</td>
                                                     <td>{{ $studentItem->email }}</td>
                                                     <td>{{ $studentItem->identity_card_number }}</td>
                                                     <td>

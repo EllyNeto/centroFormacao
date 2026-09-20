@@ -20,6 +20,7 @@ class Teacher extends Model
         'name',                 // Nome completo do formador
         'email',                // Endereço de e-mail
         'identity_card_number', // Número do Bilhete de Identidade / Documento
+        'gender',               // Género do formador (Masculino/Feminino)
         'phone_number',         // Número de telefone
         'image',                // Nome do ficheiro da foto do formador
         'status',               // Estado do registo (Ativo/Desativo)

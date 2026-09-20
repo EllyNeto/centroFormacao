@@ -80,6 +80,16 @@
 												</div>
 
 												<div class="col-xl-6 col-sm-6">
+													{{-- Campo: Género --}}
+													<div class="mb-3">
+														<label for="gender" class="form-label text-primary">Género</label>
+														<select id="gender" name="gender" class="default-select wide form-control">
+															<option value="">Selecione o género...</option>
+															<option value="Masculino" {{ old('gender') == 'Masculino' ? 'selected' : '' }}>Masculino</option>
+															<option value="Feminino" {{ old('gender') == 'Feminino' ? 'selected' : '' }}>Feminino</option>
+															<option value="Outro" {{ old('gender') == 'Outro' ? 'selected' : '' }}>Outro</option>
+														</select>
+													</div>
 													{{-- Campo: Número de Telefone --}}
 													<div class="mb-3">
 														<label for="phone" class="form-label text-primary">Telefone</label>

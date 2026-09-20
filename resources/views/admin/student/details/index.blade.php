@@ -73,7 +73,7 @@
 								</div>
 								<div class="row mt-4">
 									{{-- Item: Número do Bilhete de Identidade --}}
-									<div class="col-xl-4 col-sm-6 mb-3">
+									<div class="col-xl-3 col-sm-6 mb-3">
 										<ul class="student-details">
 											<li class="me-2">
 												<a class="icon-box bg-secondary">
@@ -87,8 +87,23 @@
 										</ul>
 									</div>
 
+									{{-- Item: Género --}}
+									<div class="col-xl-3 col-sm-6 mb-3">
+										<ul class="student-details">
+											<li class="me-2">
+												<a class="icon-box bg-secondary d-flex align-items-center justify-content-center">
+													<i class="fa fa-venus-mars text-primary fs-18"></i>
+												</a>
+											</li>
+											<li>
+												<span>Género:</span>
+												<h5 class="mb-0">{{ $student->gender ?? 'N/D' }}</h5>
+											</li>
+										</ul>
+									</div>
+
 									{{-- Item: Número de Telefone --}}
-									<div class="col-xl-4 col-sm-6 mb-3">
+									<div class="col-xl-3 col-sm-6 mb-3">
 										<ul class="student-details">
 											<li class="me-2">
 												<a class="icon-box bg-secondary">
@@ -100,7 +115,7 @@
 									</div>
 
 									{{-- Item: Endereço de E-mail --}}
-									<div class="col-xl-4 col-sm-6 mb-3">
+									<div class="col-xl-3 col-sm-6 mb-3">
 										<ul class="student-details">
 											<li class="me-2">
 												<a class="icon-box bg-secondary">

@@ -55,6 +55,7 @@ class studentController extends Controller
             'name'                 => 'required|string|max:255',
             'email'                => 'required|email|max:255',
             'identity_card_number' => 'required|string|max:255|unique:students,identity_card_number',
+            'gender'               => 'nullable|string|in:Masculino,Feminino,Outro',
             'phone'                => 'required|string|max:20',
             'code'                 => 'required|integer',
             'image'                => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -130,6 +131,7 @@ class studentController extends Controller
             'name'                 => 'required|string|max:255',
             'email'                => 'required|email|max:255',
             'identity_card_number' => 'required|string|max:255|unique:students,identity_card_number,' . $id,
+            'gender'               => 'nullable|string|in:Masculino,Feminino,Outro',
             'phone'                => 'required|string|max:20',
             'image'                => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ], [

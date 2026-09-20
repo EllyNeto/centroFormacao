@@ -38,6 +38,7 @@ class Student extends Model
         'name',                 // Nome completo do estudante/candidato
         'email',                // Endereço de e-mail de contacto
         'identity_card_number', // Número do Bilhete de Identidade (BI) ou documento legal
+        'gender',               // Género do estudante (Masculino/Feminino)
         'phone_number',         // Número de telefone principal armazenado na coluna da base de dados
         'code',                 // Código único sequencial de identificação do aluno no centro
         'image',                // Caminho e nome do ficheiro da fotografia do estudante no storage
