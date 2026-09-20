@@ -1,22 +1,25 @@
 <!--****
 		Wallet Sidebar
 		****-->
-		<div class="wallet-bar wow fadeInRight dlab-scroll active" id="wallet-bar" data-wow-delay="0.7s">		
+		<div class="wallet-bar wow fadeInRight dlab-scroll" id="wallet-bar" data-wow-delay="0.7s">		
 			<div class="row ">
 				<!--column-->
 				<div class="col-xl-12">
 					<div class="card bg-transparent mb-1">
-						<div class="card-header border-0 px-3">
+						<div class="card-header border-0 px-3 d-flex justify-content-between align-items-center">
 							<div>
 								<h2 class="heading mb-0">Recent Students</h2>
 								<span>You have <span class="font-w600">456</span> Students</span>
 							</div>
-							<div >
-								<a href="#" class="add icon-box bg-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+							<div class="d-flex align-items-center gap-2">
+								<a href="#" class="add icon-box bg-primary me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
 									<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path d="M5.188 13.412V8.512H0.428V5.348H5.188V0.531999H8.352V5.348H13.14V8.512H8.352V13.412H5.188Z" fill="white"/>
 									</svg>
-								</a>									
+								</a>
+								<a href="javascript:void(0);" class="wallet-bar-close btn btn-danger btn-xs sharp rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; padding: 0;" title="Fechar">
+									<i class="fa fa-times text-white"></i>
+								</a>
 							</div>	
 						</div>
 						<div class="card-body height450 dlab-scroll loadmore-content recent-activity-wrapper p-3 pt-2" id="RecentActivityContent">

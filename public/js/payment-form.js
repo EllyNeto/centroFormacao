@@ -41,10 +41,13 @@ document.addEventListener('DOMContentLoaded', function() {
         let totalEmoluments = 0;
         let selectedNames = [];
 
-        // Obtém os nomes de todos os emolumentos cujas checkboxes estão marcadas
+        // Obtém os nomes e soma os preços base de todos os emolumentos cujas checkboxes estão marcadas
         checkboxes.forEach(function(cb) {
             if (cb.checked) {
                 let name = cb.value;
+                let price = parseFloat(cb.getAttribute('data-price')) || 0;
+                totalEmoluments += price;
+
                 if (name === 'Outro Emolumento') {
                     const customDescInput = document.getElementById('custom_emolument_desc');
                     if (customDescInput && customDescInput.value.trim()) {
@@ -61,13 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (typeHiddenInput) {
             typeHiddenInput.value = selectedNames.join(', ');
         }
-
-        // Percorre todas as caixas de valor dinâmicas para somar os valores dos emolumentos
-        const activeItemInputs = document.querySelectorAll('.emolument-item-value');
-        activeItemInputs.forEach(function(inp) {
-            let itemVal = window.CurrencyFormatter ? window.CurrencyFormatter.parseRaw(inp.value) : (parseFloat(inp.value) || 0);
-            totalEmoluments += itemVal;
-        });
 
         // Lógica de Abatimento Automático do Saldo de Crédito do Aluno
         let usedBalance = 0;
@@ -88,8 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 valueInput.value = window.CurrencyFormatter ? window.CurrencyFormatter.format(diferencaACobrar) : diferencaACobrar.toFixed(2);
             } else if (totalEmoluments > 0 && diferencaACobrar === 0) {
                 valueInput.value = "0,00";
-            } else {
-                valueInput.value = "";
             }
         }
 
@@ -107,79 +101,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Atualiza a renderização das boxes dinâmicas de valor ao selecionar/desmarcar checkboxes de emolumentos.
+     * Alterna a visibilidade do campo de descrição do "Outro Emolumento" quando selecionado.
      */
     function renderDynamicEmolumentBoxes() {
-        if (!emolumentsInputsList || !dynamicBoxesCard) return;
+        const outroCb = document.querySelector('.emolumento-check[value="Outro Emolumento"]');
+        const outroContainer = document.getElementById('outro_emolumento_container');
 
-        let anyChecked = false;
-        checkboxes.forEach(function(cb) {
-            if (cb.checked) anyChecked = true;
-        });
-
-        if (anyChecked) {
-            dynamicBoxesCard.classList.remove('d-none');
-        } else {
-            dynamicBoxesCard.classList.add('d-none');
-            emolumentsInputsList.innerHTML = '';
-            calculateTotalsAndBalance();
-            return;
-        }
-
-        checkboxes.forEach(function(cb, index) {
-            const emolName = cb.value;
-            const defaultPrice = parseFloat(cb.getAttribute('data-price')) || 0;
-            const boxId = 'emol_box_' + index;
-            let existingBox = document.getElementById(boxId);
-
-            if (cb.checked) {
-                if (!existingBox) {
-                    const col = document.createElement('div');
-                    col.className = 'col-md-6 mb-3';
-                    col.id = boxId;
-
-                    let isCustom = (emolName === 'Outro Emolumento');
-                    let initialVal = defaultPrice > 0 ? (window.CurrencyFormatter ? window.CurrencyFormatter.format(defaultPrice) : defaultPrice.toFixed(2)) : '';
-
-                    col.innerHTML = `
-                        <div class="p-2 border rounded" style="background-color: #ffffff;">
-                            <label class="form-label fs-12 font-w600 text-dark mb-1 d-block">
-                                ${isCustom ? 'Descrição do Emolumento:' : emolName + ':'}
-                            </label>
-                            ${isCustom ? `
-                                <input type="text" id="custom_emolument_desc" class="form-control form-control-sm mb-2" placeholder="Ex: Multa por Atraso, Segunda Via..." value="${cb.getAttribute('data-custom-name') || 'Outro Emolumento'}">
-                            ` : ''}
-                            <input type="text" 
-                                   class="form-control form-control-sm currency-input emolument-item-value font-w600" 
-                                   data-name="${emolName}" 
-                                   placeholder="0,00" 
-                                   value="${initialVal}">
-                        </div>
-                    `;
-
-                    emolumentsInputsList.appendChild(col);
-
-                    // Anexa o manipulador de formatação e cálculo live
-                    const newInput = col.querySelector('.emolument-item-value');
-                    if (newInput) {
-                        window.CurrencyFormatter.attach([newInput]);
-                        newInput.addEventListener('input', calculateTotalsAndBalance);
-                        newInput.addEventListener('blur', calculateTotalsAndBalance);
-                    }
-
-                    if (isCustom) {
-                        const customDescInput = col.querySelector('#custom_emolument_desc');
-                        if (customDescInput) {
-                            customDescInput.addEventListener('input', calculateTotalsAndBalance);
-                        }
-                    }
-                }
+        if (outroContainer) {
+            if (outroCb && outroCb.checked) {
+                outroContainer.classList.remove('d-none');
             } else {
-                if (existingBox) {
-                    existingBox.remove();
-                }
+                outroContainer.classList.add('d-none');
             }
-        });
+        }
 
         calculateTotalsAndBalance();
     }

@@ -177,8 +177,7 @@ var Akademi  = function(){
 	   setTimeout(() => {
 		   if ($(window).width() <= 1400) { 
 			   jQuery('.wallet-open').removeClass('active');
-		   }else{
-			   jQuery('.wallet-open').addClass('active');
+			   jQuery('.wallet-bar').removeClass('active');
 		   }
 	   }, 500);
    }

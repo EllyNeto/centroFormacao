@@ -147,6 +147,12 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            {{-- Contentor Simples para Descrição de Outro Emolumento --}}
+                                            <div id="outro_emolumento_container" class="mt-2 pt-2 border-top d-none">
+                                                <label for="custom_emolument_desc" class="form-label text-primary font-w600 fs-13 mb-1">Descrição do Outro Emolumento:</label>
+                                                <input type="text" id="custom_emolument_desc" class="form-control form-control-sm" placeholder="Ex: Multa por Atraso, Segunda Via de Cartão..." value="Outro Emolumento">
+                                            </div>
                                         </div>
                                         <input type="hidden" name="type_of_payment" id="type_of_payment" value="{{ old('type_of_payment', $payment->type_of_payment) }}" required>
                                         <small class="text-muted d-block">Pode selecionar um ou mais emolumentos em simultâneo.</small>

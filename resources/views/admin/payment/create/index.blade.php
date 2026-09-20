@@ -163,10 +163,10 @@
                                                 </div>
                                             </div>
 
-                                            {{-- Contentor Dinâmico de Boxes de Valores dos Emolumentos Selecionados --}}
-                                            <div id="dynamic_emolument_boxes" class="mt-3 border-top pt-3 d-none">
-                                                <label class="form-label text-primary font-w600 fs-13 mb-2">Valores dos Emolumentos Selecionados (Edição por Item):</label>
-                                                <div id="emoluments_inputs_list" class="row"></div>
+                                            {{-- Contentor Simples para Descrição de Outro Emolumento --}}
+                                            <div id="outro_emolumento_container" class="mt-2 pt-2 border-top d-none">
+                                                <label for="custom_emolument_desc" class="form-label text-primary font-w600 fs-13 mb-1">Descrição do Outro Emolumento:</label>
+                                                <input type="text" id="custom_emolument_desc" class="form-control form-control-sm" placeholder="Ex: Multa por Atraso, Segunda Via de Cartão..." value="Outro Emolumento">
                                             </div>
                                         </div>
                                         <input type="hidden" name="type_of_payment" id="type_of_payment" value="{{ old('type_of_payment') }}" required>
@@ -178,8 +178,8 @@
                                     {{-- Campo: Valor Total a Pagar / Cobrado --}}
                                     <div class="mb-3">
                                         <label for="value" class="form-label text-primary font-w600">Valor Total a Cobrar (Kz) <span class="text-danger">*</span></label>
-                                        <input type="text" id="value" name="value" class="form-control currency-input font-w600" value="{{ old('value', '0.00') }}" placeholder="0,00" readonly required>
-                                        <small class="text-muted">Calculado automaticamente com base na soma dos emolumentos e abatimento de saldo (com autoformatação numérica ao digitar).</small>
+                                        <input type="text" id="value" name="value" class="form-control currency-input font-w600" value="{{ old('value', '0.00') }}" placeholder="0,00" required>
+                                        <small class="text-muted">Calculado automaticamente com base nos emolumentos selecionados e abatimento de saldo (editável).</small>
                                     </div>
 
                                     {{-- Campo: Forma de Pagamento (Select) --}}
