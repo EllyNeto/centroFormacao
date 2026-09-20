@@ -5,6 +5,7 @@
  * 2. Geração de boxes de valor dinâmicas por emolumento com placeholder="0,00".
  * 3. Formatação em tempo real ao digitar (dezenas, milhares, milhões).
  * 4. Abatimento automático de Saldo do Aluno e cálculo da diferença a cobrar.
+ * 5. Preservação e sincronização rigorosa do tipo de pagamento (type_of_payment).
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -34,26 +35,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /**
      * Recalcula a soma de todos os emolumentos ativos e aplica o abatimento do saldo do aluno.
+     * Atualiza o campo oculto 'type_of_payment' com os nomes de todos os emolumentos selecionados.
      */
     function calculateTotalsAndBalance() {
         let totalEmoluments = 0;
         let selectedNames = [];
 
-        // Percorre todas as caixas de valor dinâmicas criadas para os emolumentos selecionados
-        const activeItemInputs = document.querySelectorAll('.emolument-item-value');
-        activeItemInputs.forEach(function(inp) {
-            let itemVal = window.CurrencyFormatter ? window.CurrencyFormatter.parseRaw(inp.value) : (parseFloat(inp.value) || 0);
-            totalEmoluments += itemVal;
-
-            let itemName = inp.getAttribute('data-name');
-            if (itemName === 'Outro Emolumento') {
-                let customDescInput = document.getElementById('custom_emolument_desc');
-                if (customDescInput && customDescInput.value.trim()) {
-                    itemName = customDescInput.value.trim();
+        // Obtém os nomes de todos os emolumentos cujas checkboxes estão marcadas
+        checkboxes.forEach(function(cb) {
+            if (cb.checked) {
+                let name = cb.value;
+                if (name === 'Outro Emolumento') {
+                    const customDescInput = document.getElementById('custom_emolument_desc');
+                    if (customDescInput && customDescInput.value.trim()) {
+                        name = customDescInput.value.trim();
+                    }
                 }
-            }
-            if (itemName && !selectedNames.includes(itemName)) {
-                selectedNames.push(itemName);
+                if (name && !selectedNames.includes(name)) {
+                    selectedNames.push(name);
+                }
             }
         });
 
@@ -61,6 +61,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (typeHiddenInput) {
             typeHiddenInput.value = selectedNames.join(', ');
         }
+
+        // Percorre todas as caixas de valor dinâmicas para somar os valores dos emolumentos
+        const activeItemInputs = document.querySelectorAll('.emolument-item-value');
+        activeItemInputs.forEach(function(inp) {
+            let itemVal = window.CurrencyFormatter ? window.CurrencyFormatter.parseRaw(inp.value) : (parseFloat(inp.value) || 0);
+            totalEmoluments += itemVal;
+        });
 
         // Lógica de Abatimento Automático do Saldo de Crédito do Aluno
         let usedBalance = 0;
@@ -140,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 ${isCustom ? 'Descrição do Emolumento:' : emolName + ':'}
                             </label>
                             ${isCustom ? `
-                                <input type="text" id="custom_emolument_desc" class="form-control form-control-sm mb-2" placeholder="Ex: Multa por Atraso, Segunda Via..." value="Outro Emolumento">
+                                <input type="text" id="custom_emolument_desc" class="form-control form-control-sm mb-2" placeholder="Ex: Multa por Atraso, Segunda Via..." value="${cb.getAttribute('data-custom-name') || 'Outro Emolumento'}">
                             ` : ''}
                             <input type="text" 
                                    class="form-control form-control-sm currency-input emolument-item-value font-w600" 
@@ -175,6 +182,47 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         calculateTotalsAndBalance();
+    }
+
+    /**
+     * Sincroniza o estado inicial dos checkboxes com base no tipo de pagamento já existente (old input ou edit model)
+     * ou automaticamente pre-seleciona "Inscrição" quando vindo de uma Inscrição.
+     */
+    function syncInitialState() {
+        const initialTypeValue = typeHiddenInput ? typeHiddenInput.value.trim() : '';
+
+        if (initialTypeValue) {
+            const names = initialTypeValue.split(',').map(s => s.trim()).filter(Boolean);
+            const standardValues = ["Inscrição", "Valor do Curso", "Cartão do Formando", "Certificado", "Exame de Recurso"];
+
+            names.forEach(name => {
+                let matched = false;
+                checkboxes.forEach(cb => {
+                    if (cb.value === name) {
+                        cb.checked = true;
+                        matched = true;
+                    }
+                });
+                if (!matched) {
+                    const outroCb = document.querySelector('.emolumento-check[value="Outro Emolumento"]');
+                    if (outroCb) {
+                        outroCb.checked = true;
+                        outroCb.setAttribute('data-custom-name', name);
+                    }
+                }
+            });
+        } else {
+            // Se veio da rota de inscrição (com enrollment_id), marca automaticamente 'Inscrição'
+            const enrollmentHidden = document.querySelector('input[name="enrollment_id"]');
+            if (enrollmentHidden && enrollmentHidden.value) {
+                const inscricaoCb = document.querySelector('.emolumento-check[value="Inscrição"]');
+                if (inscricaoCb) {
+                    inscricaoCb.checked = true;
+                }
+            }
+        }
+
+        renderDynamicEmolumentBoxes();
     }
 
     /**
@@ -218,6 +266,26 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.jQuery) {
             jQuery(studentSelect).on('change.select2', handleStudentSelection);
         }
-        handleStudentSelection();
     }
+
+    // Validação antes do envio do formulário de pagamento
+    const paymentForm = typeHiddenInput ? typeHiddenInput.closest('form') : null;
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', function(e) {
+            calculateTotalsAndBalance();
+            if (!typeHiddenInput || !typeHiddenInput.value.trim()) {
+                e.preventDefault();
+                alert('Por favor, selecione pelo menos um emolumento a pagar.');
+                const emolCard = document.querySelector('.emolumento-check');
+                if (emolCard) {
+                    emolCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    }
+
+    // Executa a sincronização do estado inicial
+    handleStudentSelection();
+    syncInitialState();
 });
+

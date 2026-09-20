@@ -65,6 +65,11 @@ class paymentController extends Controller
             $request->merge(['reference' => rand(10000000, 99999999)]);
         }
 
+        // Caso o tipo de pagamento esteja vazio mas uma inscrição esteja associada, assume "Inscrição" por omissão
+        if (empty($request->type_of_payment) && $request->filled('enrollment_id')) {
+            $request->merge(['type_of_payment' => 'Inscrição']);
+        }
+
         // Validação rigorosa dos campos enviados pelo formulário de pagamento
         $validatedData = $request->validate([
             'student_id'      => 'nullable|exists:students,id',

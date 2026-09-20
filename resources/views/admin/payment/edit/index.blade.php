@@ -161,7 +161,7 @@
                                     {{-- Campo: Forma de Pagamento --}}
                                     <div class="mb-3">
                                         <label for="payment_method" class="form-label text-primary font-w600">Forma de Pagamento <span class="text-danger">*</span></label>
-                                        <select id="payment_method" name="payment_method" class="default-select wide form-control" required>
+                                        <select id="payment_method" name="payment_method" class="form-control" required>
                                             <option value="Numerário" {{ old('payment_method', $payment->payment_method ?? 'Numerário') == 'Numerário' ? 'selected' : '' }}>Numerário</option>
                                             <option value="Cartão" {{ old('payment_method', $payment->payment_method) == 'Cartão' ? 'selected' : '' }}>Cartão / TPA</option>
                                             <option value="Transferência" {{ old('payment_method', $payment->payment_method) == 'Transferência' ? 'selected' : '' }}>Transferência Bancária</option>
@@ -171,7 +171,7 @@
                                     {{-- Campo: Moeda --}}
                                     <div class="mb-3">
                                         <label for="currency" class="form-label text-primary font-w600">Moeda <span class="text-danger">*</span></label>
-                                        <select id="currency" name="currency" class="default-select wide form-control" required>
+                                        <select id="currency" name="currency" class="form-control" required>
                                             <option value="AOA" {{ old('currency', $payment->currency) == 'AOA' ? 'selected' : '' }}>AOA - Kwanza (Kz)</option>
                                             <option value="USD" {{ old('currency', $payment->currency) == 'USD' ? 'selected' : '' }}>USD - Dólar ($)</option>
                                             <option value="EUR" {{ old('currency', $payment->currency) == 'EUR' ? 'selected' : '' }}>EUR - Euro (€)</option>
