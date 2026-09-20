@@ -40,8 +40,6 @@ class _Class extends Model
         'status',       // Estado da turma (1 = Ativa, 0 = Inativa)
         'teacher_id',   // Formador responsável
         'course_id',    // Curso associado
-        'student_id',   // Aluno associado à turma
-        'falta',        // Número de faltas
         'start_time',
         'end_time',
     ];
@@ -54,17 +52,8 @@ class _Class extends Model
     protected $casts = [
         'status'       => 'boolean',
         'capacity'     => 'integer',
-        'falta'        => 'integer',
         'days_of_week' => 'array'
     ];
-
-    /**
-     * Relação de pertença com o estudante associado à turma (opcional).
-     */
-    public function student()
-    {
-        return $this->belongsTo(Student::class, 'student_id');
-    }
 
     /**
      * Relação de pertença com o curso associado à turma.

@@ -67,22 +67,24 @@ flowchart TD
 
 ---
 
-### 2.4. Fluxo Financeiro (Faturas e Pagamentos)
+### 2.4. Fluxo Financeiro (Faturas, Pagamentos e Redirecionamento)
 
-1. **Faturas (`Invoice`)**:
-   - Emissão de fatura vinculada à **Inscrição** e ao **Curso**.
-   - O sistema calcula automaticamente:
+1. **Pagamentos Efetivos (`Payment`)**:
+   - Registo da transação efetuada (Caixa, TPA ou Transferência Bancária).
+   - **Remoção da Opção Pendente**: Os registos de pagamento são gravados diretamente com o estado **Concluído / Pago** (`status = 1`), ativando a inscrição do candidato associado.
+   - **Seleção com Select2**: Pesquisa interativa de formandos ao digitar.
+   - **Autoformatação Numérica**: Formatação automática via JS para separadores de milhares e casas decimais.
+   - **Geração de Referência**: O sistema gera automaticamente uma referência numérica de 8 dígitos.
+
+2. **Geração Automática e Redirecionamento para Fatura (`Invoice`)**:
+   - Após a submissão de um pagamento com sucesso, a fatura é criada automaticamente no sistema e o utilizador é **redirecionado imediatamente para a página de detalhes da fatura** (`/invoice/{id}`).
+   - Cálculo automático de:
      - **Valor a Pagar** (`amount_to_pay`)
      - **Valor Efetivamente Pago** (`amount_paid`)
-     - **Troco** (`change`): Calculado como `max(0, amount_paid - amount_to_pay)`.
+     - **Troco / Saldo Acumulado** (`change` / `balance`).
 
-2. **Pagamentos (`Payment`)**:
-   - Registo da transação bancária ou caixa física.
-   - Campos: Tipo de Emolumento, Valor, Método de Pagamento (*Numerário, TPA, Transferência*), Moeda (`Kz / AOA`) e Data.
-   - **Geração de Referência**: Caso não seja enviada uma referência, o sistema gera automaticamente uma referência numérica aleatória de 8 dígitos.
-
-3. **Automatização de Confirmação de Inscrição**:
-   - Quando um pagamento ou fatura é marcado como **Concluído/Pago** (`status = 1` ou `amount_paid >= amount_to_pay`), o sistema atualiza automaticamente o estado da **Inscrição** correspondente para **Confirmada** (`status = 1`).
+3. **Confirmação Automática de Inscrição**:
+   - Aquando da gravação do pagamento, a **Inscrição** do formando é automaticamente atualizada para **Confirmada** (`status = 1`), passando o candidato a ser exibido na lista oficial de estudantes ativos.
 
 ---
 

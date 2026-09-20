@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\_Class;
 use App\Models\Course;
 use App\Models\Teacher;
-use App\Models\Student;
 
 /**
  * Controlador responsável pela gestão dinâmica e completa das operações CRUD da entidade Turma (_Class).
@@ -20,12 +19,12 @@ class classController extends Controller
      */
     public function index()
     {
-        $classes = _Class::with(['course', 'teacher', 'student'])->orderBy('id', 'desc')->get();
+        $classes = _Class::with(['course', 'teacher'])->orderBy('id', 'desc')->get();
         return view('admin.room.list.index', ['classes' => $classes]);
     }
 
     /**
-     * Exibe o formulário para registar uma nova turma com cursos, formadores e estudantes.
+     * Exibe o formulário para registar uma nova turma com cursos e formadores.
      *
      * @return \Illuminate\View\View
      */
@@ -33,12 +32,10 @@ class classController extends Controller
     {
         $courses = Course::where('status', 1)->get();
         $teachers = Teacher::where('status', 1)->get();
-        $students = Student::all();
 
         return view('admin.room.create.index', [
             'courses'  => $courses,
             'teachers' => $teachers,
-            'students' => $students,
         ]);
     }
 
@@ -59,8 +56,6 @@ class classController extends Controller
             'status'       => 'required|boolean',
             'teacher_id'   => 'required|exists:teachers,id',
             'course_id'    => 'required|exists:courses,id',
-            'student_id'   => 'nullable|exists:students,id',
-            'falta'        => 'nullable|integer|min:0',
             'start_time'   => 'required|date_format:H:i',
             'end_time'     => 'required|date_format:H:i',
         ], [
@@ -79,10 +74,6 @@ class classController extends Controller
             $validatedData['code'] = 'TURMA-' . date('Y') . '-' . rand(100, 999);
         }
 
-        if (!isset($validatedData['falta'])) {
-            $validatedData['falta'] = 0;
-        }
-
         _Class::create($validatedData);
 
         return redirect()->route('class.index')->with('success', 'Turma registada com sucesso!');
@@ -96,7 +87,7 @@ class classController extends Controller
      */
     public function show($id)
     {
-        $class = _Class::with(['course', 'teacher', 'student'])->findOrFail($id);
+        $class = _Class::with(['course', 'teacher'])->findOrFail($id);
         return view('admin.room.details.index', ['class' => $class]);
     }
 
@@ -111,13 +102,11 @@ class classController extends Controller
         $class = _Class::findOrFail($id);
         $courses = Course::where('status', 1)->get();
         $teachers = Teacher::where('status', 1)->get();
-        $students = Student::all();
 
         return view('admin.room.edit.index', [
             'class'    => $class,
             'courses'  => $courses,
             'teachers' => $teachers,
-            'students' => $students,
         ]);
     }
 
@@ -141,8 +130,6 @@ class classController extends Controller
             'status'       => 'required|boolean',
             'teacher_id'   => 'required|exists:teachers,id',
             'course_id'    => 'required|exists:courses,id',
-            'student_id'   => 'nullable|exists:students,id',
-            'falta'        => 'nullable|integer|min:0',
             'start_time'   => 'required|date_format:H:i',
             'end_time'     => 'required|date_format:H:i',
         ], [
@@ -156,10 +143,6 @@ class classController extends Controller
             'course_id.required'  => 'Por favor, selecione um curso associado.',
             'course_id.exists'    => 'O curso selecionado não existe.',
         ]);
-
-        if (!isset($validatedData['falta'])) {
-            $validatedData['falta'] = 0;
-        }
 
         // Garante que o código da turma não seja modificado na atualização
         $validatedData['code'] = $class->code;

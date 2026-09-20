@@ -82,6 +82,9 @@ class studentController extends Controller
             $validatedData['image'] = $imagePath;
         }
 
+        $validatedData['phone_number'] = $validatedData['phone'];
+        unset($validatedData['phone']);
+
         // Criação do registo na base de dados
         Student::create($validatedData);
 
@@ -144,6 +147,8 @@ class studentController extends Controller
   
         // Garante que o código do estudante não seja modificado
         $validatedData['code'] = $student->code;
+        $validatedData['phone_number'] = $validatedData['phone'];
+        unset($validatedData['phone']);
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             if ($student->image) {

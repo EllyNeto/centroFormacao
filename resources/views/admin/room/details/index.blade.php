@@ -40,8 +40,6 @@
                                             <span class="badge badge-danger light">Inactiva</span>
                                         @endif
                                     </p>
-                                    <p><strong>Aluno Associado:</strong> {{ $class->student->name ?? 'Nenhum' }}</p>
-                                    <p><strong>Total de Faltas:</strong> <span class="badge badge-secondary light">{{ $class->falta ?? 0 }}</span></p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-md-6">

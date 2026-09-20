@@ -41,8 +41,6 @@
                                                             <th>Nome da Turma</th>
                                                             <th>Curso</th>
                                                             <th>Formador</th>
-                                                            <th>Aluno Associado</th>
-                                                            <th>Faltas</th>
                                                             <th>Turno</th>
                                                             <th>Estado</th>
                                                             <th class="text-center" style="min-width: 120px;">Ações</th>
@@ -65,12 +63,6 @@
                                                                 </td>
                                                                 <td>
                                                                     {{ $classItem->teacher->name ?? 'N/A' }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $classItem->student->name ?? 'Nenhum' }}
-                                                                </td>
-                                                                <td>
-                                                                    <span class="badge badge-secondary light">{{ $classItem->falta ?? 0 }}</span>
                                                                 </td>
                                                                 <td>
                                                                     <span class="badge badge-light text-dark">
@@ -104,8 +96,8 @@
                                                             </tr>
                                                         @empty
                                                             <tr>
-                                                                <td colspan="9" class="text-center py-4 text-muted">
-                                                                    Nenhuma turma registada na base de dados.
+                                                                <td colspan="7" class="text-center py-4 text-muted">
+                                                                    Nenhuma turma registada.
                                                                 </td>
                                                             </tr>
                                                         @endforelse

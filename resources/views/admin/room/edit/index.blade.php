@@ -40,7 +40,7 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="code" class="form-label text-primary">Código da Turma (Não Editável)</label>
+                                        <label for="code" class="form-label text-primary">Código da Turma</label>
                                         <input type="text" id="code" class="form-control" value="{{ $class->code }}" readonly disabled>
                                     </div>
 
@@ -62,23 +62,6 @@
                                                 <option value="{{ $teacher->id }}" {{ old('teacher_id', $class->teacher_id) == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
                                             @endforeach
                                         </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="student_id" class="form-label text-primary">Estudante Associado (Opcional)</label>
-                                        <select id="student_id" name="student_id" class="default-select wide form-control">
-                                            <option value="">Nenhum Estudante Associado</option>
-                                            @foreach($students as $student)
-                                                <option value="{{ $student->id }}" {{ old('student_id', $class->student_id) == $student->id ? 'selected' : '' }}>
-                                                    {{ $student->name }} (BI: {{ $student->identity_card_number }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="falta" class="form-label text-primary">Número de Faltas</label>
-                                        <input type="number" min="0" id="falta" name="falta" class="form-control" value="{{ old('falta', $class->falta ?? 0) }}">
                                     </div>
                                 </div>
 

@@ -1,100 +1,74 @@
 <!DOCTYPE html>
-<html lang="pt" class="h-100">
-
+<html lang="pt">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Registo - Centro de Formação</title>
-    
-    <!-- FAVICONS ICON -->
+    <title>Registo Restrito — Centro de Formação</title>
+
     <link rel="shortcut icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .notice-card {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 35px;
+            text-align: center;
+        }
+        .notice-icon {
+            width: 70px;
+            height: 70px;
+            background: #fff7ed;
+            color: #f97316;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+            border: 2px solid #ffedd5;
+        }
+    </style>
 </head>
 
-<body class="body h-100">
-    <div class="authincation h-100">
-        <div class="container h-100">
-            <div class="row justify-content-center h-100 align-items-center">
-                <div class="col-md-6 col-lg-5">
-                    <div class="authincation-content">
-                        <div class="row no-gutters">
-                            <div class="col-xl-12">
-                                <div class="auth-form">
-                                    <div class="text-center mb-4">
-                                        <a href="{{ url('/') }}" class="brand-logo">
-                                            <h2 class="text-primary font-w600 mb-0">Centro de Formação</h2>
-                                        </a>
-                                        <p class="text-muted mt-2">Crie a sua conta de acesso ao sistema</p>
-                                    </div>
+<body>
+    <div class="notice-card">
+        <div class="notice-icon">
+            <i class="material-icons" style="font-size: 38px;">lock</i>
+        </div>
 
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <ul class="mb-0 ps-3">
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    @endif
+        <h2 class="font-w700 text-dark mb-2">Criação de Conta Restrita</h2>
+        <p class="text-muted fs-14 mb-4">
+            O registo público de contas está desativado. O acesso à plataforma do <strong>Centro de Formação</strong> é restrito aos elementos autorizados pela instituição.
+        </p>
 
-                                    <form action="{{ route('register') }}" method="POST">
-                                        @csrf
-                                        <div class="mb-3">
-                                            <label class="mb-1 text-label font-w500"><strong>Nome Completo</strong></label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="material-icons">person</i></span>
-                                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="O seu nome completo" value="{{ old('name') }}" required autofocus>
-                                            </div>
-                                        </div>
+        <div class="alert alert-warning light border-warning py-3 px-3 fs-13 text-start mb-4">
+            <i class="material-icons align-middle me-1">info</i>
+            <strong>Nota:</strong> Para solicitar o seu acesso, entre em contacto com a administração do Centro de Formação.
+        </div>
 
-                                        <div class="mb-3">
-                                            <label class="mb-1 text-label font-w500"><strong>Endereço de E-mail</strong></label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="material-icons">email</i></span>
-                                                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="exemplo@centro.com" value="{{ old('email') }}" required>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label class="mb-1 text-label font-w500"><strong>Palavra-passe</strong></label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="material-icons">lock</i></span>
-                                                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Mínimo 6 caracteres" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="mb-1 text-label font-w500"><strong>Confirmar Palavra-passe</strong></label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="material-icons">lock_outline</i></span>
-                                                <input type="password" name="password_confirmation" class="form-control" placeholder="Repita a palavra-passe" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="text-center mt-4">
-                                            <button type="submit" class="btn btn-primary btn-block w-100 py-2 font-w600">Criar Conta e Entrar</button>
-                                        </div>
-                                    </form>
-
-                                    <div class="new-account mt-4 text-center">
-                                        <p class="mb-0">Já tem uma conta registada? <a class="text-primary font-w600" href="{{ route('login') }}">Iniciar Sessão</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="d-grid gap-2">
+            <a href="{{ route('contact.admin') }}" class="btn btn-primary btn-block font-w600 py-2">
+                <i class="material-icons align-middle fs-16 me-1">help_outline</i> Contactar Administração
+            </a>
+            <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-block font-w500 mt-2">
+                <i class="material-icons align-middle fs-16 me-1">arrow_back</i> Voltar ao Login
+            </a>
         </div>
     </div>
-
-    <!-- Scripts -->
-    <script src="{{ asset('vendor/global/global.min.js') }}"></script>
-    <script src="{{ asset('js/custom.min.js') }}"></script>
-    <script src="{{ asset('js/dzen.init.js') }}"></script>
 </body>
-
 </html>

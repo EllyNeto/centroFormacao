@@ -8,13 +8,20 @@
 							<i class="material-symbols-outlined">home</i>
 							<span class="nav-text">Dashboard</span>
 						</a>
-						{{-- <ul aria-expanded="false">
-							<li><a href="{{url('./dashboard/main')}}">Dashboard</a></li>
-							<li><a href="{{url('./dashboard/main')}}">Dashboard Dark</a></li>
-							<li><a href="{{url('/finance/index')}}">Finance</a></li>
-						</ul> --}}
-
 					</li>
+
+					@if(auth()->check() && auth()->user()->isSuperAdmin())
+						{{-- Módulo de Gestão de Utilizadores (Exclusivo Super Admin) --}}
+						<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
+							<i class="material-symbols-outlined">manage_accounts</i>
+							<span class="nav-text">Utilizadores</span>
+						</a>
+						<ul aria-expanded="false">
+							<li><a href="{{ route('user.index') }}">Listar Utilizadores</a></li>
+							<li><a href="{{ route('user.create') }}">Adicionar Novo Admin</a></li>
+						</ul>
+						</li>
+					@endif
 						{{-- Seção Módulo de Inscrição --}}
 					<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">app_registration</i>
@@ -37,18 +44,6 @@
 						<li><a href="{{ route('payment.index') }}">Listar</a></li>
 						{{-- Link para criação de novo pagamento --}}
 						<li><a href="{{ route('payment.create') }}">Adicionar novo</a></li>
-					</ul>
-					</li>
-					{{-- Seção Módulo de Fatura --}}
-					<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
-						<i class="material-symbols-outlined">receipt_long</i>
-						<span class="nav-text">Fatura</span>
-					</a>
-					<ul aria-expanded="false">
-						{{-- Link para a listagem de faturas --}}
-						<li><a href="{{ route('invoice.index') }}">Listar</a></li>
-						{{-- Link para emissão de nova fatura --}}
-						<li><a href="{{ route('invoice.create') }}">Emitir Nova</a></li>
 					</ul>
 					</li>
 					{{-- Seção Módulo de Estudante --}}

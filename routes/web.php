@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\courseController;
 use App\Http\Controllers\studentController;
 use App\Http\Controllers\teacherController;
@@ -19,18 +19,16 @@ use App\Http\Controllers\invoiceController;
 |
 */
 
-// Rotas de Autenticação para Convidados (Guest)
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
-});
+// Rotas de Autenticação do Laravel UI (Login, Register, Logout, Password Reset)
+Auth::routes();
+
+// Redirecionamento da rota /home para o dashboard principal
+Route::get('/home', function () {
+    return redirect()->route('dashboard.main');
+})->name('home');
 
 // Rotas Protegidas por Autenticação (Auth)
 Route::middleware('auth')->group(function () {
-
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/', function () {
         return view('admin.dashboard.index');
@@ -130,4 +128,32 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoice/edit/{id}', [invoiceController::class, 'edit'])->name('invoice.edit');
     Route::put('/invoice/update/{id}', [invoiceController::class, 'update'])->name('invoice.update');
     Route::delete('/invoice/destroy/{id}', [invoiceController::class, 'destroy'])->name('invoice.destroy');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rotas Exclusivas do Super Administrador (Gestão de Utilizadores/Administradores)
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('super_admin')->group(function () {
+        Route::get('/user/index', [\App\Http\Controllers\userController::class, 'index'])->name('user.index');
+        Route::get('/user/create', [\App\Http\Controllers\userController::class, 'create'])->name('user.create');
+        Route::post('/user/store', [\App\Http\Controllers\userController::class, 'store'])->name('user.store');
+        Route::get('/user/edit/{id}', [\App\Http\Controllers\userController::class, 'edit'])->name('user.edit');
+        Route::put('/user/update/{id}', [\App\Http\Controllers\userController::class, 'update'])->name('user.update');
+        Route::delete('/user/destroy/{id}', [\App\Http\Controllers\userController::class, 'destroy'])->name('user.destroy');
+    });
 });
+
+/*
+|--------------------------------------------------------------------------
+| Rota de Contacto com a Administração (Para utilizadores sem conta)
+|--------------------------------------------------------------------------
+*/
+Route::get('/contact-admin', function () {
+    return view('auth.contact_admin');
+})->name('contact.admin');
+
+Route::post('/contact-admin/send', function (\Illuminate\Http\Request $request) {
+    $request->validate(['email' => 'required|email']);
+    return redirect()->route('login')->with('status', 'A sua solicitação de acesso foi enviada à administração. Aguarde o contacto da instituição.');
+})->name('contact.admin.send');

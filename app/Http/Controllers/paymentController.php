@@ -6,42 +6,53 @@ use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\Invoice;
 use App\Models\Enrollment;
+use App\Models\Student;
 
 /**
  * Controlador responsável pela gestão completa das operações CRUD da entidade Pagamento (Payment).
+ * Gere o registo de pagamentos de emolumentos, associação com formandos via datalist,
+ * cálculo e abatimento de saldo de crédito do estudante e atualização automática de inscrições.
  */
 class paymentController extends Controller
 {
     /**
      * Exibe a listagem de todos os pagamentos registados na base de dados.
+     * Utiliza Eager Loading para carregar os relacionamentos 'student' e 'enrollment'.
      *
      * @return \Illuminate\View\View
      */
     public function index()
     {
-        $payments = Payment::orderBy('id', 'desc')->get();
+        // Obtém todos os pagamentos ordenados pelo ID mais recente com as suas relações, incluindo a fatura associada
+        $payments = Payment::with(['student', 'enrollment.course', 'invoice'])->orderBy('id', 'desc')->get();
         return view('admin.payment.list.index', ['payments' => $payments]);
     }
 
     /**
      * Exibe o formulário para registar um novo pagamento.
+     * Carrega a lista de estudantes ativos para associação no campo datalist e verifica se veio de uma inscrição.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
     public function create(Request $request)
     {
+        // Obtém a lista de todos os estudantes ordenados por nome para preenchimento do datalist
+        $students = Student::orderBy('name', 'asc')->get();
+
+        // Verifica se o formulário foi aberto a partir de uma inscrição específica
         $selectedEnrollmentId = $request->query('enrollment_id');
         $selectedEnrollment   = $selectedEnrollmentId ? Enrollment::with(['student', 'course'])->find($selectedEnrollmentId) : null;
 
         return view('admin.payment.create.index', [
+            'students'             => $students,
             'selectedEnrollmentId' => $selectedEnrollmentId,
             'selectedEnrollment'   => $selectedEnrollment,
         ]);
     }
 
     /**
-     * Valida os dados submetidos e guarda um novo pagamento.
+     * Valida os dados submetidos, gere a utilização ou acumulação de saldo do estudante e guarda o pagamento.
      * Se o pagamento for marcado como concluído (status = 1), atualiza a inscrição associada.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -54,7 +65,10 @@ class paymentController extends Controller
             $request->merge(['reference' => rand(10000000, 99999999)]);
         }
 
+        // Validação rigorosa dos campos enviados pelo formulário de pagamento
         $validatedData = $request->validate([
+            'student_id'      => 'nullable|exists:students,id',
+            'enrollment_id'   => 'nullable|exists:enrollments,id',
             'type_of_payment' => 'required|string|max:255',
             'value'           => 'required|numeric|min:0',
             'reference'       => 'required|integer',
@@ -62,7 +76,8 @@ class paymentController extends Controller
             'payment_method'  => 'required|string|max:255',
             'date'            => 'nullable|date',
             'currency'        => 'required|string|max:10',
-            'enrollment_id'   => 'nullable|exists:enrollments,id',
+            'used_balance'    => 'nullable|numeric|min:0',
+            'add_to_balance'  => 'nullable|numeric|min:0',
         ], [
             'type_of_payment.required' => 'O tipo de emolumento/pagamento é obrigatório.',
             'value.required'           => 'O valor do pagamento é obrigatório.',
@@ -71,36 +86,104 @@ class paymentController extends Controller
             'currency.required'        => 'A indicação da moeda é obrigatória.',
         ]);
 
+        // Se a data de pagamento não tiver sido fornecida, assume a data/hora atual
         if (empty($validatedData['date'])) {
             $validatedData['date'] = now();
         }
 
+        // Gestão do saldo de crédito do estudante (se um estudante for selecionado)
+        $studentId = $request->input('student_id');
         $enrollmentId = $request->input('enrollment_id');
 
-        // Criação do pagamento
-        $payment = Payment::create($validatedData);
+        if ($studentId) {
+            $student = Student::find($studentId);
+            if ($student) {
+                $usedBalance  = floatval($request->input('used_balance', 0));
+                $addToBalance = floatval($request->input('add_to_balance', 0));
 
-        // Se o pagamento estiver como Pago/Concluído (status = 1), marca a inscrição associada como confirmada (status = 1)
-        if ($payment->status) {
-            if ($enrollmentId) {
-                Enrollment::where('id', $enrollmentId)->update(['status' => 1]);
-            } else {
-                $invoice = Invoice::where('payment_id', $payment->id)->first();
-                if ($invoice && $invoice->enrollment_id) {
-                    Enrollment::where('id', $invoice->enrollment_id)->update(['status' => 1]);
+                // Abate o saldo que foi utilizado no pagamento
+                if ($usedBalance > 0) {
+                    $student->balance = max(0, $student->balance - $usedBalance);
                 }
+
+                // Adiciona o valor pago a mais (excesso) como saldo de crédito para futuros pagamentos
+                if ($addToBalance > 0) {
+                    $student->balance += $addToBalance;
+                }
+
+                $student->save();
             }
         }
 
-        // Se veio do fluxo de inscrição ou clicou em "Salvar e Emitir Fatura", redireciona para a emissão da fatura
-        if ($request->input('action') === 'save_and_invoice' || $enrollmentId) {
-            return redirect()->route('invoice.create', [
-                'enrollment_id' => $enrollmentId,
-                'payment_id'    => $payment->id,
-            ])->with('success', 'Pagamento registado com sucesso! Emita agora a fatura/recibo.');
+        // Se veio de uma inscrição e o student_id não foi preenchido explicitamente, associa pelo enrollment
+        if (!$studentId && $enrollmentId) {
+            $enrollmentObj = Enrollment::find($enrollmentId);
+            if ($enrollmentObj) {
+                $validatedData['student_id'] = $enrollmentObj->student_id;
+            }
         }
 
-        return redirect()->route('payment.index')->with('success', 'Pagamento registado com sucesso!');
+        // Se o student_id foi fornecido mas o enrollment_id não, associa a inscrição mais recente do formando
+        if ($studentId && !$enrollmentId) {
+            $studentEnrollment = Enrollment::where('student_id', $studentId)->orderBy('id', 'desc')->first();
+            if ($studentEnrollment) {
+                $validatedData['enrollment_id'] = $studentEnrollment->id;
+                $enrollmentId = $studentEnrollment->id;
+            }
+        }
+
+        // Garante que o estado de novos pagamentos é sempre Concluído / Pago (status = 1)
+        $request->merge(['status' => 1]);
+
+        // Cria o registo do pagamento na base de dados
+        $payment = Payment::create([
+            'student_id'      => $validatedData['student_id'] ?? null,
+            'enrollment_id'   => $validatedData['enrollment_id'] ?? null,
+            'type_of_payment' => $validatedData['type_of_payment'],
+            'value'           => $validatedData['value'],
+            'reference'       => $validatedData['reference'],
+            'status'          => 1, // Sempre Concluído / Pago
+            'date'            => $validatedData['date'],
+            'currency'        => $validatedData['currency'],
+            'payment_method'  => $validatedData['payment_method'],
+        ]);
+
+        // Se o pagamento for marcado como Pago/Concluído (status = 1), marca a inscrição associada como confirmada (status = 1)
+        if ($payment->status) {
+            $targetEnrollmentId = $enrollmentId;
+
+            if (!$targetEnrollmentId && $payment->student_id) {
+                // Procura uma inscrição pendente do estudante para atualizar
+                $pendingEnrollment = Enrollment::where('student_id', $payment->student_id)->where('status', 0)->first();
+                if ($pendingEnrollment) {
+                    $targetEnrollmentId = $pendingEnrollment->id;
+                }
+            }
+
+            if ($targetEnrollmentId) {
+                Enrollment::where('id', $targetEnrollmentId)->update(['status' => 1]);
+            }
+        }
+
+        // Criação automática da Fatura correspondente ao pagamento
+        $targetEnrollment = null;
+        if ($payment->enrollment_id) {
+            $targetEnrollment = Enrollment::find($payment->enrollment_id);
+        } elseif ($payment->student_id) {
+            $targetEnrollment = Enrollment::where('student_id', $payment->student_id)->first();
+        }
+
+        $invoice = Invoice::create([
+            'enrollment_id' => $targetEnrollment ? $targetEnrollment->id : null,
+            'course_id'     => $targetEnrollment ? $targetEnrollment->course_id : null,
+            'payment_id'    => $payment->id,
+            'amount_to_pay' => $payment->value,
+            'amount_paid'   => $payment->value,
+            'change'        => 0.00,
+        ]);
+
+        // Redireciona o utilizador diretamente para a página de detalhes da fatura recém-criada
+        return redirect()->route('invoice.show', $invoice->id)->with('success', 'Pagamento registado e Fatura gerada com sucesso!');
     }
 
     /**
@@ -111,7 +194,8 @@ class paymentController extends Controller
      */
     public function show($id)
     {
-        $payment = Payment::findOrFail($id);
+        // Procura o pagamento com as relações do estudante, da inscrição e da fatura associada
+        $payment = Payment::with(['student', 'enrollment.course', 'invoice'])->findOrFail($id);
         return view('admin.payment.details.index', ['payment' => $payment]);
     }
 
@@ -123,8 +207,13 @@ class paymentController extends Controller
      */
     public function edit($id)
     {
-        $payment = Payment::findOrFail($id);
-        return view('admin.payment.edit.index', ['payment' => $payment]);
+        $payment  = Payment::with(['student', 'enrollment'])->findOrFail($id);
+        $students = Student::orderBy('name', 'asc')->get();
+
+        return view('admin.payment.edit.index', [
+            'payment'  => $payment,
+            'students' => $students,
+        ]);
     }
 
     /**
@@ -140,6 +229,7 @@ class paymentController extends Controller
         $payment = Payment::findOrFail($id);
 
         $validatedData = $request->validate([
+            'student_id'      => 'nullable|exists:students,id',
             'type_of_payment' => 'required|string|max:255',
             'value'           => 'required|numeric|min:0',
             'status'          => 'required|boolean',
@@ -159,11 +249,15 @@ class paymentController extends Controller
 
         $payment->update($validatedData);
 
-        // Se o pagamento for atualizado para Pago/Concluído (status = 1), marca a inscrição associada como confirmada (status = 1)
+        // Se o pagamento for atualizado para Pago/Concluído (status = 1), marca a inscrição associada como confirmada
         if ($payment->status) {
-            $invoice = Invoice::where('payment_id', $payment->id)->first();
-            if ($invoice && $invoice->enrollment_id) {
-                Enrollment::where('id', $invoice->enrollment_id)->update(['status' => 1]);
+            if ($payment->enrollment_id) {
+                Enrollment::where('id', $payment->enrollment_id)->update(['status' => 1]);
+            } elseif ($payment->student_id) {
+                $pendingEnrollment = Enrollment::where('student_id', $payment->student_id)->where('status', 0)->first();
+                if ($pendingEnrollment) {
+                    Enrollment::where('id', $pendingEnrollment->id)->update(['status' => 1]);
+                }
             }
         }
 

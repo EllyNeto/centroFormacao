@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftDeletesToEnrollmentsTable extends Migration
+class CreatePasswordResetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddSoftDeletesToEnrollmentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('enrollments', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::create('password_resets', function (Blueprint $table) {
+            $table->string('email')->index();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
         });
     }
 
@@ -25,8 +27,6 @@ class AddSoftDeletesToEnrollmentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('enrollments', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
+        Schema::dropIfExists('password_resets');
     }
 }

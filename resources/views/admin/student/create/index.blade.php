@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Adiconar novo estudante')
+@section('title', 'Adiconar novo formando')
 
 @section('content')
 
@@ -13,13 +13,13 @@
 					<div class="col-xl-12">
 						<div class="card">
 							<div class="card-header d-flex justify-content-between align-items-center">
-								<h5 class="mb-0">Detalhes do Estudante</h5>
+								<h5 class="mb-0">Detalhes do formando</h5>
 								<a href="{{ route('student.index') }}" class="btn btn-secondary btn-sm">
 									<i class="fa fa-arrow-left me-1"></i> Voltar à Listagem
 								</a>
 							</div>
 							
-							{{-- Formulário para envio dos dados do novo estudante via POST --}}
+							{{-- Formulário para envio dos dados do novo formando via POST --}}
 							<form action="{{ route('student.store') }}" method="POST" enctype="multipart/form-data">
 								{{-- Diretiva CSRF obrigatória do Laravel --}}
 								 @csrf
@@ -43,7 +43,7 @@
 									<div class="row">
 										{{-- Coluna Esquerda: Fotografia do Aluno --}}
 										<div class="col-xl-3 col-lg-4">
-											<label class="form-label text-primary">Fotografia do Estudante</label>
+											<label class="form-label text-primary">Fotografia do formando</label>
 											<div class="avatar-upload">
 												<div class="avatar-preview mb-3">
 													<div id="imagePreview" style="background-image: url('{{ asset('images/no-img-avatar.png') }}'); width: 130px; height: 130px; background-size: cover; background-position: center; border-radius: 12px; border: 2px solid #e2e8f0; margin: 0 auto;"> 			
@@ -57,7 +57,7 @@
 											</div>	
 										</div>
 									
-										{{-- Coluna Direita: Dados Pessoais do Estudante --}}
+										{{-- Coluna Direita: Dados Pessoais do formando --}}
 										<div class="col-xl-9 col-lg-8">
 											<div class="row">
 												<div class="col-xl-6 col-sm-6">
@@ -87,9 +87,9 @@
 													  <input type="text" class="form-control" id="phone" name="phone" placeholder="Ex: 923000000" value="{{ old('phone') }}" required>
 													</div>
 													
-													{{-- Campo: Código do Estudante --}}
+													{{-- Campo: Código do formando --}}
 													<div class="mb-3">
-													  <label for="code" class="form-label text-primary">Código do Estudante</label>
+													  <label for="code" class="form-label text-primary">Código do formando</label>
 													  <input type="text" class="form-control" id="code" name="code" placeholder="Gerado automaticamente" value="{{ old('code') }}" readonly>
 													</div>
 												</div>
@@ -101,7 +101,7 @@
 								{{-- Rodapé do cartão com os botões de ação --}}
 								<div class="card-footer text-end">
 									<a href="{{ route('student.index') }}" class="btn btn-danger light me-2">Cancelar</a>
-									<button type="submit" class="btn btn-primary">Salvar Estudante</button>
+									<button type="submit" class="btn btn-primary">Salvar formando</button>
 								</div>
 							</form>
 						</div>
@@ -166,68 +166,8 @@
 				</div>
 			</div>
 		</div>
-			{{-- <script>
-		$(function () {
-			  $("#datepicker").datepicker({ 
-					autoclose: true, 
-					todayHighlight: true
-			  }).datepicker('update', new Date());
-		
-		});
-
-	</script>
-	
-	 <script>
-		function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            $('#imagePreview').css('background-image', 'url('+e.target.result +')');
-            $('#imagePreview').hide();
-            $('#imagePreview').fadeIn(650);
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-$("#imageUpload").change(function() {
-    readURL(this);
-});
-	$('.remove-img').on('click', function() {
-		var imageUrl = "images/no-img-avatar.png";
-		$('.avatar-preview, #imagePreview').removeAttr('style');
-		$('#imagePreview').css('background-image', 'url(' + imageUrl + ')');
-	});
-
-
-
-	</script> --}}
-		
-        <!--**********************************
-            Content body end
-        ***********************************-->
-
-{{-- Script para pré-visualização instantânea da fotografia do estudante selecionada --}}
+{{-- Script para pré-visualização instantânea da fotografia do formando selecionada --}}
 @push('scripts')
-<script>
-	function previewStudentImage(input) {
-		if (input.files && input.files[0]) {
-			var file = input.files[0];
-			// Verificação do tamanho máximo do ficheiro (2MB = 2 * 1024 * 1024 bytes)
-			if (file.size > 2 * 1024 * 1024) {
-				alert('A fotografia selecionada é demasiado grande! O tamanho máximo permitido é de 2MB.');
-				input.value = '';
-				return;
-			}
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				var preview = document.getElementById('imagePreview');
-				if (preview) {
-					preview.style.backgroundImage = 'url(' + e.target.result + ')';
-				}
-			}
-			reader.readAsDataURL(file);
-		}
-	}
-</script>
+<script src="{{ asset('js/student-form.js') }}"></script>
 @endpush
 @endsection

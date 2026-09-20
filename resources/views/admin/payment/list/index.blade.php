@@ -45,6 +45,7 @@
                                         <thead>
                                             <tr>
                                                 <th>#ID</th>
+                                                <th>Formando</th>
                                                 <th>Tipo de Emolumento</th>
                                                 <th>Forma</th>
                                                 <th>Valor</th>
@@ -61,18 +62,25 @@
                                                 <tr>
                                                     <td><strong>#{{ $paymentItem->id }}</strong></td>
                                                     <td>
+                                                        @if($paymentItem->student)
+                                                            <a href="{{ route('payment.show', $paymentItem->id) }}" class="text-primary font-w600">
+                                                                {{ $paymentItem->student->name }}
+                                                            </a>
+                                                        @else
+                                                            <span class="text-muted">N/D</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
                                                         {{-- Exibição simplificada e elegante dos emolumentos em etiquetas badge curtas --}}
                                                         @php
                                                             $rawTypes = array_filter(array_map('trim', explode(',', $paymentItem->type_of_payment)));
                                                             $shortMap = [
-                                                                'Inscrição'               => 'Inscrição',
-                                                                'Propina Mensal'          => 'Propina',
-                                                                'Matrícula / Confirmação' => 'Matrícula',
-                                                                'Certificado'             => 'Certificado',
-                                                                'Declaração'              => 'Declaração',
-                                                                'Cartão de Estudante'     => 'Cartão Est.',
-                                                                'Exame de Recurso'        => 'Exame Rec.',
-                                                                'Outro Emolumento'        => 'Outro',
+                                                                'Inscrição'           => 'Inscrição',
+                                                                'Valor do Curso'      => 'Valor Curso',
+                                                                'Certificado'         => 'Certificado',
+                                                                'Cartão do Formando'  => 'Cartão Form.',
+                                                                'Exame de Recurso'    => 'Exame Rec.',
+                                                                'Outro Emolumento'    => 'Outro',
                                                             ];
                                                             $totalItems = count($rawTypes);
                                                             $maxVisible = 3;
@@ -122,8 +130,17 @@
                                                             <a href="{{ route('payment.show', $paymentItem->id) }}" class="btn btn-info shadow btn-xs sharp me-1" title="Ver Detalhes">
                                                                 <i class="fa fa-eye"></i>
                                                             </a>
-                                                            
-                                                            {{-- Botão Editar --}}
+
+                                                            {{-- Botão Emitir/Ver Fatura Associada --}}
+                                                            @if($paymentItem->invoice)
+                                                                <a href="{{ route('invoice.show', $paymentItem->invoice->id) }}" class="btn btn-warning shadow btn-xs sharp me-1" title="Ver/Emitir Fatura">
+                                                                    <i class="fa fa-file-text"></i>
+                                                                </a>
+                                                            @else
+                                                                <a href="{{ route('invoice.create', ['payment_id' => $paymentItem->id, 'enrollment_id' => $paymentItem->enrollment_id]) }}" class="btn btn-warning shadow btn-xs sharp me-1" title="Gerar Fatura">
+                                                                    <i class="fa fa-file-text"></i>
+                                                                </a>
+                                                            @endif
                                                             <a href="{{ route('payment.edit', $paymentItem->id) }}" class="btn btn-primary shadow btn-xs sharp me-1" title="Editar Pagamento">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
@@ -141,7 +158,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="9" class="text-center py-4 text-muted">
+                                                    <td colspan="10" class="text-center py-4 text-muted">
                                                         <i class="fa fa-credit-card-alt fs-24 mb-2 d-block"></i>
                                                         Nenhum pagamento registado.
                                                     </td>

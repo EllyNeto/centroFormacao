@@ -1,7 +1,10 @@
+{{-- Extende o layout principal da aplicação --}}
 @extends('layouts.main')
 
+{{-- Define o título dinâmico da página no navegador --}}
 @section('title', 'Detalhes do Pagamento')
 
+{{-- Conteúdo principal da página de detalhes do pagamento --}}
 @section('content')
 <div class="content-body">
     <div class="container-fluid">
@@ -15,6 +18,15 @@
                             <a href="{{ route('payment.index') }}" class="btn btn-secondary btn-sm me-1">
                                 <i class="fa fa-arrow-left me-1"></i> Voltar à Listagem
                             </a>
+                            @if($payment->invoice)
+                                <a href="{{ route('invoice.show', $payment->invoice->id) }}" class="btn btn-warning btn-sm me-1">
+                                    <i class="fa fa-file-text me-1"></i> Emitir / Imprimir Fatura
+                                </a>
+                            @else
+                                <a href="{{ route('invoice.create', ['payment_id' => $payment->id, 'enrollment_id' => $payment->enrollment_id]) }}" class="btn btn-warning btn-sm me-1">
+                                    <i class="fa fa-file-text me-1"></i> Gerar Fatura
+                                </a>
+                            @endif
                             <a href="{{ route('payment.edit', $payment->id) }}" class="btn btn-primary btn-sm">
                                 <i class="fa fa-pencil me-1"></i> Editar Pagamento
                             </a>
@@ -23,8 +35,21 @@
                     
                     <div class="card-body">
                         <div class="row">
-                            {{-- Coluna Principal: Destaque do Valor e Tipo de Pagamento --}}
+                            {{-- Coluna Principal: Destaque do Formando Associado, Valor e Emolumentos --}}
                             <div class="col-xl-8 col-lg-7">
+                                {{-- Informação do Formando Associado --}}
+                                @if($payment->student)
+                                    <div class="p-3 mb-4 border rounded" style="background-color: #f8fafc;">
+                                        <h5 class="text-primary font-w600 mb-2"><i class="fa fa-user me-2"></i>Formando Associado</h5>
+                                        <p class="mb-1"><strong>Nome:</strong> {{ $payment->student->name }}</p>
+                                        <p class="mb-1"><strong>Nº do BI:</strong> {{ $payment->student->identity_card_number }} | <strong>Código:</strong> {{ $payment->student->code }}</p>
+                                        <p class="mb-0"><strong>Saldo de Crédito Atual do Formando:</strong> 
+                                            <span class="badge badge-success light font-w600">{{ number_format($payment->student->balance ?? 0, 2, ',', '.') }} Kz</span>
+                                        </p>
+                                    </div>
+                                @endif
+
+                                {{-- Emolumentos e Valor Total do Pagamento --}}
                                 <div class="mb-4">
                                     <span class="badge badge-primary light mb-2">#ID {{ $payment->id }}</span>
                                     <div class="d-flex flex-wrap gap-2 align-items-center my-2">
@@ -37,6 +62,7 @@
                                     </h3>
                                 </div>
 
+                                {{-- Número de Referência --}}
                                 <div class="mb-4">
                                     <h5 class="text-primary font-w600">Referência do Comprovativo</h5>
                                     <p class="fs-16 font-w500 text-dark">
@@ -45,7 +71,7 @@
                                 </div>
                             </div>
 
-                            {{-- Coluna Lateral: Resumo de Dados com alta visibilidade e contraste --}}
+                            {{-- Coluna Lateral: Resumo de Dados de Registo --}}
                             <div class="col-xl-4 col-lg-5">
                                 <div class="card border shadow-none" style="background-color: #f8fafc; border-radius: 12px;">
                                     <div class="card-body p-4">
@@ -73,11 +99,15 @@
                                                 <strong class="text-dark font-w600">#{{ $payment->reference }}</strong>
                                             </li>
                                             <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-bottom">
+                                                <span class="text-dark font-w500"><i class="fa fa-credit-card me-2 text-primary"></i> Forma Pagamento:</span>
+                                                <strong class="text-dark font-w600">{{ $payment->payment_method ?? 'Numerário' }}</strong>
+                                            </li>
+                                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-bottom">
                                                 <span class="text-dark font-w500"><i class="fa fa-check-circle me-2 text-primary"></i> Estado:</span>
                                                 @if($payment->status)
                                                     <span class="badge badge-success light font-w600">Concluído / Pago</span>
                                                 @else
-                                                    <span class="badge badge-warning light font-w600">Pendente / Cancelado</span>
+                                                    <span class="badge badge-warning light font-w600">Pendente / Não Pago</span>
                                                 @endif
                                             </li>
                                             <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-bottom">

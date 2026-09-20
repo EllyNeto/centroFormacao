@@ -27,11 +27,11 @@
                         <div class="row mb-4">
                             <div class="col-xl-6 col-md-6">
                                 <div class="p-3 border rounded">
-                                    <h6 class="text-primary font-w600 mb-3"><i class="fa fa-file-text-o me-2"></i>Informação da Inscrição e Curso</h6>
+                                    <h6 class="text-primary font-w600 mb-3"><i class="fa fa-file-text me-2"></i>Informação da Inscrição e Curso</h6>
                                     <p><strong>Identificador Inscrição:</strong> #INS-{{ sprintf('%04d', $invoice->enrollment_id) }}</p>
-                                    <p><strong>Estudante:</strong> {{ $invoice->enrollment->student->name ?? 'N/D' }}</p>
-                                    <p><strong>Código Estudante:</strong> {{ $invoice->enrollment->student->code ?? 'N/D' }}</p>
-                                    <p><strong>Curso Associado:</strong> {{ $invoice->course->name ?? 'N/D' }}</p>
+                                    <p><strong>Formando:</strong> {{ $invoice->enrollment->student->name ?? ($invoice->payment->student->name ?? 'N/D') }}</p>
+                                    <p><strong>Código Formando:</strong> {{ $invoice->enrollment->student->code ?? ($invoice->payment->student->code ?? 'N/D') }}</p>
+                                    <p><strong>Curso Associado:</strong> {{ $invoice->course->name ?? ($invoice->enrollment->course->name ?? ($invoice->payment->student && $invoice->payment->student->enrollments->first() ? $invoice->payment->student->enrollments->first()->course->name : 'N/D')) }}</p>
                                 </div>
                             </div>
 

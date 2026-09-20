@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Estudantes')
+@section('title', 'Formandos')
 
 @section('content')
 		
@@ -24,8 +24,8 @@
                     <!-- Cabeçalho do Cartão no modelo Profile Datatable -->
                     <div class="card-header flex-wrap px-3 d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="card-title">Gestão de Estudantes</h4>
-                            <p class="m-0 subtitle">Lista de todos os alunos em formação registados</p>
+                            <h4 class="card-title">Gestão de Formandos</h4>
+                            <p class="m-0 subtitle">Lista de todos os formandos em formação registados</p>
                         </div>
                         <div class="d-flex align-items-center">
                         </div>
@@ -42,7 +42,7 @@
                                             <tr>
                                                 <th>#ID</th>
                                                 <th>Foto</th>
-                                                <th>Nome Completo</th>
+                                                <th>Nome</th>
                                                 <th>E-mail</th>
                                                 <th>Nº do BI</th>
                                                 <th>Telefone</th>
@@ -56,7 +56,7 @@
                                                 <tr>
                                                     <td><strong>#{{ $studentItem->id }}</strong></td>
                                                     <td>
-                                                        {{-- Exibição da foto do estudante em avatar circular --}}
+                                                        {{-- Exibição da foto do Formando em avatar circular --}}
                                                         @if($studentItem->image)
                                                             <img src="{{ asset('storage/'.$studentItem->image) }}" alt="Foto" class="avatar avatar-sm rounded-circle">
                                                         @else
@@ -64,7 +64,7 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        {{-- Nome com link para os detalhes do estudante --}}
+                                                        {{-- Nome com link para os detalhes do Formando --}}
                                                         <a href="{{ route('student.show', $studentItem->id) }}" class="text-primary font-w600">
                                                             {{ $studentItem->name }}
                                                         </a>
@@ -84,16 +84,16 @@
                                                                 <i class="fa fa-eye"></i>
                                                             </a>
                                                             
-                                                            {{-- Botão Editar Estudante --}}
-                                                            <a href="{{ route('student.edit', $studentItem->id) }}" class="btn btn-primary shadow btn-xs sharp me-1" title="Editar Estudante">
+                                                            {{-- Botão Editar Formando --}}
+                                                            <a href="{{ route('student.edit', $studentItem->id) }}" class="btn btn-primary shadow btn-xs sharp me-1" title="Editar Formando">
                                                                 <i class="fa fa-pencil"></i>
                                                             </a>
                                             
                                                             {{-- Formulário com confirmação para Eliminar --}}
-                                                            <form action="{{ route('student.destroy', $studentItem->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este estudante?');" style="display: inline;">
+                                                            <form action="{{ route('student.destroy', $studentItem->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este Formando?');" style="display: inline;">
                                                                 @csrf
                                                                 @method('DELETE')
-                                                                <button type="submit" class="btn btn-danger shadow btn-xs sharp" title="Eliminar Estudante">
+                                                                <button type="submit" class="btn btn-danger shadow btn-xs sharp" title="Eliminar Formando">
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
                                                             </form>
@@ -104,7 +104,7 @@
                                                 <tr>
                                                     <td colspan="8" class="text-center py-4 text-muted">
                                                         <i class="fa fa-user-times fs-24 mb-2 d-block"></i>
-                                                        Nenhum estudante encontrado.
+                                                        Nenhum Formando encontrado.
                                                     </td>
                                                 </tr>
                                             @endforelse

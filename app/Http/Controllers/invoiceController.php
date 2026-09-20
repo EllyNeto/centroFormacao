@@ -29,19 +29,40 @@ class invoiceController extends Controller
      */
     public function create(Request $request)
     {
+        $selectedPaymentId    = $request->query('payment_id');
+        $selectedEnrollmentId = $request->query('enrollment_id');
+
+        // Carrega o pagamento selecionado com as relações do formando, inscrições e curso
+        $selectedPayment = $selectedPaymentId 
+            ? Payment::with(['student.enrollments.course', 'enrollment.course'])->find($selectedPaymentId) 
+            : null;
+
+        // Tenta resolver a inscrição e curso associados a partir do pagamento ou do formando
+        $selectedEnrollment = null;
+        if ($selectedPayment) {
+            if ($selectedPayment->enrollment) {
+                $selectedEnrollment = $selectedPayment->enrollment;
+            } elseif ($selectedPayment->student && $selectedPayment->student->enrollments->isNotEmpty()) {
+                $selectedEnrollment = $selectedPayment->student->enrollments->sortByDesc('id')->first();
+            }
+        }
+
+        if (!$selectedEnrollment && $selectedEnrollmentId) {
+            $selectedEnrollment = Enrollment::with(['student', 'course'])->find($selectedEnrollmentId);
+        }
+
         $enrollments = Enrollment::with(['student', 'course'])->get();
         $courses     = Course::where('status', 1)->get();
-        $payments    = Payment::all();
-
-        $selectedEnrollmentId = $request->query('enrollment_id');
-        $selectedPaymentId    = $request->query('payment_id');
+        $payments    = Payment::with(['student.enrollments.course', 'enrollment.course'])->orderBy('id', 'desc')->get();
 
         return view('admin.invoice.create.index', [
             'enrollments'          => $enrollments,
             'courses'              => $courses,
             'payments'             => $payments,
-            'selectedEnrollmentId' => $selectedEnrollmentId,
             'selectedPaymentId'    => $selectedPaymentId,
+            'selectedEnrollmentId' => $selectedEnrollmentId,
+            'selectedPayment'      => $selectedPayment,
+            'selectedEnrollment'   => $selectedEnrollment,
         ]);
     }
 
@@ -54,7 +75,33 @@ class invoiceController extends Controller
      */
     public function store(Request $request)
     {
-        // Obtém o curso automaticamente a partir da inscrição selecionada se não for enviado
+        // Se o pagamento for enviado, infere a inscrição e o curso caso não venham preenchidos
+        if ($request->filled('payment_id')) {
+            $payment = Payment::with(['student.enrollments.course', 'enrollment.course'])->find($request->payment_id);
+            if ($payment) {
+                if (!$request->filled('enrollment_id')) {
+                    if ($payment->enrollment_id) {
+                        $request->merge(['enrollment_id' => $payment->enrollment_id]);
+                    } elseif ($payment->student && $payment->student->enrollments->isNotEmpty()) {
+                        $request->merge(['enrollment_id' => $payment->student->enrollments->sortByDesc('id')->first()->id]);
+                    }
+                }
+
+                $resolvedEnrollment = $request->filled('enrollment_id') ? Enrollment::find($request->enrollment_id) : null;
+                if (!$request->filled('course_id')) {
+                    if ($resolvedEnrollment) {
+                        $request->merge(['course_id' => $resolvedEnrollment->course_id]);
+                    } elseif ($payment->enrollment) {
+                        $request->merge(['course_id' => $payment->enrollment->course_id]);
+                    }
+                }
+
+                if (!$request->filled('amount_to_pay')) {
+                    $request->merge(['amount_to_pay' => $payment->value]);
+                }
+            }
+        }
+
         if ($request->filled('enrollment_id') && !$request->filled('course_id')) {
             $enrollment = Enrollment::find($request->enrollment_id);
             if ($enrollment) {
@@ -62,40 +109,50 @@ class invoiceController extends Controller
             }
         }
 
-        // Se o valor a pagar não for enviado no formulário, assume por padrão o valor pago enviado
-        if (!$request->filled('amount_to_pay')) {
-            $request->merge(['amount_to_pay' => $request->input('amount_paid', 0)]);
-        }
-
         $validatedData = $request->validate([
-            'enrollment_id' => 'required|exists:enrollments,id',
-            'course_id'     => 'required|exists:courses,id',
-            'amount_to_pay' => 'nullable|numeric|min:0',
+            'enrollment_id' => 'nullable|exists:enrollments,id',
+            'course_id'     => 'nullable|exists:courses,id',
+            'amount_to_pay' => 'required|numeric|min:0',
             'amount_paid'   => 'required|numeric|min:0',
             'payment_id'    => 'nullable|exists:payments,id',
         ], [
-            'enrollment_id.required' => 'A inscrição é obrigatória.',
-            'course_id.required'     => 'O curso é obrigatório.',
-            'amount_paid.required'   => 'O valor pago é obrigatório.',
+            'amount_to_pay.required' => 'O valor a pagar é obrigatório.',
+            'amount_paid.required'   => 'O valor recebido é obrigatório.',
         ]);
 
         // Conversão dos valores recebidos para ponto flutuante
-        $amountToPay = (float) ($validatedData['amount_to_pay'] ?? $validatedData['amount_paid']);
+        $amountToPay = (float) $validatedData['amount_to_pay'];
         $amountPaid  = (float) $validatedData['amount_paid'];
         $validatedData['amount_to_pay'] = $amountToPay;
 
-        // Cálculo do troco (apenas quando o valor pago for estritamente superior ao valor a pagar)
+        // Cálculo do troco / saldo acumulado
         $validatedData['change'] = max(0, $amountPaid - $amountToPay);
+
+        // Se houver troco/excedente e o método de pagamento não for Numerário (Transferência ou Cartão/TPA), adiciona ao saldo do formando
+        if ($validatedData['change'] > 0 && !empty($validatedData['payment_id'])) {
+            $paymentObj = Payment::find($validatedData['payment_id']);
+            if ($paymentObj && $paymentObj->student_id) {
+                $pMethod = strtolower($paymentObj->payment_method ?? '');
+                $isNumerario = str_contains($pMethod, 'numerári') || str_contains($pMethod, 'numerari');
+                if (!$isNumerario) {
+                    $student = \App\Models\Student::find($paymentObj->student_id);
+                    if ($student) {
+                        $student->balance += $validatedData['change'];
+                        $student->save();
+                    }
+                }
+            }
+        }
 
         // Criação do registo da fatura na base de dados
         $invoice = Invoice::create($validatedData);
 
         // Atualização automática da inscrição para Pago/Confirmado (status = 1) se liquidação concluída
-        if ($amountPaid >= $amountToPay || !empty($validatedData['payment_id'])) {
+        if (!empty($validatedData['enrollment_id']) && ($amountPaid >= $amountToPay || !empty($validatedData['payment_id']))) {
             Enrollment::where('id', $validatedData['enrollment_id'])->update(['status' => 1]);
         }
 
-        return redirect()->route('invoice.index')->with('success', 'Fatura emitida com sucesso e inscrição atualizada para confirmada!');
+        return redirect()->route('payment.index')->with('success', 'Fatura emitida com sucesso!');
     }
 
     /**

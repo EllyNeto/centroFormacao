@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Detalhes do estudante')
+@section('title', 'Detalhes do Formando')
 
 @section('content')
 	<!--**********************************
@@ -12,20 +12,20 @@
 				<div class="row">
 					<div class="col-xl-12 mb-3">
 						<div class="d-flex justify-content-between align-items-center bg-white p-3 rounded card-header">
-							<h4 class="card-title mb-0">Detalhes do Estudante: {{ $student->name }}</h4>
+							<h4 class="card-title mb-0">Detalhes do Formando: {{ $student->name }}</h4>
 							<div>
-								{{-- Botão para retornar à listagem principal de estudantes --}}
+								{{-- Botão para retornar à listagem principal de Formandos --}}
 								<a href="{{ route('student.index') }}" class="btn btn-secondary btn-sm me-1">
 									<i class="fa fa-arrow-left me-1"></i> Voltar à Listagem
 								</a>
 
-								{{-- Botão para navegar para a página de edição do estudante --}}
+								{{-- Botão para navegar para a página de edição do Formando --}}
 								<a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm me-1">
-									<i class="fa fa-pencil me-1"></i> Editar Estudante
+									<i class="fa fa-pencil me-1"></i> Editar Formando
 								</a>
 
-								{{-- Formulário para eliminar o estudante atual --}}
-								<form action="{{ route('student.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este estudante?');" style="display: inline-block;">
+								{{-- Formulário para eliminar o Formando atual --}}
+								<form action="{{ route('student.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar este Formando?');" style="display: inline-block;">
 									@csrf
 									@method('DELETE')
 									<button type="submit" class="btn btn-danger btn-sm">
@@ -57,15 +57,15 @@
 								<div class="d-flex justify-content-between">
 									<div class="user">
 										<div class="user-media">
-											{{-- Renderização da foto de perfil dinâmica do estudante ou fallback pré-definido --}}
+											{{-- Renderização da foto de perfil dinâmica do Formando ou fallback pré-definido --}}
 											@if($student->image)
-												<img src="{{ asset('storage/'.$student->image) }}" alt="Foto do Estudante" class="avatar avatar-xxl" style="object-fit: cover;">
+												<img src="{{ asset('storage/'.$student->image) }}" alt="Foto do Formando" class="avatar avatar-xxl" style="object-fit: cover;">
 											@else
 												<img src="{{ asset('images/avatar/9.jpg') }}" alt="Avatar" class="avatar avatar-xxl">
 											@endif
 										</div>
 										<div>
-											{{-- Nome do estudante e código de identificação --}}
+											{{-- Nome do Formando e código de identificação --}}
 											<h2 class="mb-0">{{ $student->name }}</h2>
 											<p class="text-primary font-w600">Código do Aluno: #{{ $student->code }}</p>
 										</div>

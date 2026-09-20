@@ -91,7 +91,7 @@
                                             @empty
                                                 <tr>
                                                     <td colspan="7" class="text-center py-4 text-muted">
-                                                        Nenhuma fatura emitida na base de dados.
+                                                        Nenhuma fatura emitida.
                                                     </td>
                                                 </tr>
                                             @endforelse

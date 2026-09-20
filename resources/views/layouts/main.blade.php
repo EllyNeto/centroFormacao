@@ -36,10 +36,14 @@
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
 	{{-- Folha de Estilos Personalizada para Tabelas Centralizadas e Ampliadas --}}
     <link href="{{asset('css/custom-tables.css')}}" rel="stylesheet">
+	{{-- Estilos para Campos Inalteráveis com Fundo Cinza --}}
+    <link href="{{asset('css/uneditable-fields.css')}}" rel="stylesheet">
 
 	<!-- Datatable -->
     <link href="{{asset('vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
+    <!-- Select2 CSS -->
+    <link href="{{asset('vendor/select2/css/select2.min.css')}}" rel="stylesheet">
     <!-- Custom Stylesheet -->
 	<link href="{{asset('vendor/jquery-nice-select/css/nice-select.css')}}" rel="stylesheet">
 
@@ -155,6 +159,12 @@
 	<script src="{{asset('js/plugins-init/datatables.init.js')}}"></script>
 	<script src="{{asset('vendor/jquery-nice-select/js/jquery.nice-select.min.js')}}"></script>
 
+	<!-- Select2 JS -->
+	<script src="{{asset('vendor/select2/js/select2.full.min.js')}}"></script>
+
+	<!-- Currency Formatter Utility -->
+	<script src="{{asset('js/currency-formatter.js')}}"></script>
+
 	@stack('scripts')
 
 	<script src="{{asset('js/custom.min.js')}}"></script>
@@ -165,18 +175,7 @@
 	
 	<!-- code-highlight for Datatable-->
 	<script src="{{asset('js/highlight.min.js')}}"></script>
-	<script>
-		hljs.highlightAll();
-		hljs.configure({ ignoreUnescapedHTML: true })	
-	</script>
-
-	<script>
-		document.addEventListener('DOMContentLoaded', (event) => {
-			document.querySelectorAll('pre code').forEach((el) => {
-				hljs.highlightElement(el);
-			});
-			});
-	</script>
+	<script src="{{asset('js/main-init.js')}}"></script>
 	
 </body>
 

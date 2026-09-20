@@ -64,23 +64,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-                                    <div class="mb-3">
-                                        <label for="student_id" class="form-label text-primary">Estudante Associado (Opcional)</label>
-                                        <select id="student_id" name="student_id" class="default-select wide form-control">
-                                            <option value="">Selecione um Estudante (Opcional)</option>
-                                            @foreach($students as $student)
-                                                <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>
-                                                    {{ $student->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="falta" class="form-label text-primary">Número de Faltas</label>
-                                        <input type="number" min="0" id="falta" name="falta" class="form-control" value="{{ old('falta', 0) }}">
-                                    </div>
                                 </div>
 
                                 <div class="col-xl-6 col-sm-6">
@@ -105,7 +88,7 @@
 
                                     <div class="mb-3">
                                         <label for="capacity" class="form-label text-primary">Capacidade Máxima <span class="text-danger">*</span></label>
-                                        <input type="number" min="1" id="capacity" name="capacity" class="form-control" value="{{ old('capacity', 25) }}" required>
+                                        <input type="number" min="1" id="capacity" name="capacity" class="form-control" value="{{ old('capacity') }}" placeholder="Ex: 25" required>
                                     </div>
 
                                     <div class="mb-3">
