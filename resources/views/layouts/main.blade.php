@@ -38,6 +38,10 @@
     <link href="{{asset('css/custom-tables.css')}}" rel="stylesheet">
 	{{-- Estilos para Campos Inalteráveis com Fundo Cinza --}}
     <link href="{{asset('css/uneditable-fields.css')}}" rel="stylesheet">
+	{{-- Estilos para Selects Nativos com Fundo Cinza Elegante --}}
+    <link href="{{asset('css/custom-selects.css')}}" rel="stylesheet">
+	{{-- Melhorias de Responsividade Mobile --}}
+    <link href="{{asset('css/mobile-responsive.css')}}" rel="stylesheet">
 
 	<!-- Datatable -->
     <link href="{{asset('vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">

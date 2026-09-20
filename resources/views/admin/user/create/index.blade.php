@@ -53,7 +53,7 @@
 
                                 <div class="col-xl-6 col-sm-6 mb-3">
                                     <label for="role" class="form-label text-primary font-w600">Perfil / Função de Acesso <span class="text-danger">*</span></label>
-                                    <select id="role" name="role" class="default-select wide form-control" required>
+                                    <select id="role" name="role" class="form-control" required>
                                         <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Administrador / Operador Normal</option>
                                         <option value="super_admin" {{ old('role') == 'super_admin' ? 'selected' : '' }}>Super Administrador (Acesso Total)</option>
                                     </select>

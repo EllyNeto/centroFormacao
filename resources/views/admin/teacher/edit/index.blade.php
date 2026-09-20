@@ -110,7 +110,7 @@
                                             {{-- Campo: Estado (Ativo/Desativo) --}}
                                             <div class="mb-3">
                                                 <label for="status" class="form-label text-primary">Estado</label>
-                                                <select id="status" name="status" class="default-select wide form-control">
+                                                <select id="status" name="status" class="form-control">
                                                     <option value="1" {{ old('status', $teacher->status) ? 'selected' : '' }}>Activo</option>
                                                     <option value="0" {{ !old('status', $teacher->status) ? 'selected' : '' }}>Desativo</option>
                                                 </select>

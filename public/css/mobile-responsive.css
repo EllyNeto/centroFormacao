@@ -1,0 +1,170 @@
+/* ==========================================================================
+   Melhorias de Responsividade Mobile para Todo o Sistema
+   ========================================================================== */
+
+/* Ajustes Globais para Ecrãs Pequenos (Smartphones e Tablets) */
+@media (max-width: 768px) {
+    /* Evitar scroll horizontal indesejado na página */
+    html, body {
+        overflow-x: hidden !important;
+    }
+
+    /* Ajuste de Padding do Content Body e Container */
+    .content-body {
+        padding-top: 4.5rem !important;
+    }
+    
+    .content-body .container-fluid {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+
+    /* Cartões e Formulários */
+    .card {
+        margin-bottom: 1rem !important;
+        border-radius: 0.75rem !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    .card-header {
+        padding: 1rem 1rem !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem !important;
+    }
+
+    .card-header .card-title {
+        font-size: 1rem !important;
+    }
+
+    .card-body {
+        padding: 1rem !important;
+    }
+
+    .card-footer {
+        padding: 0.875rem 1rem !important;
+        display: flex !important;
+        flex-direction: column-reverse !important;
+        gap: 0.5rem !important;
+    }
+
+    .card-footer .btn,
+    .card-footer button,
+    .card-footer a {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        margin-bottom: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* Tamanho de Fonte para Inputs e Selects Nativos (Evita Zoom em iOS/Android) */
+    .form-control,
+    select.form-control,
+    .form-select,
+    textarea.form-control,
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    input[type="password"] {
+        font-size: 16px !important; /* Previne auto-zoom no Safari iOS */
+        height: 46px !important;
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+        border-radius: 0.5rem !important;
+    }
+
+    select.form-control {
+        background-position: right 0.75rem center !important;
+        padding-right: 2.25rem !important;
+    }
+
+    /* DataTables e Tabelas Responsivas */
+    .table-responsive {
+        border: none !important;
+        margin-bottom: 1rem !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .table th, 
+    .table td,
+    table.dataTable th,
+    table.dataTable td {
+        padding: 10px 12px !important;
+        white-space: nowrap !important;
+        font-size: 12.5px !important;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        padding: 0.5rem 0 !important;
+        text-align: left !important;
+    }
+
+    .dataTables_wrapper .dataTables_filter label {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-top: 0.4rem !important;
+        box-sizing: border-box !important;
+    }
+
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        text-align: center !important;
+        justify-content: center !important;
+        padding: 0.5rem 0 !important;
+        width: 100% !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 4px 8px !important;
+        font-size: 12px !important;
+    }
+
+    /* Badges e Botões de Ação na Tabela */
+    .badge {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+    }
+
+    /* Select2 Responsividade no Mobile */
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 46px !important;
+        font-size: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        background-color: #f3f4f6 !important;
+        border-color: #d1d5db !important;
+        border-radius: 0.5rem !important;
+    }
+}
+
+/* Ajustes Adicionais para Telas Muito Pequenas (< 480px) */
+@media (max-width: 480px) {
+    .content-body .container-fluid {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+
+    .card-header .card-title {
+        font-size: 0.95rem !important;
+    }
+}

@@ -45,7 +45,7 @@
 
                                     <div class="mb-3">
                                         <label for="course_id" class="form-label text-primary">Curso Associado <span class="text-danger">*</span></label>
-                                        <select id="course_id" name="course_id" class="default-select wide form-control" required>
+                                        <select id="course_id" name="course_id" class="form-control" required>
                                             <option value="">Selecione o Curso</option>
                                             @foreach($courses as $course)
                                                 <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>{{ $course->name }}</option>
@@ -55,7 +55,7 @@
 
                                     <div class="mb-3">
                                         <label for="teacher_id" class="form-label text-primary">Formador Responsável <span class="text-danger">*</span></label>
-                                        <select id="teacher_id" name="teacher_id" class="default-select wide form-control" required>
+                                        <select id="teacher_id" name="teacher_id" class="form-control" required>
                                             <option value="">Selecione o Formador</option>
                                             @foreach($teachers as $teacher)
                                                 <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
@@ -79,7 +79,7 @@
 
                                     <div class="mb-3">
                                         <label for="shift" class="form-label text-primary">Turno <span class="text-danger">*</span></label>
-                                        <select id="shift" name="shift" class="default-select wide form-control" required>
+                                        <select id="shift" name="shift" class="form-control" required>
                                             <option value="Manhã" {{ old('shift') == 'Manhã' ? 'selected' : '' }}>Manhã</option>
                                             <option value="Tarde" {{ old('shift') == 'Tarde' ? 'selected' : '' }}>Tarde</option>
                                             <option value="Pós-Laboral" {{ old('shift') == 'Pós-Laboral' ? 'selected' : '' }}>Pós-Laboral</option>
@@ -93,7 +93,7 @@
 
                                     <div class="mb-3">
                                         <label for="status" class="form-label text-primary">Estado da Turma <span class="text-danger">*</span></label>
-                                        <select id="status" name="status" class="default-select wide form-control" required>
+                                        <select id="status" name="status" class="form-control" required>
                                             <option value="1" {{ old('status', '1') == '1' ? 'selected' : '' }}>Activa</option>
                                             <option value="0" {{ old('status') === '0' ? 'selected' : '' }}>Inactiva</option>
                                         </select>

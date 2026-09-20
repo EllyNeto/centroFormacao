@@ -36,7 +36,7 @@
                                 <div class="col-xl-6 col-sm-6">
                                     <div class="mb-3">
                                         <label for="enrollment_id" class="form-label text-primary">Inscrição Associada <span class="text-danger">*</span></label>
-                                        <select id="enrollment_id" name="enrollment_id" class="default-select wide form-control" required>
+                                        <select id="enrollment_id" name="enrollment_id" class="form-control" required>
                                             <option value="">Selecione uma Inscrição</option>
                                             @foreach($enrollments as $enrollment)
                                                 <option value="{{ $enrollment->id }}" 
@@ -58,7 +58,7 @@
 
                                     <div class="mb-3">
                                         <label for="payment_id" class="form-label text-primary">Registo de Pagamento Associado</label>
-                                        <select id="payment_id" name="payment_id" class="default-select wide form-control">
+                                        <select id="payment_id" name="payment_id" class="form-control">
                                             <option value="">Selecione um Pagamento (Opcional)</option>
                                             @foreach($payments as $payment)
                                                 <option value="{{ $payment->id }}" 
