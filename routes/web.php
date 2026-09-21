@@ -132,7 +132,7 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Rotas Exclusivas do Super Administrador (Gestão de Utilizadores/Administradores)
+    | Rotas Exclusivas do Administrador (Gestão de Utilizadores/Administradores)
     |--------------------------------------------------------------------------
     */
     Route::middleware('super_admin')->group(function () {

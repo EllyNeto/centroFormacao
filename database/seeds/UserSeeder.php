@@ -5,19 +5,19 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 /**
- * Seeder responsável por popular a conta inicial do Super Administrador (Super Admin)
+ * Seeder responsável por popular a conta inicial do Administrador (Admin)
  * no sistema Centro de Formação.
  */
 class UserSeeder extends Seeder
 {
     /**
-     * Executa a população da base de dados com a conta do Super Admin.
+     * Executa a população da base de dados com a conta do Admin.
      *
      * @return void
      */
     public function run()
     {
-        // 1. Conta do Administrador (Super Administrador - Acesso Total)
+        // 1. Conta do Administrador (Administrador - Acesso Total)
         User::updateOrCreate(
             ['email' => 'admin@centro.com'],
             [

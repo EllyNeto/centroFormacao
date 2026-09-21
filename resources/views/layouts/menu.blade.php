@@ -11,7 +11,7 @@
 					</li>
 
 					@if(auth()->check() && auth()->user()->isSuperAdmin())
-						{{-- Módulo de Gestão de Utilizadores (Exclusivo Super Admin) --}}
+						{{-- Módulo de Gestão de Utilizadores (Exclusivo Admin) --}}
 						<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
 							<i class="material-symbols-outlined">manage_accounts</i>
 							<span class="nav-text">Utilizadores</span>

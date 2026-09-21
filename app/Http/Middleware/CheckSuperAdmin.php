@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 /**
  * Middleware de proteção responsável por verificar se o utilizador autenticado
- * possui permissões de Super Administrador (role = 'super_admin').
+ * possui permissões de Administrador (role = 'super_admin').
  * Impede o acesso não autorizado ao módulo de Gestão de Utilizadores.
  */
 class CheckSuperAdmin
 {
     /**
-     * Manipula a requisição recebida e valida a função de Super Admin.
+     * Manipula a requisição recebida e valida a função de Admin.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -28,6 +28,6 @@ class CheckSuperAdmin
         }
 
         // Caso não possua permissão, redireciona para o dashboard com mensagem de erro explicativa
-        return redirect()->route('dashboard.main')->with('error', 'Acesso negado: Apenas o Super Administrador pode aceder à Gestão de Utilizadores.');
+        return redirect()->route('dashboard.main')->with('error', 'Acesso negado: Apenas o Administrador pode aceder à Gestão de Utilizadores.');
     }
 }

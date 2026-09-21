@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\Auth;
  * (`super_admin` / `admin` - Administradores, `secretaria` - Secretaria, `financas` - Finanças).
  * 
  * Proteção de Acesso:
- *  - Funcionalidade reservada em exclusivo aos Super Administradores via middleware ['auth', 'super_admin'].
+ *  - Funcionalidade reservada em exclusivo aos Administradores via middleware ['auth', 'super_admin'].
  *  - Proteção contra auto-eliminação da conta do utilizador em sessão no método destroy().
  */
 class userController extends Controller
 {
     /**
      * Construtor da classe.
-     * Aplica os middlewares de autenticação ('auth') e verificação de perfil Super Admin ('super_admin').
+     * Aplica os middlewares de autenticação ('auth') e verificação de perfil Admin ('super_admin').
      */
     public function __construct()
     {

@@ -48,8 +48,8 @@ class User extends Authenticatable
     ];
 
     /**
-     * Verifica se o utilizador possui o perfil de Administrador / Super Administrador (Acesso Total).
-     * O Administrador/Super Admin tem acesso a todas as definições e gestão de utilizadores.
+     * Verifica se o utilizador possui o perfil de Administrador / Administrador (Acesso Total).
+     * O Administrador/Admin tem acesso a todas as definições e gestão de utilizadores.
      *
      * @return bool
      */
@@ -88,7 +88,7 @@ class User extends Authenticatable
         switch ($this->role) {
             case 'super_admin':
             case 'admin':
-                return 'Administrador (Super Admin)';
+                return 'Administrador (Admin)';
             case 'secretaria':
                 return 'Operador - Secretaria';
             case 'financas':

@@ -9,7 +9,7 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Gestão de Utilizadores e Administradores</h4>
-                    <p class="mb-0">Painel exclusivo do Super Administrador para gestão de contas da equipa</p>
+                    <p class="mb-0">Painel exclusivo do Administrador para gestão de contas da equipa</p>
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">

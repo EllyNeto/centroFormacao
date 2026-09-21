@@ -1,4 +1,4 @@
-# Documentação do Processo de Autenticação & Níveis de Acesso Super Admin
+# Documentação do Processo de Autenticação & Níveis de Acesso Admin
 
 Este documento descreve detalhadamente a arquitetura de autenticação, níveis de acesso, gestão de utilizadores e regras de auditoria implementadas na plataforma **Centro de Formação**.
 
@@ -9,7 +9,7 @@ Este documento descreve detalhadamente a arquitetura de autenticação, níveis 
 A plataforma **Centro de Formação** utiliza um modelo de autenticação protegido baseado em sessões seguras do Laravel, complementado por um sistema de papéis (**Roles**) para controlo de acesso baseado em funções (RBAC).
 
 ### Níveis de Acesso (Roles)
-1. **Super Administrador (`super_admin`)**:
+1. **Administrador (`super_admin`)**:
    - Possui **permissões totais** no sistema.
    - É a única função autorizada a aceder ao módulo de **Gestão de Utilizadores** (`/user/index`, `/user/create`, etc.).
    - Pode criar, editar, desativar e eliminar contas de outros administradores e operadores.
@@ -19,16 +19,16 @@ A plataforma **Centro de Formação** utiliza um modelo de autenticação proteg
 
 ---
 
-## 2. Credenciais Iniciais do Super Administrador
+## 2. Credenciais Iniciais do Administrador
 
-Para o primeiro acesso do sistema, foi criada via Seeder a conta mestra do Super Administrador:
+Para o primeiro acesso do sistema, foi criada via Seeder a conta mestra do Administrador:
 
 - **E-mail**: `admin@centro.com`
 - **Palavra-passe**: `password123`
 - **Perfil (`role`)**: `super_admin`
 - **Estado**: `true` (Ativo)
 
-> ⚠️ **Recomendação de Segurança**: Após o primeiro acesso, a palavra-passe do Super Admin pode ser alterada no módulo de utilizadores.
+> ⚠️ **Recomendação de Segurança**: Após o primeiro acesso, a palavra-passe do Admin pode ser alterada no módulo de utilizadores.
 
 ---
 
@@ -48,14 +48,14 @@ Para o primeiro acesso do sistema, foi criada via Seeder a conta mestra do Super
 
 ---
 
-## 4. Passo a Passo: Como o Super Admin Adiciona Novos Administradores
+## 4. Passo a Passo: Como o Admin Adiciona Novos Administradores
 
-1. Efetue login na plataforma com a conta de **Super Administrador** (`admin@centro.com`).
+1. Efetue login na plataforma com a conta de **Administrador** (`admin@centro.com`).
 2. No menu lateral principal (Sidebar), clique na secção **"Utilizadores"** -> **"Adicionar Novo Admin"** (ou aceda diretamente a `/user/create`).
 3. Preencha o formulário com os dados do novo elemento:
    - **Nome Completo**: Nome do operador/administrador.
    - **Endereço de E-mail**: E-mail único de acesso.
-   - **Perfil / Função de Acesso**: Selecione **"Administrador / Operador Normal"** (`admin`) ou **"Super Administrador"** (`super_admin`).
+   - **Perfil / Função de Acesso**: Selecione **"Administrador / Operador Normal"** (`admin`) ou **"Administrador"** (`super_admin`).
    - **Palavra-passe** e **Confirmação**.
 4. Clique em **"Cadastrar Utilizador"**.
 5. O novo utilizador fica imediatamente apto a entrar no sistema com as suas credenciais.
@@ -71,7 +71,7 @@ O modelo Eloquent `User` contém a definição do fillable e dois métodos auxil
 
 ### 5.2. Middleware `CheckSuperAdmin` (`app/Http/Middleware/CheckSuperAdmin.php`)
 - Intercepta requisições dirigidas às rotas do grupo `super_admin`.
-- Valida se o utilizador em sessão é Super Admin. Caso contrário, interrompe o acesso e redireciona para a Dashboard com uma mensagem de aviso.
+- Valida se o utilizador em sessão é Admin. Caso contrário, interrompe o acesso e redireciona para a Dashboard com uma mensagem de aviso.
 
 ```php
 // Registo no Kernel HTTP (app/Http/Kernel.php)
@@ -103,10 +103,10 @@ O modelo Eloquent `User` contém a definição do fillable e dois métodos auxil
 | :--- | :--- |
 | `database/migrations/2026_09_20_120000_add_role_to_users_table.php` | Migração da coluna `role` e `status` na tabela `users`. |
 | `app/Models/User.php` | Modelo User atualizado com métodos `isSuperAdmin()` e `isAdmin()`. |
-| `database/seeds/UserSeeder.php` | Seeder da conta inicial do Super Administrador. |
-| `app/Http/Middleware/CheckSuperAdmin.php` | Middleware de proteção de rotas exclusivas do Super Admin. |
+| `database/seeds/UserSeeder.php` | Seeder da conta inicial do Administrador. |
+| `app/Http/Middleware/CheckSuperAdmin.php` | Middleware de proteção de rotas exclusivas do Admin. |
 | `app/Http/Controllers/userController.php` | Controlador CRUD de gestão de utilizadores. |
-| `resources/views/admin/user/index.blade.php` | Lista de utilizadores para o Super Admin. |
+| `resources/views/admin/user/index.blade.php` | Lista de utilizadores para o Admin. |
 | `resources/views/admin/user/create/index.blade.php` | Formulário de cadastro de novos administradores. |
 | `resources/views/auth/login.blade.php` | Nova interface de login personalizada **Centro de Formação**. |
 | `resources/views/auth/register.blade.php` | Tela de bloqueio de registo público com aviso institucional. |

@@ -13,7 +13,7 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Adicionar Novo Administrador</h4>
-                    <p class="mb-0">Registo de novos elementos de gestão da instituição pelo Super Admin</p>
+                    <p class="mb-0">Registo de novos elementos de gestão da instituição pelo Admin</p>
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
@@ -67,7 +67,7 @@
                                     <label for="role" class="form-label text-primary font-w600">Perfil / Função de Acesso <span class="text-danger">*</span></label>
                                     <select id="role" name="role" class="form-control" required>
                                         <option value="">Selecione a função...</option>
-                                        <option value="super_admin" {{ old('role') == 'super_admin' ? 'selected' : '' }}>Administrador (Super Administrador - Acesso Total)</option>
+                                        <option value="super_admin" {{ old('role') == 'super_admin' ? 'selected' : '' }}>Administrador (Administrador - Acesso Total)</option>
                                         <option value="secretaria" {{ old('role') == 'secretaria' ? 'selected' : '' }}>Operador — Secretaria (Inscrições, Formandos, Cursos, Turmas)</option>
                                         <option value="financas" {{ old('role') == 'financas' ? 'selected' : '' }}>Operador — Finanças (Pagamentos, Faturas e Saldos)</option>
                                     </select>
