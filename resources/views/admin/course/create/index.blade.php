@@ -60,7 +60,7 @@
                                     {{-- Campo: Estado --}}
                                     <div class="mb-3">
                                         <label for="status" class="form-label text-primary">Estado <span class="text-danger">*</span></label>
-                                        <select id="status" name="status" class="default-select wide form-control" required>
+                                        <select id="status" name="status" class="form-control" required>
                                             <option value="1" selected>Activo</option>
                                             <option value="0">Desativo</option>
                                         </select>
@@ -77,7 +77,7 @@
 
                         {{-- Rodapé do cartão com os botões de ação --}}
                         <div class="card-footer text-end">
-                            <a href="{{ route('course.index') }}" class="btn btn-danger light me-2">Cancelar</a>
+                            {{-- <a href="{{ route('course.index') }}" class="btn btn-danger light me-2">Cancelar</a> --}}
                             <button type="submit" class="btn btn-primary">Salvar Curso</button>
                         </div>
                     </form>

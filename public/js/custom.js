@@ -177,8 +177,7 @@ var Akademi  = function(){
 	   setTimeout(() => {
 		   if ($(window).width() <= 1400) { 
 			   jQuery('.wallet-open').removeClass('active');
-		   }else{
-			   jQuery('.wallet-open').addClass('active');
+			   jQuery('.wallet-bar').removeClass('active');
 		   }
 	   }, 500);
    }
@@ -449,9 +448,9 @@ var Akademi  = function(){
    
    var handelBootstrapSelect = function(){
 	   /* Bootstrap Select box function by  = bootstrap-select.min.js */ 
-	   if(jQuery('select').length > 0){
+	   if(jQuery('select.use-selectpicker').length > 0){
 	   
-		   jQuery('select').selectpicker();
+		   jQuery('select.use-selectpicker').selectpicker();
 	   /* Bootstrap Select box function by  = bootstrap-select.min.js end*/
 	   }
    }

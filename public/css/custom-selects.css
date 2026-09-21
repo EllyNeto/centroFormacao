@@ -1,0 +1,126 @@
+/* Custom Styles for Clean White Native and Dynamic Select Elements */
+select,
+select.form-control,
+select.custom-select-grey,
+.form-group select.form-control,
+select[name="gender"],
+select#gender,
+#gender,
+select[name="course_id"],
+select#course_id,
+#course_id,
+select[name="payment_method"],
+select#payment_method,
+#payment_method,
+select[name="currency"],
+select#currency,
+#currency,
+.bootstrap-select button[data-id="gender"],
+button[data-id="gender"],
+.bootstrap-select button[data-id="course_id"],
+button[data-id="course_id"],
+.bootstrap-select button[data-id="payment_method"],
+button[data-id="payment_method"],
+.bootstrap-select button[data-id="currency"],
+button[data-id="currency"],
+.bootstrap-select > button.dropdown-toggle,
+.bootstrap-select .btn-light,
+.nice-select {
+    background-color: #ffffff !important; /* Clean white background */
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important; /* Clean neutral border */
+    color: #1f2937 !important; /* Dark legible text */
+    border-radius: 0.5rem !important; /* Soft rounded corners */
+    padding: 0.65rem 2.5rem 0.65rem 1rem !important;
+    height: 48px !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    line-height: 1.5 !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%234b5563' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 1rem center !important;
+    background-size: 1.25em 1.25em !important;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out !important;
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+select:hover,
+select.form-control:hover,
+select[name="gender"]:hover,
+select#gender:hover,
+#gender:hover,
+button[data-id="gender"]:hover,
+select[name="course_id"]:hover,
+select#course_id:hover,
+#course_id:hover,
+button[data-id="course_id"]:hover,
+select[name="payment_method"]:hover,
+select#payment_method:hover,
+#payment_method:hover,
+button[data-id="payment_method"]:hover,
+select[name="currency"]:hover,
+select#currency:hover,
+#currency:hover,
+button[data-id="currency"]:hover,
+.bootstrap-select > button.dropdown-toggle:hover {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    border-color: #9ca3af !important;
+}
+
+select:focus,
+select.form-control:focus,
+select[name="gender"]:focus,
+select#gender:focus,
+#gender:focus,
+button[data-id="gender"]:focus,
+select[name="course_id"]:focus,
+select#course_id:focus,
+#course_id:focus,
+button[data-id="course_id"]:focus,
+select[name="payment_method"]:focus,
+select#payment_method:focus,
+#payment_method:focus,
+button[data-id="payment_method"]:focus,
+select[name="currency"]:focus,
+select#currency:focus,
+#currency:focus,
+button[data-id="currency"]:focus {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    border-color: #4f46e5 !important;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15) !important;
+    outline: none !important;
+}
+
+select option,
+select.form-control option,
+select[name="gender"] option,
+select#gender option,
+select[name="course_id"] option,
+select#course_id option {
+    background-color: #ffffff !important;
+    color: #1f2937 !important;
+    padding: 10px 14px !important;
+}
+
+/* Hide theme bootstrap-select wrapper if auto-generated on normal selects */
+div.bootstrap-select:not(.use-selectpicker) {
+    display: none !important;
+}
+
+/* Ensure native select is always displayed natively */
+select.form-control.bs-select-hidden,
+select.form-control[style*="display: none"] {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: static !important;
+}
+
+

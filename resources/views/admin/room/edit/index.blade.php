@@ -40,13 +40,13 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="code" class="form-label text-primary">Código da Turma (Não Editável)</label>
-                                        <input type="text" id="code" class="form-control" value="{{ $class->code }}" readonly disabled>
+                                        <label for="code" class="form-label text-primary">Código da Turma</label>
+                                        <input type="text" id="code" class="form-control uneditable-field" value="{{ $class->code }}" style="background-color: #e9ecef !important; cursor: not-allowed; border: 1px solid #cbd5e1;" readonly disabled>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="course_id" class="form-label text-primary">Curso Associado <span class="text-danger">*</span></label>
-                                        <select id="course_id" name="course_id" class="default-select wide form-control" required>
+                                        <select id="course_id" name="course_id" class="form-control" required>
                                             <option value="">Selecione um curso</option>
                                             @foreach($courses as $course)
                                                 <option value="{{ $course->id }}" {{ old('course_id', $class->course_id) == $course->id ? 'selected' : '' }}>{{ $course->name }}</option>
@@ -56,29 +56,12 @@
 
                                     <div class="mb-3">
                                         <label for="teacher_id" class="form-label text-primary">Formador Responsável <span class="text-danger">*</span></label>
-                                        <select id="teacher_id" name="teacher_id" class="default-select wide form-control" required>
+                                        <select id="teacher_id" name="teacher_id" class="form-control" required>
                                             <option value="">Selecione um formador</option>
                                             @foreach($teachers as $teacher)
                                                 <option value="{{ $teacher->id }}" {{ old('teacher_id', $class->teacher_id) == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
                                             @endforeach
                                         </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="student_id" class="form-label text-primary">Estudante Associado (Opcional)</label>
-                                        <select id="student_id" name="student_id" class="default-select wide form-control">
-                                            <option value="">Nenhum Estudante Associado</option>
-                                            @foreach($students as $student)
-                                                <option value="{{ $student->id }}" {{ old('student_id', $class->student_id) == $student->id ? 'selected' : '' }}>
-                                                    {{ $student->name }} (BI: {{ $student->identity_card_number }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="falta" class="form-label text-primary">Número de Faltas</label>
-                                        <input type="number" min="0" id="falta" name="falta" class="form-control" value="{{ old('falta', $class->falta ?? 0) }}">
                                     </div>
                                 </div>
 
@@ -95,7 +78,7 @@
 
                                     <div class="mb-3">
                                         <label for="shift" class="form-label text-primary">Turno <span class="text-danger">*</span></label>
-                                        <select id="shift" name="shift" class="default-select wide form-control" required>
+                                        <select id="shift" name="shift" class="form-control" required>
                                             <option value="Manhã" {{ old('shift', $class->shift) == 'Manhã' ? 'selected' : '' }}>Manhã</option>
                                             <option value="Tarde" {{ old('shift', $class->shift) == 'Tarde' ? 'selected' : '' }}>Tarde</option>
                                             <option value="Pós-Laboral" {{ old('shift', $class->shift) == 'Pós-Laboral' ? 'selected' : '' }}>Pós-Laboral</option>
@@ -109,7 +92,7 @@
 
                                     <div class="mb-3">
                                         <label for="status" class="form-label text-primary">Estado da Turma <span class="text-danger">*</span></label>
-                                        <select id="status" name="status" class="default-select wide form-control" required>
+                                        <select id="status" name="status" class="form-control" required>
                                             <option value="1" {{ old('status', $class->status) ? 'selected' : '' }}>Activa</option>
                                             <option value="0" {{ !old('status', $class->status) ? 'selected' : '' }}>Inactiva</option>
                                         </select>
@@ -148,7 +131,7 @@
                         </div>
 
                         <div class="card-footer text-end">
-                            <a href="{{ route('class.index') }}" class="btn btn-danger light me-2">Cancelar</a>
+                            {{-- <a href="{{ route('class.index') }}" class="btn btn-danger light me-2">Cancelar</a> --}}
                             <button type="submit" class="btn btn-primary">Atualizar Turma</button>
                         </div>
                     </form>

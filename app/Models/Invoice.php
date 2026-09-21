@@ -38,18 +38,20 @@ class Invoice extends Model
 
     /**
      * Relação de pertença com o modelo Enrollment (Inscrição).
+     * Inclui inscrições eliminadas logicamente (withTrashed) para auditoria.
      */
     public function enrollment()
     {
-        return $this->belongsTo(Enrollment::class, 'enrollment_id');
+        return $this->belongsTo(Enrollment::class, 'enrollment_id')->withTrashed();
     }
 
     /**
      * Relação de pertença com o modelo Course (Curso).
+     * Inclui cursos eliminados logicamente (withTrashed) para auditoria.
      */
     public function course()
     {
-        return $this->belongsTo(Course::class, 'course_id');
+        return $this->belongsTo(Course::class, 'course_id')->withTrashed();
     }
 
     /**

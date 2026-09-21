@@ -2,7 +2,7 @@
 
 @section('title', 'Dashboard')
 
-@section('wrapper_class', 'wallet-open active')
+@section('wrapper_class', 'wallet-open')
 
 @push('styles')
 	<link rel="stylesheet" href="{{asset('vendor/bootstrap-select-country/css/bootstrap-select-country.min.css')}}">

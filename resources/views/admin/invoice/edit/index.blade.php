@@ -34,51 +34,55 @@
 
                             <div class="row">
                                 <div class="col-xl-6 col-sm-6">
+                                    {{-- Inscrição Associada (Inalterável / Preenchida Automaticamente) --}}
                                     <div class="mb-3">
-                                        <label for="enrollment_id" class="form-label text-primary">Inscrição Associada <span class="text-danger">*</span></label>
-                                        <select id="enrollment_id" name="enrollment_id" class="default-select wide form-control" required>
-                                            <option value="">Selecione uma Inscrição</option>
-                                            @foreach($enrollments as $enrollment)
-                                                <option value="{{ $enrollment->id }}" 
-                                                        data-course-id="{{ $enrollment->course_id }}"
-                                                        data-course-name="{{ $enrollment->course->name ?? '' }}"
-                                                        {{ old('enrollment_id', $invoice->enrollment_id) == $enrollment->id ? 'selected' : '' }}>
-                                                    #INS-{{ sprintf('%04d', $enrollment->id) }} - {{ $enrollment->student->name ?? 'Estudante' }} ({{ $enrollment->course->name ?? 'Curso' }})
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <label for="enrollment_display" class="form-label text-primary font-w600">Inscrição Associada <span class="text-danger">*</span></label>
+                                        @php
+                                            $enrollmentObj = $invoice->enrollment;
+                                            $enrollmentText = $enrollmentObj 
+                                                ? '#INS-' . sprintf('%04d', $enrollmentObj->id) . ' - ' . ($enrollmentObj->student->name ?? 'Estudante') . ' (' . ($enrollmentObj->course->name ?? 'Curso') . ')'
+                                                : 'N/D';
+                                        @endphp
+                                        <input type="text" id="enrollment_display" class="form-control font-w600 text-dark" value="{{ $enrollmentText }}" style="background-color: #e9ecef !important; cursor: not-allowed; border: 1px solid #cbd5e1;" readonly disabled>
+                                        <input type="hidden" name="enrollment_id" value="{{ $invoice->enrollment_id }}">
                                     </div>
 
-                                    {{-- Curso Associado (Preenchido Automaticamente a partir da Inscrição) --}}
+                                    {{-- Curso Associado (Inalterável / Preenchido Automaticamente a partir da Inscrição) --}}
                                     <div class="mb-3">
-                                        <label for="course_name_display" class="form-label text-primary">Curso Associado (Automático)</label>
-                                        <input type="text" id="course_name_display" class="form-control" value="{{ $invoice->course->name ?? '' }}" readonly disabled>
-                                        <input type="hidden" name="course_id" id="course_id" value="{{ old('course_id', $invoice->course_id) }}">
+                                        <label for="course_name_display" class="form-label text-primary font-w600">Curso Associado</label>
+                                        <input type="text" id="course_name_display" class="form-control font-w600 text-dark" value="{{ $invoice->course->name ?? ($invoice->enrollment->course->name ?? 'N/D') }}" style="background-color: #e9ecef !important; cursor: not-allowed; border: 1px solid #cbd5e1;" readonly disabled>
+                                        <input type="hidden" name="course_id" id="course_id" value="{{ $invoice->course_id }}">
                                     </div>
 
+                                    {{-- Registo de Pagamento Associado (Inalterável / Preenchido Automaticamente) --}}
                                     <div class="mb-3">
-                                        <label for="payment_id" class="form-label text-primary">Registo de Pagamento Associado</label>
-                                        <select id="payment_id" name="payment_id" class="default-select wide form-control">
-                                            <option value="">Selecione um Pagamento (Opcional)</option>
-                                            @foreach($payments as $payment)
-                                                <option value="{{ $payment->id }}" 
-                                                        data-value="{{ number_format($payment->value, 2, '.', '') }}"
-                                                        {{ old('payment_id', $invoice->payment_id) == $payment->id ? 'selected' : '' }}>
-                                                    #PAG-{{ sprintf('%04d', $payment->id) }} - {{ $payment->type_of_payment }} ({{ number_format($payment->value, 2, ',', '.') }} Kz)
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <label for="payment_display" class="form-label text-primary font-w600">Registo de Pagamento Associado</label>
+                                        @php
+                                            $paymentObj = $invoice->payment;
+                                            $paymentText = $paymentObj 
+                                                ? '#PAG-' . sprintf('%04d', $paymentObj->id) . ' - ' . $paymentObj->type_of_payment . ' (' . number_format($paymentObj->value, 2, ',', '.') . ' Kz)'
+                                                : 'N/D';
+                                        @endphp
+                                        <input type="text" id="payment_display" class="form-control font-w600 text-dark" value="{{ $paymentText }}" style="background-color: #e9ecef !important; cursor: not-allowed; border: 1px solid #cbd5e1;" readonly disabled>
+                                        <input type="hidden" name="payment_id" value="{{ $invoice->payment_id }}">
                                     </div>
                                 </div>
 
                                 <div class="col-xl-6 col-sm-6">
+                                    {{-- Valor Total a Pagar (Soma dos Emolumentos) --}}
                                     <div class="mb-3">
-                                        <label for="amount_paid" class="form-label text-primary">Valor Pago (Recebido) (Kz) <span class="text-danger">*</span></label>
-                                        <input type="number" step="0.01" min="0" id="amount_paid" name="amount_paid" class="form-control" value="{{ old('amount_paid', $invoice->amount_paid) }}" required>
+                                        <label for="amount_to_pay" class="form-label text-primary font-w600">Valor a Pagar (Soma dos Emolumentos) (Kz) <span class="text-danger">*</span></label>
+                                        <input type="number" step="0.01" min="0" id="amount_to_pay" name="amount_to_pay" class="form-control font-w600" value="{{ old('amount_to_pay', $invoice->amount_to_pay) }}" required>
+                                        <small class="text-muted">Valor total cobrado pelos emolumentos.</small>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="change_display" class="form-label text-success font-w600">Troco a Devolver</label>
+                                        <label for="amount_paid" class="form-label text-primary font-w600">Valor Pago (Recebido) (Kz) <span class="text-danger">*</span></label>
+                                        <input type="number" step="0.01" min="0" id="amount_paid" name="amount_paid" class="form-control font-w600 text-primary" value="{{ old('amount_paid', $invoice->amount_paid) }}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="change_display" class="form-label text-success font-w600">Saldo a Favor / Crédito</label>
                                         <input type="text" id="change_display" class="form-control font-w600 text-success" readonly value="{{ number_format($invoice->change, 2, '.', '') }} Kz">
                                     </div>
 
@@ -88,7 +92,7 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="created_at" class="form-label text-primary">Data de Emissão (Não Editável)</label>
+                                        <label for="created_at" class="form-label text-primary">Data de Emissão</label>
                                         <input type="text" class="form-control" id="created_at" value="{{ $invoice->created_at ? $invoice->created_at->format('d/m/Y H:i') : 'N/D' }}" readonly disabled>
                                     </div>
                                 </div>
@@ -96,7 +100,7 @@
                         </div>
 
                         <div class="card-footer text-end">
-                            <a href="{{ route('invoice.index') }}" class="btn btn-danger light me-2">Cancelar</a>
+                            {{-- <a href="{{ route('invoice.index') }}" class="btn btn-danger light me-2">Cancelar</a> --}}
                             <button type="submit" class="btn btn-primary">Atualizar Fatura</button>
                         </div>
                     </form>
@@ -107,45 +111,6 @@
 </div>
 
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const enrollmentSelect  = document.getElementById('enrollment_id');
-        const courseInput       = document.getElementById('course_id');
-        const courseNameDisplay = document.getElementById('course_name_display');
-        const paymentSelect     = document.getElementById('payment_id');
-        const amountPaidInput   = document.getElementById('amount_paid');
-        const changeDisplay     = document.getElementById('change_display');
-        const remainingDisplay  = document.getElementById('remaining_display');
-
-        function updateCourseFromEnrollment() {
-            if (!enrollmentSelect) return;
-            const selectedOption = enrollmentSelect.options[enrollmentSelect.selectedIndex];
-            if (selectedOption) {
-                const courseId   = selectedOption.getAttribute('data-course-id');
-                const courseName = selectedOption.getAttribute('data-course-name');
-                if (courseId && courseInput) {
-                    courseInput.value = courseId;
-                }
-                if (courseNameDisplay && courseName) {
-                    courseNameDisplay.value = courseName;
-                }
-            }
-        }
-
-        if (enrollmentSelect) {
-            enrollmentSelect.addEventListener('change', updateCourseFromEnrollment);
-        }
-
-        if (paymentSelect) {
-            paymentSelect.addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                const paymentVal = selectedOption.getAttribute('data-value');
-                if (paymentVal !== null && paymentVal !== undefined && amountPaidInput) {
-                    amountPaidInput.value = paymentVal;
-                }
-            });
-        }
-    });
-</script>
+<script src="{{ asset('js/invoice-form.js') }}"></script>
 @endpush
 @endsection

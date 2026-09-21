@@ -13812,23 +13812,26 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 .wallet-open.active .wallet-bar {
   right: 0rem; }
 
-.wallet-open.active .wallet-bar-close {
+.wallet-open.active .wallet-bar-close,
+.wallet-bar.active ~ .wallet-bar-close {
   position: fixed;
   width: 100%;
   cursor: pointer;
   height: 100%;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.4);
   display: none;
-  z-index: 1; }
+  z-index: 998; }
   @media only screen and (max-width: 87.5rem) {
-    .wallet-open.active .wallet-bar-close {
+    .wallet-open.active .wallet-bar-close,
+    .wallet-bar.active ~ .wallet-bar-close {
       display: block;
-      z-index: 3; } }
+      z-index: 998; } }
   @media only screen and (max-width: 35.9375rem) {
-    .wallet-open.active .wallet-bar-close {
-      z-index: 3; } }
+    .wallet-open.active .wallet-bar-close,
+    .wallet-bar.active ~ .wallet-bar-close {
+      z-index: 998; } }
 
 .wallet-bar {
   position: fixed;

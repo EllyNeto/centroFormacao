@@ -422,3 +422,170 @@ table.dataTable td .btn-info {
     border-left-color: #06b6d4 !important;
     color: #cffafe !important;
 }
+
+/* Ocultação de Botões Flutuantes / Alternador de Temas / Demo / Suporte / Carrinho */
+.sidebar-right,
+.sidebar-right-trigger,
+.dlab-demo-panel,
+.dlab-demo-trigger,
+.dz-buy-now,
+.dz-support,
+.bt-buy-now,
+.bt-support,
+.support-ticket-btn,
+.at-buy-now,
+.at-support {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* ==========================================================================
+   Uniformidade Visual de Cor Única (Header Superior, Logo e Sidebar)
+   ========================================================================== */
+
+.header,
+.nav-header,
+.dlabnav,
+[data-headerbg] .header,
+[data-nav-headerbg] .nav-header,
+[data-sidebarbg] .dlabnav {
+    background-color: #4D44B5 !important;
+}
+
+/* Cor do texto e ícones do cabeçalho superior */
+.header .dashboard_bar,
+.header-left .dashboard_bar,
+.header .nav-link,
+.header-right .notification_dropdown .nav-link {
+    color: #ffffff !important;
+}
+
+.header .hamburger .line,
+.header .hamburger svg rect,
+.header .notification_dropdown svg path,
+.header .search-area svg path {
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+/* Botões Secundários em tom neutro profissional (cinza-azulado escuro) */
+.btn-secondary {
+    background-color: #64748b !important;
+    border-color: #64748b !important;
+    color: #ffffff !important;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+    background-color: #475569 !important;
+    border-color: #475569 !important;
+    color: #ffffff !important;
+}
+
+/* Estilo Personalizado para Dropdown de Ações nas Tabelas (...) */
+.table td .dropdown.custom-dropdown .dropdown-menu {
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 0.5rem 0;
+    min-width: 140px;
+    z-index: 1050;
+}
+
+.table td .dropdown.custom-dropdown .dropdown-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #475569;
+    transition: all 0.2s ease;
+}
+
+.table td .dropdown.custom-dropdown .dropdown-item:hover {
+    background-color: #f1f5f9;
+    color: #1e293b;
+}
+
+.table td .dropdown.custom-dropdown .dropdown-item.text-danger:hover {
+    background-color: #fef2f2;
+    color: #dc2626 !important;
+}
+
+/* Suporte para Modo Escuro nos Dropdowns de Ação */
+[data-theme-version="dark"] .table td .dropdown.custom-dropdown .dropdown-menu {
+    background-color: #1e1e2d !important;
+    border-color: #334155 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme-version="dark"] .table td .dropdown.custom-dropdown .dropdown-item {
+    color: #cbd5e1 !important;
+}
+
+[data-theme-version="dark"] .table td .dropdown.custom-dropdown .dropdown-item:hover {
+    background-color: #272738 !important;
+    color: #ffffff !important;
+}
+
+[data-theme-version="dark"] .table td .dropdown.custom-dropdown .dropdown-item.text-danger:hover {
+    background-color: #450a0a !important;
+    color: #f87171 !important;
+}
+
+/* Centralização e Responsividade Total dos Dropdowns de Ações */
+.table td .dropdown.custom-dropdown,
+.custom-dropdown {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    float: none !important;
+    margin: 0 auto !important;
+}
+
+.table td.text-center .dropdown.custom-dropdown {
+    text-align: center;
+}
+
+.table td:last-child {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Evita que o container responsivo corte a visualização do menu */
+.table-responsive {
+    overflow-x: auto;
+    overflow-y: visible !important;
+}
+
+.card,
+.card-body,
+.tab-content,
+.tab-pane,
+.dataTables_wrapper,
+.dataTablesCard {
+    overflow: visible !important;
+}
+
+.table td .dropdown.custom-dropdown .dropdown-menu {
+    z-index: 1070 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Suporte Automático a Dropup (abertura para cima quando necessário) */
+.table td .dropdown.custom-dropdown.dropup .dropdown-menu,
+.table td .dropup.custom-dropdown .dropdown-menu,
+.dropup .dropdown-menu {
+    top: auto !important;
+    bottom: 100% !important;
+    margin-bottom: 0.35rem !important;
+    margin-top: 0 !important;
+    transform: none !important;
+}
+
+
+
+
+

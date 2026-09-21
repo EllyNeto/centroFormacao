@@ -1,0 +1,49 @@
+/**
+ * Global Uneditable Fields Stylesheet
+ * Estilo unificado para todos os campos inalteráveis, readonly ou disabled no Centro de Formação.
+ * Aplica fundo cinza (#e9ecef), cursor de proibição e bordas distintas.
+ */
+
+/* Qualquer input, select ou textarea com o atributo readonly, disabled ou classe uneditable-field */
+input[readonly],
+input[disabled],
+select[disabled],
+textarea[readonly],
+textarea[disabled],
+.form-control[readonly],
+.form-control[disabled],
+.form-control:read-only,
+.form-control:disabled,
+.uneditable-field,
+[readonly],
+[disabled] {
+    background-color: #e9ecef !important;
+    background-image: none !important;
+    color: #495057 !important;
+    cursor: not-allowed !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    opacity: 0.88 !important;
+}
+
+/* Estado de foco em elementos inalteráveis */
+input[readonly]:focus,
+input[disabled]:focus,
+select[disabled]:focus,
+textarea[readonly]:focus,
+textarea[disabled]:focus,
+.form-control[readonly]:focus,
+.form-control[disabled]:focus {
+    background-color: #e9ecef !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Select2 desativado */
+.select2-container--default.select2-container--disabled .select2-selection--single,
+.select2-container--default.select2-container--disabled .select2-selection--multiple {
+    background-color: #e9ecef !important;
+    cursor: not-allowed !important;
+    border-color: #cbd5e1 !important;
+}

@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Classe de migração para criar a tabela de cursos no banco de dados.
+ * Classe de migração responsável por criar a tabela principal de cursos (courses) na base de dados.
  */
 class CreateCoursesTable extends Migration
 {
@@ -17,28 +17,31 @@ class CreateCoursesTable extends Migration
     public function up()
     {
         Schema::create('courses', function (Blueprint $table) {
-            // Chave primária auto-incrementável
+            // Chave primária auto-incrementável da tabela
             $table->id();
 
-            // Nome ou título do curso (ex: Programação Web)
+            // Nome ou título do curso de formação
             $table->string('name');
 
-            // Estado do curso (ex: activo ou desaivado.)
-            $table->boolean('status')->default(true); // O curso fica ativo por padrão
+            // Estado de disponibilidade do curso (true = Ativo, false = Inativo)
+            $table->boolean('status')->default(true);
 
-            // Duração do curso em horas (inteiro)
+            // Duração total do curso em horas (número inteiro)
             $table->integer('duration');
 
-            // Descrição detalhada do programa do curso (opcional/pode ser nulo)
+            // Descrição detalhada do programa ou ementa do curso
             $table->text('description')->nullable();
 
-            // Campos de auditoria: created_at (data de criação) e updated_at (data de atualização)
+            // Suporte para remoção lógica (Soft Deletes) - adiciona a coluna deleted_at
+            $table->softDeletes();
+
+            // Campos de auditoria: created_at e updated_at
             $table->timestamps();
         });
     }
 
     /**
-     * Reverte a migração, eliminando a tabela 'courses' se ela existir.
+     * Reverte a migração, eliminando a tabela 'courses' da base de dados.
      *
      * @return void
      */

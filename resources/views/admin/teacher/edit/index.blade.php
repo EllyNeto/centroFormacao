@@ -42,27 +42,8 @@
                             @endif
 
                             <div class="row">
-                                {{-- Coluna Esquerda: Fotografia do Formador --}}
-                                <div class="col-xl-3 col-lg-4">
-                                    <label class="form-label text-primary">Fotografia do Formador</label>
-                                    <div class="avatar-upload">
-                                        <div class="avatar-preview mb-3">
-                                            @if($teacher->image)
-                                                <div id="imagePreview" style="background-image: url('{{ asset('storage/'.$teacher->image) }}'); width: 130px; height: 130px; background-size: cover; background-position: center; border-radius: 12px; border: 2px solid #e2e8f0; margin: 0 auto;"></div>
-                                            @else
-                                                <div id="imagePreview" style="background-image: url('{{ asset('images/avatar/8.jpg') }}'); width: 130px; height: 130px; background-size: cover; background-position: center; border-radius: 12px; border: 2px solid #e2e8f0; margin: 0 auto;"></div>
-                                            @endif
-                                        </div>
-                                        <div class="change-btn mt-2 mb-lg-0 mb-3">
-                                            {{-- Campo para carregar uma nova foto com pré-visualização instantânea --}}
-                                            <input type='file' class="form-control" name="image" id="imageUpload" accept="image/*" onchange="previewTeacherImage(this)">
-                                            <small class="text-muted d-block mt-1">Formatos aceites: JPG, PNG, WEBP (Máx: 2MB)</small>
-                                        </div>
-                                    </div>	
-                                </div>
-
-                                {{-- Coluna Direita: Formulário com os campos pré-preenchidos --}}
-                                <div class="col-xl-9 col-lg-8">
+                                {{-- Formulário com os campos pré-preenchidos --}}
+                                <div class="col-xl-12 col-lg-12">
                                     <div class="row">
                                         <div class="col-xl-6 col-sm-6">
                                             {{-- Campo: Nome Completo --}}
@@ -85,6 +66,16 @@
                                         </div>
 
                                         <div class="col-xl-6 col-sm-6">
+                                            {{-- Campo: Género --}}
+                                            <div class="mb-3">
+                                                <label for="gender" class="form-label text-primary">Género</label>
+                                                <select id="gender" name="gender" class="form-control" style="background-color: #ffffff !important;">
+                                                    <option value="">Selecione o género...</option>
+                                                    <option value="Masculino" {{ old('gender', $teacher->gender) == 'Masculino' ? 'selected' : '' }}>Masculino</option>
+                                                    <option value="Feminino" {{ old('gender', $teacher->gender) == 'Feminino' ? 'selected' : '' }}>Feminino</option>
+                                                    <option value="Outro" {{ old('gender', $teacher->gender) == 'Outro' ? 'selected' : '' }}>Outro</option>
+                                                </select>
+                                            </div>
                                             {{-- Campo: Número de Telefone --}}
                                             <div class="mb-3">
                                                 <label for="phone" class="form-label text-primary">Telefone</label>
@@ -100,7 +91,7 @@
                                             {{-- Campo: Estado (Ativo/Desativo) --}}
                                             <div class="mb-3">
                                                 <label for="status" class="form-label text-primary">Estado</label>
-                                                <select id="status" name="status" class="default-select wide form-control">
+                                                <select id="status" name="status" class="form-control">
                                                     <option value="1" {{ old('status', $teacher->status) ? 'selected' : '' }}>Activo</option>
                                                     <option value="0" {{ !old('status', $teacher->status) ? 'selected' : '' }}>Desativo</option>
                                                 </select>
@@ -123,28 +114,7 @@
     </div>
 </div>
 
-{{-- Script para pré-visualização da foto alterada do formador --}}
 @push('scripts')
-<script>
-	function previewTeacherImage(input) {
-		if (input.files && input.files[0]) {
-			var file = input.files[0];
-			// Verificação do tamanho máximo do ficheiro (2MB = 2 * 1024 * 1024 bytes)
-			if (file.size > 2 * 1024 * 1024) {
-				alert('A fotografia selecionada é demasiado grande! O tamanho máximo permitido é de 2MB.');
-				input.value = '';
-				return;
-			}
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				var preview = document.getElementById('imagePreview');
-				if (preview) {
-					preview.style.backgroundImage = 'url(' + e.target.result + ')';
-				}
-			}
-			reader.readAsDataURL(file);
-		}
-	}
-</script>
+<script src="{{ asset('js/teacher-form.js') }}"></script>
 @endpush
 @endsection
