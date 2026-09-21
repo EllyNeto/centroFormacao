@@ -15,7 +15,7 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <div>
                             <h4 class="card-title mb-0">Editar Inscrição: #{{ $enrollment->id }}</h4>
-                            <p class="m-0 subtitle">Atualize a fotografia, os dados do candidato e o curso pretendido</p>
+                            <p class="m-0 subtitle">Atualize a fotografia, os dados do candidato e o Curso</p>
                         </div>
                         <a href="{{ route('enrollment.index') }}" class="btn btn-secondary btn-sm">
                             <i class="fa fa-arrow-left me-1"></i> Voltar à Listagem
@@ -45,30 +45,8 @@
                             @endif
 
                             <div class="row">
-                                {{-- Coluna Esquerda: Edição e Pré-visualização da Fotografia de Perfil do Candidato --}}
-                                <div class="col-xl-3 col-lg-4 text-center mb-4 mb-lg-0">
-                                    <label class="form-label text-primary font-w600">Fotografia do Candidato</label>
-                                    <div class="avatar-upload">
-                                        {{-- Apresenta a fotografia armazenada do estudante ou a imagem padrão se nula --}}
-                                        <div class="avatar-preview mb-3">
-                                            @php
-                                                $studentImage = ($enrollment->student && $enrollment->student->image) 
-                                                    ? asset('storage/' . $enrollment->student->image) 
-                                                    : asset('images/no-img-avatar.png');
-                                            @endphp
-                                            <div id="imagePreview" style="background-image: url('{{ $studentImage }}'); width: 140px; height: 140px; background-size: cover; background-position: center; border-radius: 12px; border: 2px solid #e2e8f0; margin: 0 auto;"> 			
-                                            </div>
-                                        </div>
-                                        {{-- Campo de carregamento de novo ficheiro de imagem --}}
-                                        <div class="change-btn mt-2">
-                                            <input type="file" class="form-control" name="image" id="imageUpload" accept="image/*" onchange="previewStudentImage(this)">
-                                            <small class="text-muted d-block mt-1">Formatos: JPG, PNG, WEBP (Máx: 2MB)</small>
-                                        </div>
-                                    </div>	
-                                </div>
-
-                                {{-- Coluna Direita: Formulário editável do candidato e do curso --}}
-                                <div class="col-xl-9 col-lg-8">
+                                {{-- Formulário editável do candidato e do curso --}}
+                                <div class="col-xl-12 col-lg-12">
                                     <div class="row">
                                         {{-- Campo: Nome Completo do Formando --}}
                                         <div class="col-xl-6 col-sm-6">
@@ -115,12 +93,12 @@
                                             </div>
                                         </div>
 
-                                        {{-- Campo: Curso Pretendido --}}
+                                        {{-- Campo: Curso --}}
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
-                                                <label for="course_id" class="form-label text-primary">Curso Pretendido <span class="text-danger">*</span></label>
+                                                <label for="course_id" class="form-label text-primary">Curso <span class="text-danger">*</span></label>
                                                 <select id="course_id" name="course_id" class="form-control" style="background-color: #ffffff !important;" required>
-                                                    <option value="">Selecione o Curso Pretendido...</option>
+                                                    <option value="">Selecione o Curso...</option>
                                                     @foreach($courses as $course)
                                                         <option value="{{ $course->id }}" {{ old('course_id', $enrollment->course_id) == $course->id ? 'selected' : '' }}>
                                                             {{ $course->name }} (Cód: {{ $course->code ?? $course->id }})
@@ -144,7 +122,7 @@
                                                 <label class="form-label text-primary d-block">Estado da Inscrição</label>
                                                 <div class="mt-2">
                                                     @if($enrollment->status)
-                                                        <span class="badge badge-success light fs-14 py-2 px-3"><i class="fa fa-check-circle me-1"></i> Confirmada / Ativa</span>
+                                                        <span class="badge badge-success light fs-14 py-2 px-3"><i class="fa fa-check-circle me-1"></i> Confirmada</span>
                                                     @else
                                                         <span class="badge badge-warning light fs-14 py-2 px-3"><i class="fa fa-clock-o me-1"></i> Pendente </span>
                                                     @endif
@@ -158,7 +136,7 @@
 
                         {{-- Rodapé do Cartão com os botões de submissão --}}
                         <div class="card-footer text-end">
-                            <a href="{{ route('enrollment.index') }}" class="btn btn-danger light me-2">Cancelar</a>
+                            {{-- <a href="{{ route('enrollment.index') }}" class="btn btn-danger light me-2">Cancelar</a> --}}
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-save me-1"></i> Atualizar Inscrição
                             </button>

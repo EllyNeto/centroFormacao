@@ -90,7 +90,7 @@
                         
                         {{-- Rodapé com os botões de submissão e cancelamento --}}
                         <div class="card-footer text-end">
-                            <a href="{{ route('user.index') }}" class="btn btn-danger light me-2">Cancelar</a>
+                            {{-- <a href="{{ route('user.index') }}" class="btn btn-danger light me-2">Cancelar</a> --}}
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-save me-1"></i> Cadastrar Utilizador
                             </button>

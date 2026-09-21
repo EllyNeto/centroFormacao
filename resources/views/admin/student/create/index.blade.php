@@ -41,24 +41,8 @@
 									@endif
 
 									<div class="row">
-										{{-- Coluna Esquerda: Fotografia do Aluno --}}
-										<div class="col-xl-3 col-lg-4">
-											<label class="form-label text-primary">Fotografia do formando</label>
-											<div class="avatar-upload">
-												<div class="avatar-preview mb-3">
-													<div id="imagePreview" style="background-image: url('{{ asset('images/no-img-avatar.png') }}'); width: 130px; height: 130px; background-size: cover; background-position: center; border-radius: 12px; border: 2px solid #e2e8f0; margin: 0 auto;"> 			
-													</div>
-												</div>
-												<div class="change-btn mt-2 mb-lg-0 mb-3">
-													{{-- Campo do tipo File para seleção da imagem com pré-visualização instantânea --}}
-													<input type='file' class="form-control" name="image" id="imageUpload" accept="image/*" onchange="previewStudentImage(this)">
-													<small class="text-muted d-block mt-1">Formatos aceites: JPG, PNG, WEBP (Máx: 2MB)</small>
-												</div>
-											</div>	
-										</div>
-									
-										{{-- Coluna Direita: Dados Pessoais do formando --}}
-										<div class="col-xl-9 col-lg-8">
+										{{-- Dados Pessoais do formando --}}
+										<div class="col-xl-12 col-lg-12">
 											<div class="row">
 												<div class="col-xl-6 col-sm-6">
 													{{-- Campo: Nome Completo --}}
@@ -125,7 +109,7 @@
 							<div class="row">
 								<div class="col-xl-6 col-sm-6">
 									<div class="mb-3">
-									  <label for="exampleFormControlInput8" class="form-label text-primary">First Name<span class="required">*</span></label>
+									  <label for="exampleFormControlInput8" class="form-label text-primary">Primeiro Nome<span class="required">*</span></label>
 									  <input type="text" class="form-control" id="exampleFormControlInput8" placeholder="Mana">
 									</div>
 									<div class="mb-3">
@@ -142,7 +126,7 @@
 								
 								<div class="col-xl-6 col-sm-6">
 									<div class="mb-3">
-									  <label for="exampleFormControlInput10" class="form-label text-primary">Last Name<span class="required">*</span></label>
+									  <label for="exampleFormControlInput10" class="form-label text-primary">Apelido<span class="required">*</span></label>
 									  <input type="text" class="form-control" id="exampleFormControlInput10" placeholder="Wick">
 									</div>
 									<div class="mb-3">

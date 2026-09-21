@@ -238,7 +238,7 @@
 
                         {{-- Rodapé do cartão com os botões de ação para Salvar Pagamento --}}
                         <div class="card-footer text-end">
-                            <a href="{{ route('payment.index') }}" class="btn btn-danger light me-2">Cancelar</a>
+                            {{-- <a href="{{ route('payment.index') }}" class="btn btn-danger light me-2">Cancelar</a> --}}
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-arrow-right me-1"></i> Salvar Pagamento e Continuar para a Fatura
                             </button>

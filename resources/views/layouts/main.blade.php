@@ -104,29 +104,29 @@
 			  <div class="modal-dialog modal-dialog-center">
 				<div class="modal-content">
 				  <div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">New Student Deatils</h1>
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Detalhes do Formando</h1>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				  </div>
 				  <div class="modal-body">
 					<div class="row">
 						<div class="col-xl-6">
 							<div class="mb-3">
-							  <label for="exampleFormControlInput1" class="form-label">First Name</label>
+							  <label for="exampleFormControlInput1" class="form-label">Primeiro Nome</label>
 							  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Yatin">
 							</div>
 							<div class="mb-3">
-							  <label for="exampleFormControlInput3" class="form-label">Current Class</label>
+							  <label for="exampleFormControlInput3" class="form-label">Turma Atual</label>
 							  <input type="text" class="form-control" id="exampleFormControlInput3" placeholder="VII A">
 							</div>
 						</div>
 						<div class="col-xl-6">
 							<div class="mb-3">
-							  <label for="exampleFormControlInput2" class="form-label">Last Name</label>
+							  <label for="exampleFormControlInput2" class="form-label">Apelido</label>
 							  <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="xarma">
 							</div>
 							 <label  class="form-label d-block">Gender</label>
 							 <select class="default-select" aria-label="Default select example">
-							  <option selected>Select</option>
+							  <option selected>Selecionar</option>
 							  <option value="1">Male</option>
 							  <option value="2">Female</option>
 							  <option value="3">Other</option>
@@ -136,7 +136,7 @@
 				  </div>
 				  <div class="modal-footer">
 					<button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
+					<button type="button" class="btn btn-primary">Guardar Alterações</button>
 				  </div>
 				</div>
 			  </div>
@@ -168,8 +168,9 @@
 
 	<script src="{{asset('js/custom.min.js')}}"></script>
 	<script src="{{asset('js/dlabnav-init.js')}}"></script>
-	<script src="{{asset('js/demo.js')}}"></script>
-	<script src="{{asset('js/styleSwitcher.js')}}"></script>
+	{{-- Scripts do alternador de temas/demo desativados para remover os botões flutuantes --}}
+	{{-- <script src="{{asset('js/demo.js')}}"></script> --}}
+	{{-- <script src="{{asset('js/styleSwitcher.js')}}"></script> --}}
 
 	
 	<!-- code-highlight for Datatable-->

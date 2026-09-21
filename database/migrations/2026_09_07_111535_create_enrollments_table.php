@@ -23,7 +23,7 @@ class CreateEnrollmentsTable extends Migration
             // Chave estrangeira ligando ao estudante/candidato inscrito (student_id)
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
 
-            // Chave estrangeira ligando ao curso pretendido (course_id)
+            // Chave estrangeira ligando ao Curso (course_id)
             $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
 
             // Data e hora de registo da inscrição

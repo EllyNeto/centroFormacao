@@ -114,6 +114,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/enrollment/{id}', [enrollmentController::class, 'show'])->name('enrollment.show');
     Route::get('/enrollment/edit/{id}', [enrollmentController::class, 'edit'])->name('enrollment.edit');
     Route::put('/enrollment/update/{id}', [enrollmentController::class, 'update'])->name('enrollment.update');
+    Route::post('/enrollment/confirm/{id}', [enrollmentController::class, 'confirmPayment'])->name('enrollment.confirm');
     Route::delete('/enrollment/destroy/{id}', [enrollmentController::class, 'destroy'])->name('enrollment.destroy');
 
     /*

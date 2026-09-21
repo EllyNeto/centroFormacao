@@ -129,7 +129,7 @@
                         </div>
 
                         <div class="card-footer text-end">
-                            <a href="{{ route('class.index') }}" class="btn btn-danger light me-2">Cancelar</a>
+                            {{-- <a href="{{ route('class.index') }}" class="btn btn-danger light me-2">Cancelar</a> --}}
                             <button type="submit" class="btn btn-primary">Salvar Turma</button>
                         </div>
                     </form>

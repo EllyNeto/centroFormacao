@@ -96,7 +96,7 @@ class courseController extends Controller
         $course = Course::findOrFail($id);
 
         // Retorna a vista de edição passando os dados do curso
-        return view('course.edit.index', ['course' => $course]);
+        return view('admin.course.edit.index', ['course' => $course]);
     }
 
     /**

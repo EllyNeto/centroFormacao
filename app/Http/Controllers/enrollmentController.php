@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\Course;
+use App\Models\Payment;
 
 /**
  * =========================================================================================
@@ -85,7 +86,7 @@ class enrollmentController extends Controller
             'image.image'                   => 'O ficheiro selecionado deve ser uma imagem válida.',
             'image.mimes'                   => 'A imagem deve estar no formato JPG, JPEG, PNG ou WEBP.',
             'image.max'                     => 'A imagem não pode ter um tamanho superior a 2MB.',
-            'course_id.required'            => 'Por favor selecione o curso pretendido.',
+            'course_id.required'            => 'Por favor selecione o Curso.',
             'course_id.exists'              => 'O curso selecionado é inválido ou não existe.',
             'date.required'                 => 'A data da inscrição é de preenchimento obrigatório.',
         ]);
@@ -277,6 +278,41 @@ class enrollmentController extends Controller
 
         // Redireciona com mensagem de confirmação
         return redirect()->route('enrollment.index')->with('success', 'Inscrição eliminada com sucesso!');
+    }
+
+    /**
+     * Confirma o pagamento da inscrição com estado Pendente.
+     * Altera o estado da inscrição para Confirmada (status = 1) e gera automaticamente o pagamento correspondente.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function confirmPayment($id)
+    {
+        $enrollment = Enrollment::with(['student', 'course'])->findOrFail($id);
+
+        // Atualiza o estado da inscrição para Confirmada (status = 1)
+        $enrollment->status = 1;
+        $enrollment->save();
+
+        // Regista o pagamento associado no módulo de Pagamentos se ainda não existir
+        $existingPayment = Payment::where('enrollment_id', $enrollment->id)->first();
+
+        if (!$existingPayment) {
+            Payment::create([
+                'student_id'      => $enrollment->student_id,
+                'enrollment_id'   => $enrollment->id,
+                'type_of_payment' => 'Inscrição',
+                'value'           => 15000.00,
+                'reference'       => rand(10000000, 99999999),
+                'status'          => 1, // Concluído / Pago
+                'date'            => now(),
+                'currency'        => 'AOA',
+                'payment_method'  => 'Numerário',
+            ]);
+        }
+
+        return redirect()->route('enrollment.index')->with('success', 'Pagamento de inscrição confirmado e registado em Pagamentos!');
     }
 }
 

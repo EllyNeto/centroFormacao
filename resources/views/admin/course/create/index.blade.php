@@ -77,7 +77,7 @@
 
                         {{-- Rodapé do cartão com os botões de ação --}}
                         <div class="card-footer text-end">
-                            <a href="{{ route('course.index') }}" class="btn btn-danger light me-2">Cancelar</a>
+                            {{-- <a href="{{ route('course.index') }}" class="btn btn-danger light me-2">Cancelar</a> --}}
                             <button type="submit" class="btn btn-primary">Salvar Curso</button>
                         </div>
                     </form>

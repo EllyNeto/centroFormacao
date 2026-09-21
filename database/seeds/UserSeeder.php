@@ -29,25 +29,25 @@ class UserSeeder extends Seeder
         );
 
         // 2. Conta do Operador da Secretaria (Inscrições, Formandos, Turmas, Cursos)
-        User::updateOrCreate(
-            ['email' => 'secretaria@centro.com'],
-            [
-                'name'     => 'Operador da Secretaria',
-                'password' => Hash::make('password123'),
-                'role'     => 'secretaria',
-                'status'   => true,
-            ]
-        );
+        // User::updateOrCreate(
+        //     ['email' => 'secretaria@centro.com'],
+        //     [
+        //         'name'     => 'Operador da Secretaria',
+        //         'password' => Hash::make('password123'),
+        //         'role'     => 'secretaria',
+        //         'status'   => true,
+        //     ]
+        // );
 
         // 3. Conta do Operador das Finanças (Pagamentos, Faturas e Saldos)
-        User::updateOrCreate(
-            ['email' => 'financas@centro.com'],
-            [
-                'name'     => 'Operador das Finanças',
-                'password' => Hash::make('password123'),
-                'role'     => 'financas',
-                'status'   => true,
-            ]
-        );
+        // User::updateOrCreate(
+        //     ['email' => 'financas@centro.com'],
+        //     [
+        //         'name'     => 'Operador das Finanças',
+        //         'password' => Hash::make('password123'),
+        //         'role'     => 'financas',
+        //         'status'   => true,
+        //     ]
+        // );
     }
 }

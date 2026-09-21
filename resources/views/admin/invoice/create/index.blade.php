@@ -123,7 +123,7 @@
                         </div>
 
                         <div class="card-footer text-end">
-                            <a href="{{ route('payment.index') }}" class="btn btn-danger light me-2">Cancelar</a>
+                            {{-- <a href="{{ route('payment.index') }}" class="btn btn-danger light me-2">Cancelar</a> --}}
                             <button type="submit" class="btn btn-success font-w600">
                                 <i class="fa fa-check-circle me-1"></i> Confirmar e Gerar Fatura
                             </button>

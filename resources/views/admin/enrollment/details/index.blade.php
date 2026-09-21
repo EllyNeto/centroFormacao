@@ -67,7 +67,7 @@
                                     <p class="mb-2"><strong>Duração :</strong> {{ $enrollment->course->duration ?? 'N/D' }}</p>
                                     <p class="mb-2"><strong>Estado da Inscrição:</strong> 
                                         @if($enrollment->status)
-                                            <span class="badge badge-success light">Confirmada / Ativa</span>
+                                            <span class="badge badge-success light">Confirmada</span>
                                         @else
                                             <span class="badge badge-warning light">Pendente </span>
                                         @endif
@@ -80,6 +80,14 @@
 
                     {{-- Rodapé do Cartão com botão de exclusão de inscrição --}}
                     <div class="card-footer text-end">
+                        @if(!$enrollment->status)
+                            <form action="{{ route('enrollment.confirm', $enrollment->id) }}" method="POST" style="display: inline;" class="me-2">
+                                @csrf
+                                <button type="submit" class="btn btn-success light" onclick="return confirm('Tem a certeza que deseja confirmar o pagamento desta inscrição?');">
+                                    <i class="fa fa-check-circle me-1"></i> Confirmar Pagamento
+                                </button>
+                            </form>
+                        @endif
                         <form action="{{ route('enrollment.destroy', $enrollment->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar esta inscrição?');" style="display: inline;">
                             @csrf
                             @method('DELETE')

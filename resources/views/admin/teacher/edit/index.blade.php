@@ -42,27 +42,8 @@
                             @endif
 
                             <div class="row">
-                                {{-- Coluna Esquerda: Fotografia do Formador --}}
-                                <div class="col-xl-3 col-lg-4">
-                                    <label class="form-label text-primary">Fotografia do Formador</label>
-                                    <div class="avatar-upload">
-                                        <div class="avatar-preview mb-3">
-                                            @if($teacher->image)
-                                                <div id="imagePreview" style="background-image: url('{{ asset('storage/'.$teacher->image) }}'); width: 130px; height: 130px; background-size: cover; background-position: center; border-radius: 12px; border: 2px solid #e2e8f0; margin: 0 auto;"></div>
-                                            @else
-                                                <div id="imagePreview" style="background-image: url('{{ asset('images/avatar/8.jpg') }}'); width: 130px; height: 130px; background-size: cover; background-position: center; border-radius: 12px; border: 2px solid #e2e8f0; margin: 0 auto;"></div>
-                                            @endif
-                                        </div>
-                                        <div class="change-btn mt-2 mb-lg-0 mb-3">
-                                            {{-- Campo para carregar uma nova foto com pré-visualização instantânea --}}
-                                            <input type='file' class="form-control" name="image" id="imageUpload" accept="image/*" onchange="previewTeacherImage(this)">
-                                            <small class="text-muted d-block mt-1">Formatos aceites: JPG, PNG, WEBP (Máx: 2MB)</small>
-                                        </div>
-                                    </div>	
-                                </div>
-
-                                {{-- Coluna Direita: Formulário com os campos pré-preenchidos --}}
-                                <div class="col-xl-9 col-lg-8">
+                                {{-- Formulário com os campos pré-preenchidos --}}
+                                <div class="col-xl-12 col-lg-12">
                                     <div class="row">
                                         <div class="col-xl-6 col-sm-6">
                                             {{-- Campo: Nome Completo --}}

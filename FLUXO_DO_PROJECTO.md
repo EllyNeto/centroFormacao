@@ -58,7 +58,7 @@ flowchart TD
 
 1. **Unificação do Formulário de Inscrição e Candidato (`Enrollment` + `Student`)**:
    - Os candidatos realizam primeiro a sua inscrição no sistema através do formulário de inscrição (`enrollment.create`).
-   - O formulário recolhe simultaneamente os dados pessoais do candidato (Nome completo, BI, E-mail, Telefone, Fotografia de perfil) e a seleção do Curso pretendido.
+   - O formulário recolhe simultaneamente os dados pessoais do candidato (Nome completo, BI, E-mail, Telefone, Fotografia de perfil) e a seleção do Curso.
    - **Geração Automática de Código**: O sistema cria o registo do estudante na base de dados e gera automaticamente um código numérico sequencial único (ex: `1001`, `1002`).
 
 2. **Condição para Estudante Ativo (Após Pagamento)**:
