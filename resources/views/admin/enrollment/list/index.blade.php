@@ -94,18 +94,27 @@
                                                                 </svg>
                                                             </div>
                                                             <div class="dropdown-menu dropdown-menu-end">
-                                                                <a class="dropdown-item" href="{{ route('enrollment.show', $item->id) }}">Ver Detalhes</a>
+                                                                <a class="dropdown-item" href="{{ route('enrollment.show', $item->id) }}">
+                                                                     <i class="fa fa-eye"></i>
+                                                                     Ver Detalhes
+                                                                </a>
                                                                 @if(!$item->status)
                                                                     <form action="{{ route('enrollment.confirm', $item->id) }}" method="POST">
                                                                         @csrf
                                                                         <button type="submit" class="dropdown-item text-success font-w600" onclick="return confirm('Tem a certeza que deseja confirmar o pagamento desta inscrição?');">Confirmar Pagamento</button>
                                                                     </form>
                                                                 @endif
-                                                                <a class="dropdown-item" href="{{ route('enrollment.edit', $item->id) }}">Editar</a>
+                                                                <a class="dropdown-item" href="{{ route('enrollment.edit', $item->id) }}">
+                                                                    <i class="fa fa-pencil"></i>>
+                                                                    Editar
+                                                                </a>
                                                                 <form action="{{ route('enrollment.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Tem a certeza que deseja eliminar esta inscrição?');">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" class="dropdown-item text-danger">Eliminar</button>
+                                                                    <button type="submit" class="dropdown-item text-danger">
+                                                                        <i class="fa fa-trash"></i>
+                                                                        Eliminar
+                                                                    </button>
                                                                 </form>
                                                             </div>
                                                         </div>

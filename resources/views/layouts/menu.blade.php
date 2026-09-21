@@ -243,10 +243,10 @@
 						</ul>
 					</li>
 				</ul> --}}
-				<div class="copyright">
+				{{-- <div class="copyright">
 					<p><strong>School Admission Dashboard</strong></p>
 					<p class="fs-12">Made with <span class="heart"></span> by DexignLab</p>
-				</div>
+				</div> --}}
 			</div>
         </div>
         <!--**********************************

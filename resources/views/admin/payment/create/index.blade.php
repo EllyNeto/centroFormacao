@@ -104,12 +104,12 @@
                                             <div class="row">
                                                 {{-- Emolumento: Inscrição --}}
                                                 <div class="col-md-6 mb-2">
-                                                    <div class="form-check">
+                                                    {{-- <div class="form-check">
                                                         <input class="form-check-input emolumento-check" type="checkbox" value="Inscrição" data-price="15000.00" id="emol_1">
                                                         <label class="form-check-label font-w500" for="emol_1">
                                                             Inscrição — <strong>15.000,00 Kz</strong>
                                                         </label>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
 
                                                 {{-- Emolumento: Valor do Curso --}}

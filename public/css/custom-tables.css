@@ -556,7 +556,16 @@ table.dataTable td .btn-info {
 /* Evita que o container responsivo corte a visualização do menu */
 .table-responsive {
     overflow-x: auto;
-    overflow-y: visible;
+    overflow-y: visible !important;
+}
+
+.card,
+.card-body,
+.tab-content,
+.tab-pane,
+.dataTables_wrapper,
+.dataTablesCard {
+    overflow: visible !important;
 }
 
 .table td .dropdown.custom-dropdown .dropdown-menu {
@@ -564,6 +573,18 @@ table.dataTable td .btn-info {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(0, 0, 0, 0.08);
 }
+
+/* Suporte Automático a Dropup (abertura para cima quando necessário) */
+.table td .dropdown.custom-dropdown.dropup .dropdown-menu,
+.table td .dropup.custom-dropdown .dropdown-menu,
+.dropup .dropdown-menu {
+    top: auto !important;
+    bottom: 100% !important;
+    margin-bottom: 0.35rem !important;
+    margin-top: 0 !important;
+    transform: none !important;
+}
+
 
 
 

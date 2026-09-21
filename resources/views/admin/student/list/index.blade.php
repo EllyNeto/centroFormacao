@@ -41,7 +41,7 @@
                                         <thead>
                                             <tr>
                                                 <th>#ID</th>
-                                                <th>Foto</th>
+                                                {{-- <th>Foto</th> --}}
                                                 <th>Nome</th>
                                                 <th>Género</th>
                                                 <th>E-mail</th>
@@ -56,14 +56,14 @@
                                             @forelse($students as $studentItem)
                                                 <tr>
                                                     <td><strong>#{{ $studentItem->id }}</strong></td>
-                                                    <td>
+                                                    {{-- <td> --}}
                                                         {{-- Exibição da foto do Formando em avatar circular --}}
-                                                        @if($studentItem->image)
+                                                        {{-- @if($studentItem->image)
                                                             <img src="{{ asset('storage/'.$studentItem->image) }}" alt="Foto" class="avatar avatar-sm rounded-circle">
                                                         @else
                                                             <img src="{{ asset('images/avatar/1.jpg') }}" alt="Sem Foto" class="avatar avatar-sm rounded-circle">
                                                         @endif
-                                                    </td>
+                                                    </td> --}}
                                                     <td>
                                                         {{-- Nome com link para os detalhes do Formando --}}
                                                         <a href="{{ route('student.show', $studentItem->id) }}" class="text-primary font-w600">
