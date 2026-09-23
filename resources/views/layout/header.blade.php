@@ -880,7 +880,7 @@
 													<span class="ms-2">Perfil </span>
 												</a>
 											</div>
-											<div class="card-footer text-center p-3">
+											{{--<div class="card-footer text-center p-3">
 												<form action="{{ route('logout') }}" method="POST" class="d-inline">
 													@csrf
 													<button type="submit" class="dropdown-item ai-icon btn btn-primary light w-100 border-0" style="background: none;">
@@ -888,7 +888,7 @@
 														<span class="ms-2 text-primary">Sair </span>
 													</button>
 												</form>
-											</div>
+											</div> --}}
 										</div>
 									</div>
 								</div>
