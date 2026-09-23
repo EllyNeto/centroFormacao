@@ -15,6 +15,15 @@ class CreateRoomsTable extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->string('days_of_week');
+            $table->string('shift');
+            $table->foreignId('teacher_id')->constrained();
+            $table->foreignId('course_id')->constrained();
+            $table->foreignId('student_id')->constrained();
+            $table->softDeletes();            
             $table->timestamps();
         });
     }
