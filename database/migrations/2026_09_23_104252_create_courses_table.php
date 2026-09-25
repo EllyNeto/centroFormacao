@@ -19,6 +19,7 @@ class CreateCoursesTable extends Migration
             $table->text('description');
             $table->integer('duration');
             $table->boolean('status');
+            $table->float('value');
             $table->timestamps();
         });
     }

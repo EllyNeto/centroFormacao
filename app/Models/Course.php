@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,6 +16,7 @@ class Course extends Model
         "description",
         "duration",
         "status",
+        "value",
     ];
 
     protected $cast = [

@@ -10,78 +10,70 @@
 						</a>
 					</li>
 
-					{{-- Seção Módulo de Curso 
+					{{-- Seção Módulo de Curso--}} 
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">book</i>
 						<span class="nav-text">Curso</span>
 					</a>
 						<ul aria-expanded="false">
-							{{-- Link para a listagem de cursos 
-							<li><a href="{{ route('course.index') }}">Listar</a></li>
-							{{-- Link para criação de novo curso 
-							<li><a href="{{ route('course.create') }}">Adicionar novo</a></li>
+							{{-- Link para a listagem de cursos --}} 
+							<li><a href="#">Listar</a></li>
+							{{-- Link para criação de novo curso --}}
+							<li><a href="#">Adicionar novo</a></li>
 						</ul>
 					</li>
-					{{-- Seção Módulo de Formador 
+					{{-- Seção Módulo de Formador --}}
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">person</i>
 						<span class="nav-text">Formador</span>
 					</a>
 					<ul aria-expanded="false">
-						{{-- Link para a listagem de formadores 
-						<li><a href="{{ route('teacher.index') }}">Listar</a></li>
-						{{-- Link para registo de novo formador 
-						<li><a href="{{ route('teacher.create') }}">Adicionar novo</a></li>
+						{{-- Link para a listagem de formadores --}}
+						<li><a href="#">Listar</a></li>
+						{{-- Link para registo de novo formador --}}
+						<li><a href="#">Adicionar novo</a></li>
 					</ul>
 					</li>
-					{{-- Seção Módulo de Turma 
+					{{-- Seção Módulo de Turma --}}
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">groups</i>
 						<span class="nav-text">Turma</span>
 					</a>
 						<ul aria-expanded="false">
-							{{-- Link para a listagem de turmas 
-							<li><a href="{{ route('class.index') }}">Listar</a></li>
-							{{-- Link para criação de nova turma 
-							<li><a href="{{ route('class.create') }}">Adicionar novo</a></li>
+							{{-- Link para a listagem de turmas --}}
+							<li><a href="#">Listar</a></li>
+							{{-- Link para criação de nova turma --}}
+							<li><a href="#">Adicionar novo</a></li>
 						</ul>
 					</li>
-					{{-- Seção Módulo de Estudante 
-					<li><a href="{{ route('student.index') }}">
+					{{-- Seção Módulo de Estudante --}}
+					<li><a href="#">
 						<i class="material-symbols-outlined">school</i>
 						<span class="nav-text">Formando</span>
 					</a>
-					{{-- Seção Módulo de pagamento 
+					{{-- Seção Módulo de pagamento --}}
 				<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
 					<i class="material-symbols-outlined">payments</i>
 					<span class="nav-text">Pagamento</span>
 				</a>
 				<ul aria-expanded="false">
-					{{-- Link para a listagem de pagamentos 
-					<li><a href="{{ route('payment.index') }}">Listar</a></li>
-					{{-- Link para criação de novo pagamento 
-					<li><a href="{{ route('payment.create') }}">Adicionar novo</a></li>
+					{{-- Link para a listagem de pagamentos --}}
+					<li><a href="#">Listar</a></li>
+					{{-- Link para criação de novo pagamento --}}
+					<li><a href="#">Adicionar novo</a></li>
 				</ul>
 			</li>
-						{{-- Seção Módulo de Inscrição 
+						{{-- Seção Módulo de Inscrição --}}
 					<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">app_registration</i>
 						<span class="nav-text">Inscrição</span>
 					</a>
 					<ul aria-expanded="false">
-						{{-- Link para a listagem de Inscriçãos 
-						<li><a href="{{ route('enrollment.index') }}">Listar</a></li>
-						{{-- Link para criação de novo Inscrição 
-						<li><a href="{{ route('enrollment.create') }}">Adicionar nova</a></li>
+						{{-- Link para a listagem de Inscriçãos --}}
+						<li><a href="#">Listar</a></li>
+						{{-- Link para criação de novo Inscrição --}}
+						<li><a href="#">Adicionar nova</a></li>
 					</ul>
-					</li>
-					{{-- <ul aria-expanded="false"> --}}
-						{{-- Link para a listagem de estudantes --}}
-						{{-- <li><a href="{{ route('student.index') }}">Listar</a></li> --}}
-						{{-- Link para criação de novo estudante --}}
-						{{-- <li><a href="{{ route('student.create') }}">Adicionar novo</a></li>
-					</ul> --}}
-					</li>
 
 
 {{-- 
