@@ -74,12 +74,12 @@
     ***********************************-->
     <div id="main-wrapper" class="show @yield('wrapper_class', '')">
 		<div class="wallet-bar-close"></div>
-		@include('layouts.header')
-		@include('layouts.menu')
+		@include('layout.header')
+		@include('layout.menu')
 		<main>
 			@yield('content')
 		</main>
-		@include('layouts.footer')
+		@include('layout.footer')
 		
 		<!--**********************************
            Support ticket button start

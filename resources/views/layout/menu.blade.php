@@ -10,28 +10,16 @@
 						</a>
 					</li>
 
-					@if(auth()->check() && auth()->user()->isSuperAdmin())
-						{{-- Módulo de Gestão de Utilizadores (Exclusivo Admin) --}}
-						<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
-							<i class="material-symbols-outlined">manage_accounts</i>
-							<span class="nav-text">Utilizadores</span>
-						</a>
-						<ul aria-expanded="false">
-							<li><a href="{{ route('user.index') }}">Listar Utilizadores</a></li>
-							<li><a href="{{ route('user.create') }}">Adicionar Novo Admin</a></li>
-						</ul>
-					</li>
-					@endif
-					{{-- Seção Módulo de Curso --}}
+					{{-- Seção Módulo de Curso--}} 
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">book</i>
 						<span class="nav-text">Curso</span>
 					</a>
 						<ul aria-expanded="false">
-							{{-- Link para a listagem de cursos --}}
-							<li><a href="{{ route('course.index') }}">Listar</a></li>
+							{{-- Link para a listagem de cursos --}} 
+							<li><a href="#">Listar</a></li>
 							{{-- Link para criação de novo curso --}}
-							<li><a href="{{ route('course.create') }}">Adicionar novo</a></li>
+							<li><a href="#">Adicionar novo</a></li>
 						</ul>
 					</li>
 					{{-- Seção Módulo de Formador --}}
@@ -41,9 +29,9 @@
 					</a>
 					<ul aria-expanded="false">
 						{{-- Link para a listagem de formadores --}}
-						<li><a href="{{ route('teacher.index') }}">Listar</a></li>
+						<li><a href="#">Listar</a></li>
 						{{-- Link para registo de novo formador --}}
-						<li><a href="{{ route('teacher.create') }}">Adicionar novo</a></li>
+						<li><a href="#">Adicionar novo</a></li>
 					</ul>
 					</li>
 					{{-- Seção Módulo de Turma --}}
@@ -53,13 +41,13 @@
 					</a>
 						<ul aria-expanded="false">
 							{{-- Link para a listagem de turmas --}}
-							<li><a href="{{ route('class.index') }}">Listar</a></li>
+							<li><a href="#">Listar</a></li>
 							{{-- Link para criação de nova turma --}}
-							<li><a href="{{ route('class.create') }}">Adicionar novo</a></li>
+							<li><a href="#">Adicionar novo</a></li>
 						</ul>
 					</li>
 					{{-- Seção Módulo de Estudante --}}
-					<li><a href="{{ route('student.index') }}">
+					<li><a href="#">
 						<i class="material-symbols-outlined">school</i>
 						<span class="nav-text">Formando</span>
 					</a>
@@ -70,9 +58,9 @@
 				</a>
 				<ul aria-expanded="false">
 					{{-- Link para a listagem de pagamentos --}}
-					<li><a href="{{ route('payment.index') }}">Listar</a></li>
+					<li><a href="#">Listar</a></li>
 					{{-- Link para criação de novo pagamento --}}
-					<li><a href="{{ route('payment.create') }}">Adicionar novo</a></li>
+					<li><a href="#">Adicionar novo</a></li>
 				</ul>
 			</li>
 						{{-- Seção Módulo de Inscrição --}}
@@ -82,18 +70,10 @@
 					</a>
 					<ul aria-expanded="false">
 						{{-- Link para a listagem de Inscriçãos --}}
-						<li><a href="{{ route('enrollment.index') }}">Listar</a></li>
+						<li><a href="#">Listar</a></li>
 						{{-- Link para criação de novo Inscrição --}}
-						<li><a href="{{ route('enrollment.create') }}">Adicionar nova</a></li>
+						<li><a href="#">Adicionar nova</a></li>
 					</ul>
-					</li>
-					{{-- <ul aria-expanded="false"> --}}
-						{{-- Link para a listagem de estudantes --}}
-						{{-- <li><a href="{{ route('student.index') }}">Listar</a></li> --}}
-						{{-- Link para criação de novo estudante --}}
-						{{-- <li><a href="{{ route('student.create') }}">Adicionar novo</a></li>
-					</ul> --}}
-					</li>
 
 
 {{-- 
