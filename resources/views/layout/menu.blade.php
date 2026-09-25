@@ -4,7 +4,7 @@
         <div class="dlabnav">
 			<div class="dlabnav-scroll">	
 				<ul class="metismenu" id="menu">
-					<li><a href="{{url('./dashboard/main')}}" >
+					<li><a href="{{url('./dashboard/index')}}" >
 							<i class="material-symbols-outlined">home</i>
 							<span class="nav-text">Dashboard</span>
 						</a>
@@ -17,7 +17,7 @@
 					</a>
 						<ul aria-expanded="false">
 							{{-- Link para a listagem de cursos --}} 
-							<li><a href="#">Listar</a></li>
+							<li><a href="{{ route('course.index')}}">Listar</a></li>
 							{{-- Link para criação de novo curso --}}
 							<li><a href="#">Adicionar novo</a></li>
 						</ul>
