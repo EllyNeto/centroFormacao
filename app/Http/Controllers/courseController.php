@@ -35,13 +35,6 @@ class courseController extends Controller
      */
     public function store(Request $request)
     {
-        // Formata o campo 'value' removendo pontos de milhar e formatando a vírgula decimal
-        if ($request->has('value')) {
-            $cleanValue = str_replace(['.', ' '], '', $request->input('value'));
-            $cleanValue = str_replace(',', '.', $cleanValue);
-            $request->merge(['value' => $cleanValue]);
-        }
-
         // Validação rigorosa dos dados recebidos no formulário
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
@@ -82,13 +75,6 @@ class courseController extends Controller
     public function update(Request $request, $id)
     {
         $course = Course::findOrFail($id);
-
-        // Sanitização dos separadores de milhar do valor monetário
-        if ($request->has('value')) {
-            $cleanValue = str_replace(['.', ' '], '', $request->input('value'));
-            $cleanValue = str_replace(',', '.', $cleanValue);
-            $request->merge(['value' => $cleanValue]);
-        }
 
         // Validação dos campos editados
         $validated = $request->validate([

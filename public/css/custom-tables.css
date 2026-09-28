@@ -1,8 +1,156 @@
 /**
- * Estilos Personalizados para Enquadramento, Responsividade e Dropdowns de Tabelas
+ * Estilos Personalizados, Identidade Visual (Azul Opaco #1E40AF) e Responsividade
  */
 
-/* Ajustes Globais do Container Principal */
+/* ==========================================================================
+   CONFIGURAÇÃO DE COR PRIMÁRIA GLOBAL DO SISTEMA - AZUL OPACO (#1E40AF)
+   ========================================================================== */
+:root {
+    --primary: #1E40AF !important;
+    --primary-hover: #1E3A8A !important;
+    --primary-dark: #172554 !important;
+}
+
+/* 1. NAV HEADER & LOGO AREA */
+.nav-header {
+    background-color: #1E40AF !important;
+}
+
+.nav-header .brand-logo {
+    background-color: #1E40AF !important;
+}
+
+/* 2. HEADER BAR (BARRA SUPERIOR DO SISTEMA) */
+.header,
+.header-content,
+[data-header-position="fixed"] .header {
+    background-color: #1E40AF !important;
+}
+
+.header .nav-link,
+.header .header-right .nav-item .nav-link,
+.header .search-area .input-group-text,
+.header .header-left .dashboard_bar {
+    color: #ffffff !important;
+}
+
+.header .search-area .form-control {
+    color: #ffffff !important;
+}
+
+.header .search-area .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Botões de Ícones da Barra Superior (Header Right Action Buttons) */
+.header-right .notification_dropdown .nav-link,
+.header-right .nav-item .nav-link,
+.header-right .dropdown .nav-link {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 0.5rem !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.header-right .notification_dropdown .nav-link:hover,
+.header-right .nav-item .nav-link:hover,
+.header-right .dropdown .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Forçar os ícones (SVG / FontAwesome / Material Icons) para Branco Limpo */
+.header-right .notification_dropdown .nav-link i,
+.header-right .notification_dropdown .nav-link svg,
+.header-right .nav-item .nav-link i,
+.header-right .nav-item .nav-link svg,
+.header-right .nav-item .material-symbols-outlined {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+.header-right .notification_dropdown .nav-link svg path,
+.header-right .nav-item .nav-link svg path {
+    stroke: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+.header-right .notification_dropdown .nav-link.bell-link svg path,
+.header-right .notification_dropdown .nav-link.dz-fullscreen svg path,
+.header-right .notification_dropdown .nav-link.dz-theme-mode svg path {
+    stroke: #ffffff !important;
+}
+
+/* 3. BARRA LATERAL / MENU PRINCIPAL (.dlabnav) */
+.dlabnav {
+    background-color: #1E40AF !important;
+}
+
+.dlabnav .dlabnav-scroll {
+    background-color: #1E40AF !important;
+}
+
+.dlabnav .metismenu {
+    background-color: #1E40AF !important;
+}
+
+.dlabnav .metismenu a {
+    color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.dlabnav .metismenu a i,
+.dlabnav .metismenu a .material-symbols-outlined {
+    color: #ffffff !important;
+}
+
+.dlabnav .metismenu li:hover > a,
+.dlabnav .metismenu li.mm-active > a,
+.dlabnav .metismenu a:hover,
+.dlabnav .metismenu a:focus {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.dlabnav .metismenu ul a {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.dlabnav .metismenu ul a:hover,
+.dlabnav .metismenu ul li.mm-active > a {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 4. BOTÕES E COMPONENTES GERAIS DO SISTEMA */
+.btn-primary {
+    background-color: #1E40AF !important;
+    border-color: #1E40AF !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #1E3A8A !important;
+    border-color: #1E3A8A !important;
+    color: #ffffff !important;
+}
+
+.text-primary {
+    color: #1E40AF !important;
+}
+
+.bg-primary {
+    background-color: #1E40AF !important;
+}
+
+.badge-primary,
+.badge.light.badge-primary {
+    background-color: rgba(30, 64, 175, 0.12) !important;
+    color: #1E40AF !important;
+}
+
+/* 5. TABELAS E DATA TABLES */
 .content-body {
     padding-bottom: 2rem;
 }
@@ -12,7 +160,6 @@
     padding-right: 1.875rem;
 }
 
-/* Responsividade de Padding em Ecrãs Pequenos (< 576px) */
 @media (max-width: 575px) {
     .content-body .container-fluid {
         padding-left: 0.9375rem;
@@ -20,7 +167,6 @@
     }
 }
 
-/* Cartão Principal da Tabela com Cantos Arredondados e Sombra Suave */
 .card {
     border-radius: 0.75rem;
     box-shadow: 0 0.25rem 0.875rem rgba(0, 0, 0, 0.04);
@@ -40,7 +186,6 @@
     overflow: visible !important;
 }
 
-/* Container Responsivo de Tabela (Permite Rolagem Horizontal Touch sem Cortar Transbordos Verticais) */
 .table-responsive {
     width: 100%;
     margin-bottom: 0;
@@ -55,7 +200,6 @@
     position: relative;
 }
 
-/* Classe dedicada para a célula TD das Acções e Dropdown (...) */
 td.action-cell,
 .action-cell {
     position: relative;
@@ -78,7 +222,6 @@ td.action-cell .btn-link:hover,
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-/* Estilos do Dropdown Flutuante Superposto a Tudo (Z-Index Elevado) */
 body > .dropdown-menu,
 .action-cell .dropdown-menu {
     z-index: 999999 !important;
@@ -101,7 +244,7 @@ body > .dropdown-menu .dropdown-item,
 
 body > .dropdown-menu .dropdown-item:hover,
 .action-cell .dropdown-menu .dropdown-item:hover {
-    color: #0d9488 !important;
+    color: #1E40AF !important;
     background-color: #f8fafc !important;
 }
 
@@ -111,7 +254,6 @@ body > .dropdown-menu .dropdown-item.text-danger:hover,
     background-color: #fff5f5 !important;
 }
 
-/* Enquadramento e Alinhamento dos Controles DataTables (Search & Length) */
 .dataTables_wrapper {
     padding: 0.5rem 0;
 }
@@ -143,8 +285,8 @@ body > .dropdown-menu .dropdown-item.text-danger:hover,
 }
 
 .dataTables_wrapper .dataTables_filter input:focus {
-    border-color: #0d9488;
-    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    border-color: #1E40AF !important;
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15) !important;
 }
 
 .dataTables_wrapper .dataTables_info {
@@ -165,12 +307,11 @@ body > .dropdown-menu .dropdown-item.text-danger:hover,
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background: #0d9488 !important;
+    background: #1E40AF !important;
     color: #ffffff !important;
-    border: 1px solid #0d9488 !important;
+    border: 1px solid #1E40AF !important;
 }
 
-/* Responsividade dos Controles DataTables em Telemóveis */
 @media (max-width: 767.98px) {
     .dataTables_wrapper .dataTables_length,
     .dataTables_wrapper .dataTables_filter {
