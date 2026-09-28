@@ -1,0 +1,27 @@
+/**
+ * Estilos Personalizados para Campos de Seleção (Dropdown Select Controls)
+ * Garante fundo branco limpo, bordas suaves e foco destacado nos selects.
+ */
+
+/* Estilização Base de Selects Nativos e DataTables Length Select */
+.dataTables_length select,
+select.default-select,
+.form-select {
+    border: 1px solid #e2e8f0 !important;
+    background-color: #ffffff !important;
+    border-radius: 0.5rem !important;
+    padding: 0.35rem 2rem 0.35rem 0.75rem !important;
+    font-size: 0.875rem !important;
+    color: #2d3748 !important;
+    outline: none !important;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* Estado de Foco (Focus State) */
+.dataTables_length select:focus,
+select.default-select:focus,
+.form-select:focus {
+    border-color: #0d9488 !important;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15) !important;
+}
