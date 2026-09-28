@@ -4,7 +4,7 @@
         <div class="dlabnav">
 			<div class="dlabnav-scroll">	
 				<ul class="metismenu" id="menu">
-					<li><a href="{{url('./dashboard/index')}}" >
+					<li><a href="{{url('/')}}" >
 							<i class="material-symbols-outlined">home</i>
 							<span class="nav-text">Dashboard</span>
 						</a>
@@ -19,7 +19,7 @@
 							{{-- Link para a listagem de cursos --}} 
 							<li><a href="{{ route('course.index')}}">Listar</a></li>
 							{{-- Link para criação de novo curso --}}
-							<li><a href="#">Adicionar novo</a></li>
+							<li><a href="{{ route('course.create')}}">Adicionar novo</a></li>
 						</ul>
 					</li>
 					{{-- Seção Módulo de Formador --}}
@@ -29,9 +29,9 @@
 					</a>
 					<ul aria-expanded="false">
 						{{-- Link para a listagem de formadores --}}
-						<li><a href="#">Listar</a></li>
+						<li><a href="{{ route('teacher.index')}}">Listar</a></li>
 						{{-- Link para registo de novo formador --}}
-						<li><a href="#">Adicionar novo</a></li>
+						<li><a href="{{ route('teacher.create')}}">Adicionar novo</a></li>
 					</ul>
 					</li>
 					{{-- Seção Módulo de Turma --}}
@@ -41,13 +41,13 @@
 					</a>
 						<ul aria-expanded="false">
 							{{-- Link para a listagem de turmas --}}
-							<li><a href="#">Listar</a></li>
+							<li><a href="{{ route('room.index')}}">Listar</a></li>
 							{{-- Link para criação de nova turma --}}
-							<li><a href="#">Adicionar novo</a></li>
+							<li><a href="{{ route('room.create')}}">Adicionar novo</a></li>
 						</ul>
 					</li>
 					{{-- Seção Módulo de Estudante --}}
-					<li><a href="#">
+					<li><a href="{{ route('student.index')}}">
 						<i class="material-symbols-outlined">school</i>
 						<span class="nav-text">Formando</span>
 					</a>
@@ -58,9 +58,9 @@
 				</a>
 				<ul aria-expanded="false">
 					{{-- Link para a listagem de pagamentos --}}
-					<li><a href="#">Listar</a></li>
+					<li><a href="{{ route('payment.index')}}">Listar</a></li>
 					{{-- Link para criação de novo pagamento --}}
-					<li><a href="#">Adicionar novo</a></li>
+					<li><a href="{{ route('payment.create')}}">Adicionar novo</a></li>
 				</ul>
 			</li>
 						{{-- Seção Módulo de Inscrição --}}
@@ -69,10 +69,10 @@
 						<span class="nav-text">Inscrição</span>
 					</a>
 					<ul aria-expanded="false">
-						{{-- Link para a listagem de Inscriçãos --}}
-						<li><a href="#">Listar</a></li>
+						{{-- Link para a listagem de Inscrições --}}
+						<li><a href="{{ route('enrollment.index')}}">Listar</a></li>
 						{{-- Link para criação de novo Inscrição --}}
-						<li><a href="#">Adicionar nova</a></li>
+						<li><a href="{{ route('enrollment.create')}}">Adicionar nova</a></li>
 					</ul>
 
 
