@@ -15,7 +15,7 @@ class courseController extends Controller
 
     public function create()
     {
-        return view('course.create');
+        return view('admin.course.create.index');
     }
 
 
