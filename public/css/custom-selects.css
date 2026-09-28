@@ -18,10 +18,11 @@ select.default-select,
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-/* Estado de Foco (Focus State) */
+/* Estado de Foco (Focus State) com a cor primária Azul Opaco #1E40AF */
 .dataTables_length select:focus,
 select.default-select:focus,
-.form-select:focus {
-    border-color: #0d9488 !important;
-    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15) !important;
+.form-select:focus,
+.form-control:focus {
+    border-color: #1E40AF !important;
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15) !important;
 }

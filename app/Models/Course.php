@@ -29,6 +29,5 @@ class Course extends Model
     // Conversão automática de tipos de dados ao ler os atributos
     protected $casts = [
         'status' => 'boolean',
-        'value'  => 'float',
     ];
 }

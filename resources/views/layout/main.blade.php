@@ -46,10 +46,56 @@
 	{{-- Estilos para Selects Nativos com Fundo Branco Limpo --}}
     <link href="{{asset('css/custom-selects.css')}}" rel="stylesheet">
 
+	<!-- Script para Persistência do Modo Escuro (Filtra de imediato para evitar oscilação ao atualizar a página) -->
+	<script>
+		function setCookie(cname, cvalue, exdays) {
+			exdays = exdays || 365;
+			var d = new Date();
+			d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+			var expires = "expires=" + d.toUTCString();
+			document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;SameSite=Lax";
+			if (cname === 'version') {
+				try { localStorage.setItem('version', cvalue); } catch(e){}
+			}
+		}
+
+		function getCookie(cname) {
+			if (cname === 'version') {
+				try {
+					var localVal = localStorage.getItem('version');
+					if (localVal) return localVal;
+				} catch(e){}
+			}
+			var name = cname + "=";
+			var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i].trim();
+				if (c.indexOf(name) === 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return cname === 'version' ? 'light' : "";
+		}
+
+		(function() {
+			var savedVersion = getCookie('version') || "{{ $_COOKIE['version'] ?? 'light' }}";
+			if (savedVersion !== 'dark' && savedVersion !== 'light') {
+				savedVersion = 'light';
+			}
+			window.themeVersion = savedVersion;
+		})();
+	</script>
+
 	@stack('styles')
 	
 </head>
 <body data-theme-version="{{ $_COOKIE['version'] ?? 'light' }}">
+	<script>
+		if (window.themeVersion) {
+			document.body.setAttribute('data-theme-version', window.themeVersion);
+		}
+	</script>
 
     <!--*******************
         Preloader start
@@ -168,6 +214,16 @@
 
 	<script src="{{asset('js/custom.min.js')}}"></script>
 	<script src="{{asset('js/dlabnav-init.js')}}"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			var currentTheme = document.body.getAttribute('data-theme-version') || getCookie('version') || 'light';
+			if (currentTheme === 'dark') {
+				jQuery('.dz-theme-mode').addClass('active');
+			} else {
+				jQuery('.dz-theme-mode').removeClass('active');
+			}
+		});
+	</script>
 	{{-- Scripts do alternador de temas/demo desativados para remover os botões flutuantes --}}
 	{{-- <script src="{{asset('js/demo.js')}}"></script> --}}
 	{{-- <script src="{{asset('js/styleSwitcher.js')}}"></script> --}}
