@@ -1,0 +1,193 @@
+/**
+ * Estilos Personalizados para Enquadramento, Responsividade e Dropdowns de Tabelas
+ */
+
+/* Ajustes Globais do Container Principal */
+.content-body {
+    padding-bottom: 2rem;
+}
+
+.content-body .container-fluid {
+    padding-left: 1.875rem;
+    padding-right: 1.875rem;
+}
+
+/* Responsividade de Padding em Ecrãs Pequenos (< 576px) */
+@media (max-width: 575px) {
+    .content-body .container-fluid {
+        padding-left: 0.9375rem;
+        padding-right: 0.9375rem;
+    }
+}
+
+/* Cartão Principal da Tabela com Cantos Arredondados e Sombra Suave */
+.card {
+    border-radius: 0.75rem;
+    box-shadow: 0 0.25rem 0.875rem rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: #ffffff;
+    margin-bottom: 1.875rem;
+    overflow: visible !important;
+}
+
+.card-header {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 1.25rem 1.5rem;
+}
+
+.card-body {
+    position: relative;
+    overflow: visible !important;
+}
+
+/* Container Responsivo de Tabela (Permite Rolagem Horizontal Touch sem Cortar Transbordos Verticais) */
+.table-responsive {
+    width: 100%;
+    margin-bottom: 0;
+    overflow-x: auto;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0.5rem;
+}
+
+.table td {
+    vertical-align: middle;
+    position: relative;
+}
+
+/* Classe dedicada para a célula TD das Acções e Dropdown (...) */
+td.action-cell,
+.action-cell {
+    position: relative;
+    vertical-align: middle;
+}
+
+td.action-cell .btn-link,
+.action-cell .btn-link {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+td.action-cell .btn-link:hover,
+.action-cell .btn-link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Estilos do Dropdown Flutuante Superposto a Tudo (Z-Index Elevado) */
+body > .dropdown-menu,
+.action-cell .dropdown-menu {
+    z-index: 999999 !important;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.18) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 0.75rem !important;
+    padding: 0.5rem 0 !important;
+    min-width: 160px;
+    background-color: #ffffff !important;
+}
+
+body > .dropdown-menu .dropdown-item,
+.action-cell .dropdown-menu .dropdown-item {
+    padding: 0.6rem 1.25rem !important;
+    font-size: 0.875rem !important;
+    color: #5e6278 !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+body > .dropdown-menu .dropdown-item:hover,
+.action-cell .dropdown-menu .dropdown-item:hover {
+    color: #0d9488 !important;
+    background-color: #f8fafc !important;
+}
+
+body > .dropdown-menu .dropdown-item.text-danger:hover,
+.action-cell .dropdown-menu .dropdown-item.text-danger:hover {
+    color: #e53e3e !important;
+    background-color: #fff5f5 !important;
+}
+
+/* Enquadramento e Alinhamento dos Controles DataTables (Search & Length) */
+.dataTables_wrapper {
+    padding: 0.5rem 0;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 1.25rem;
+}
+
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #4a5568;
+    margin-bottom: 0;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.875rem;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+    border-color: #0d9488;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 0.875rem;
+    color: #718096;
+    padding-top: 1rem;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    padding-top: 1rem;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border-radius: 0.375rem !important;
+    padding: 0.35rem 0.75rem !important;
+    margin: 0 0.15rem !important;
+    font-size: 0.875rem !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #0d9488 !important;
+    color: #ffffff !important;
+    border: 1px solid #0d9488 !important;
+}
+
+/* Responsividade dos Controles DataTables em Telemóveis */
+@media (max-width: 767.98px) {
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        float: none !important;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+}

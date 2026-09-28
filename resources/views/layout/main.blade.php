@@ -176,7 +176,7 @@
 	<!-- code-highlight for Datatable-->
 	<script src="{{asset('js/highlight.min.js')}}"></script>
 	<script src="{{asset('js/main-init.js')}}"></script>
-	
+	<script src="{{asset('js/table-dropdown.js')}}"></script>
 </body>
 
 <!-- Mirrored from http://akademi.dexignlab.com/xhtml/student.html by HTTrack Website Copier/3.x [XR&CO], Sun, 23 Aug 2026 17:14:11 GMT -->

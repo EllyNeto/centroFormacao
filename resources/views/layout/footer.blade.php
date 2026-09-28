@@ -4,7 +4,8 @@
 			
 				<div class="footer out-footer style-2">
 					<div class="copyright">
-						<p>Copyright © Designed &amp; Developed by <a href="https://dexignlab.com/" target="_blank">DexignLab</a> 2023</p>
+						<p> Centro de Formação</p>
+						<p>Desenvolvido por <a href="https://infosi.gov.ao/" target="_blank"> Infosi</a> 2026</p>
 					</div>
 				</div>
 			
