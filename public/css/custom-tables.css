@@ -222,8 +222,8 @@ td.action-cell .btn-link:hover,
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-body > .dropdown-menu,
-.action-cell .dropdown-menu {
+body:not([data-theme-version="dark"]) > .dropdown-menu.table-action-dropdown,
+body:not([data-theme-version="dark"]) .action-cell .dropdown-menu {
     z-index: 999999 !important;
     box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.18) !important;
     border: 1px solid rgba(0, 0, 0, 0.08) !important;
@@ -233,8 +233,8 @@ body > .dropdown-menu,
     background-color: #ffffff !important;
 }
 
-body > .dropdown-menu .dropdown-item,
-.action-cell .dropdown-menu .dropdown-item {
+body:not([data-theme-version="dark"]) > .dropdown-menu.table-action-dropdown .dropdown-item,
+body:not([data-theme-version="dark"]) .action-cell .dropdown-menu .dropdown-item {
     padding: 0.6rem 1.25rem !important;
     font-size: 0.875rem !important;
     color: #5e6278 !important;
@@ -242,10 +242,37 @@ body > .dropdown-menu .dropdown-item,
     transition: all 0.2s ease !important;
 }
 
-body > .dropdown-menu .dropdown-item:hover,
-.action-cell .dropdown-menu .dropdown-item:hover {
+body:not([data-theme-version="dark"]) > .dropdown-menu.table-action-dropdown .dropdown-item:hover,
+body:not([data-theme-version="dark"]) .action-cell .dropdown-menu .dropdown-item:hover {
     color: #1E40AF !important;
     background-color: #f8fafc !important;
+}
+
+/* Suporte de Modo Escuro para Dropdowns no Body e em Tabelas */
+[data-theme-version="dark"] body > .dropdown-menu.table-action-dropdown,
+[data-theme-version="dark"] .action-cell .dropdown-menu {
+    z-index: 999999 !important;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid #3f3f5a !important;
+    border-radius: 0.75rem !important;
+    padding: 0.5rem 0 !important;
+    min-width: 160px;
+    background-color: #272738 !important;
+}
+
+[data-theme-version="dark"] body > .dropdown-menu.table-action-dropdown .dropdown-item,
+[data-theme-version="dark"] .action-cell .dropdown-menu .dropdown-item {
+    padding: 0.6rem 1.25rem !important;
+    font-size: 0.875rem !important;
+    color: #cbd5e1 !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+[data-theme-version="dark"] body > .dropdown-menu.table-action-dropdown .dropdown-item:hover,
+[data-theme-version="dark"] .action-cell .dropdown-menu .dropdown-item:hover {
+    color: #ffffff !important;
+    background-color: #373752 !important;
 }
 
 body > .dropdown-menu .dropdown-item.text-danger:hover,

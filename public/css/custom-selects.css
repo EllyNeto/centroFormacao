@@ -1,28 +1,157 @@
 /**
  * Estilos Personalizados para Campos de Seleção (Dropdown Select Controls)
- * Garante fundo branco limpo, bordas suaves e foco destacado nos selects.
+ * Design idêntico à imagem de referência: fundo branco limpo, bordas arredondadas,
+ * destaque em azul suave no item ativo e opções com texto nítido.
  */
 
-/* Estilização Base de Selects Nativos e DataTables Length Select */
+/* 1. Caixa Principal do Select e DataTables Length Toggle */
 .dataTables_length select,
+.dataTables_wrapper .dataTables_length .bootstrap-select .dropdown-toggle,
 select.default-select,
-.form-select {
+.form-select,
+.bootstrap-select > .dropdown-toggle {
     border: 1px solid #e2e8f0 !important;
     background-color: #ffffff !important;
-    border-radius: 0.5rem !important;
-    padding: 0.35rem 2rem 0.35rem 0.75rem !important;
+    border-radius: 0.6rem !important;
+    padding: 0.35rem 0.75rem !important;
     font-size: 0.875rem !important;
     color: #2d3748 !important;
+    font-weight: 500 !important;
     outline: none !important;
     cursor: pointer;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
 }
 
-/* Estado de Foco (Focus State) com a cor primária Azul Opaco #1E40AF */
+/* Foco */
 .dataTables_length select:focus,
+.dataTables_wrapper .dataTables_length .bootstrap-select .dropdown-toggle:focus,
 select.default-select:focus,
-.form-select:focus,
-.form-control:focus {
+.form-select:focus {
     border-color: #1E40AF !important;
     box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15) !important;
 }
+
+/* 2. Menu Suspenso de Opções (Dropdown Container) */
+.bootstrap-select .dropdown-menu,
+.dataTables_length .bootstrap-select .dropdown-menu,
+.default-select .dropdown-menu,
+.dropdown-menu.inner,
+div.dropdown-menu.show {
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03) !important;
+    border-radius: 0.6rem !important;
+    padding: 0.4rem 0 !important;
+    min-width: 90px !important;
+    margin-top: 4px !important;
+}
+
+/* 3. Estilização dos Itens do Dropdown */
+.bootstrap-select .dropdown-menu li,
+.bootstrap-select .dropdown-menu li a,
+.bootstrap-select .dropdown-menu .dropdown-item,
+.bootstrap-select .dropdown-menu li span.text,
+.dataTables_length .bootstrap-select .dropdown-menu li span.text {
+    color: #64748b !important;
+    font-weight: 400 !important;
+    font-size: 0.875rem !important;
+    padding: 0.45rem 1rem !important;
+    transition: all 0.15s ease-in-out !important;
+    background-color: transparent !important;
+}
+
+/* Força visibilidade em todos os elementos filhos dentro do dropdown em modo claro */
+body:not([data-theme-version="dark"]) .bootstrap-select .dropdown-menu *,
+body:not([data-theme-version="dark"]) .dataTables_length .dropdown-menu *,
+body:not([data-theme-version="dark"]) .default-select .dropdown-menu * {
+    color: #64748b !important;
+}
+
+/* 4. Item Selecionado (Destaque em Fundo Azul Suave e Texto Primário) */
+.bootstrap-select .dropdown-menu li.active a,
+.bootstrap-select .dropdown-menu li.selected a,
+.bootstrap-select .dropdown-menu .dropdown-item.active,
+.bootstrap-select .dropdown-menu .dropdown-item.selected,
+.bootstrap-select .dropdown-menu li.active,
+.bootstrap-select .dropdown-menu li.selected {
+    background-color: rgba(30, 64, 175, 0.08) !important;
+    color: #1E40AF !important;
+    font-weight: 600 !important;
+}
+
+body:not([data-theme-version="dark"]) .bootstrap-select .dropdown-menu li.active *,
+body:not([data-theme-version="dark"]) .bootstrap-select .dropdown-menu li.selected * {
+    color: #1E40AF !important;
+    font-weight: 600 !important;
+}
+
+/* 5. Hover nos Itens Inativos */
+.bootstrap-select .dropdown-menu li a:hover,
+.bootstrap-select .dropdown-menu .dropdown-item:hover {
+    background-color: #f8fafc !important;
+    color: #1E40AF !important;
+}
+
+body:not([data-theme-version="dark"]) .bootstrap-select .dropdown-menu li a:hover *,
+body:not([data-theme-version="dark"]) .bootstrap-select .dropdown-menu .dropdown-item:hover * {
+    color: #1E40AF !important;
+}
+
+/* 6. Opções de Select Nativos */
+.dataTables_length select option,
+select option,
+.default-select option,
+.form-select option {
+    background-color: #ffffff !important;
+    color: #334155 !important;
+    font-size: 0.875rem !important;
+    padding: 8px 12px !important;
+}
+
+/* ==========================================================================
+   ESTILOS DE DROPDOWNS PARA MODO ESCURO (DARK MODE)
+   ========================================================================== */
+[data-theme-version="dark"] .dataTables_length select,
+[data-theme-version="dark"] .dataTables_wrapper .dataTables_length .bootstrap-select .dropdown-toggle,
+[data-theme-version="dark"] select.default-select,
+[data-theme-version="dark"] .form-select,
+[data-theme-version="dark"] .bootstrap-select > .dropdown-toggle {
+    background-color: #272738 !important;
+    border-color: #3f3f5a !important;
+    color: #f8fafc !important;
+}
+
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu,
+[data-theme-version="dark"] .dataTables_length .bootstrap-select .dropdown-menu,
+[data-theme-version="dark"] .default-select .dropdown-menu {
+    background-color: #272738 !important;
+    border-color: #3f3f5a !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu li a,
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu .dropdown-item,
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu li span.text,
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu * {
+    color: #cbd5e1 !important;
+}
+
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu li.active a,
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu li.selected a,
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu li.active span.text,
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu li.selected span.text,
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu li.active *,
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu li.selected * {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu li a:hover,
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu .dropdown-item:hover,
+[data-theme-version="dark"] .bootstrap-select .dropdown-menu li a:hover * {
+    background-color: #373752 !important;
+    color: #ffffff !important;
+}
+
+
