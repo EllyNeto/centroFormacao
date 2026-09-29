@@ -33,9 +33,10 @@
 	<!-- Style css -->
 	<link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
 	<!-- Style css -->
+	<link href="{{ asset('css/teacher-form.css') }}?v={{ time() }}" rel="stylesheet">
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
 	{{-- Folha de Estilos Personalizada para Tabelas Centralizadas e Ampliadas --}}
-    <link href="{{asset('css/custom-tables.css')}}" rel="stylesheet">
+    <link href="{{asset('css/custom-tables.css')}}?v={{ time() }}" rel="stylesheet">
 	<!-- Datatable -->
     <link href="{{asset('vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
@@ -44,58 +45,15 @@
     <!-- Custom Stylesheet -->
 	<link href="{{asset('vendor/jquery-nice-select/css/nice-select.css')}}" rel="stylesheet">
 	{{-- Estilos para Selects Nativos com Fundo Branco Limpo --}}
-    <link href="{{asset('css/custom-selects.css')}}" rel="stylesheet">
+    <link href="{{asset('css/custom-selects.css')}}?v={{ time() }}" rel="stylesheet">
 
-	<!-- Script para Persistência do Modo Escuro (Filtra de imediato para evitar oscilação ao atualizar a página) -->
-	<script>
-		function setCookie(cname, cvalue, exdays) {
-			exdays = exdays || 365;
-			var d = new Date();
-			d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-			var expires = "expires=" + d.toUTCString();
-			document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;SameSite=Lax";
-			if (cname === 'version') {
-				try { localStorage.setItem('version', cvalue); } catch(e){}
-			}
-		}
-
-		function getCookie(cname) {
-			if (cname === 'version') {
-				try {
-					var localVal = localStorage.getItem('version');
-					if (localVal) return localVal;
-				} catch(e){}
-			}
-			var name = cname + "=";
-			var decodedCookie = decodeURIComponent(document.cookie);
-			var ca = decodedCookie.split(';');
-			for (var i = 0; i < ca.length; i++) {
-				var c = ca[i].trim();
-				if (c.indexOf(name) === 0) {
-					return c.substring(name.length, c.length);
-				}
-			}
-			return cname === 'version' ? 'light' : "";
-		}
-
-		(function() {
-			var savedVersion = getCookie('version') || "{{ $_COOKIE['version'] ?? 'light' }}";
-			if (savedVersion !== 'dark' && savedVersion !== 'light') {
-				savedVersion = 'light';
-			}
-			window.themeVersion = savedVersion;
-		})();
-	</script>
+	<!-- Script de Inicialização e Persistência do Modo Escuro -->
+	<script src="{{asset('js/theme-init.js')}}?v={{ time() }}"></script>
 
 	@stack('styles')
 	
 </head>
 <body data-theme-version="{{ $_COOKIE['version'] ?? 'light' }}">
-	<script>
-		if (window.themeVersion) {
-			document.body.setAttribute('data-theme-version', window.themeVersion);
-		}
-	</script>
 
     <!--*******************
         Preloader start
@@ -205,6 +163,7 @@
 	<script src="{{asset('vendor/jquery-nice-select/js/jquery.nice-select.min.js')}}"></script>
 
 	<!-- Select2 JS -->
+	<script src="{{ asset('js/teacher-form.js') }}?v={{ time() }}"></script>
 	<script src="{{asset('vendor/select2/js/select2.full.min.js')}}"></script>
 
 	<!-- Currency Formatter Utility -->
@@ -214,19 +173,9 @@
 
 	<script src="{{asset('js/custom.min.js')}}"></script>
 	<script src="{{asset('js/dlabnav-init.js')}}"></script>
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			var currentTheme = document.body.getAttribute('data-theme-version') || getCookie('version') || 'light';
-			if (currentTheme === 'dark') {
-				jQuery('.dz-theme-mode').addClass('active');
-			} else {
-				jQuery('.dz-theme-mode').removeClass('active');
-			}
-		});
-	</script>
-	{{-- Scripts do alternador de temas/demo desativados para remover os botões flutuantes --}}
-	{{-- <script src="{{asset('js/demo.js')}}"></script> --}}
-	{{-- <script src="{{asset('js/styleSwitcher.js')}}"></script> --}}
+	 {{-- Scripts do alternador de temas/demo desativados para remover os botões flutuantes --}}
+	 {{-- <script src="{{asset('js/demo.js')}}"></script>
+	 <script src="{{asset('js/styleSwitcher.js')}}"></script>  --}}
 
 	
 	<!-- code-highlight for Datatable-->

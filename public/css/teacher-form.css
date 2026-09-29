@@ -1,0 +1,167 @@
+.akademi-card {
+	background: #ffffff;
+	border-radius: 16px;
+	border: 1px solid #EAEAEA;
+	box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.akademi-card-header {
+	padding: 24px 32px;
+	border-bottom: 1px solid #F0F0F5;
+}
+
+.akademi-title {
+	color: #2D1E5F;
+	font-size: 20px;
+	font-weight: 700;
+}
+
+.akademi-subtitle {
+	color: #7E7E8F;
+	font-size: 13px;
+}
+
+.btn-orange-back {
+	background-color: #FB7D5B;
+	color: #ffffff !important;
+	font-weight: 600;
+	font-size: 13px;
+	padding: 10px 22px;
+	border-radius: 8px;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	transition: all 0.2s ease;
+}
+
+.btn-orange-back:hover {
+	background-color: #e06646;
+	color: #ffffff !important;
+}
+
+.akademi-card-body {
+	padding: 32px;
+}
+
+.field-label {
+	color: #4D44B5;
+	font-weight: 700;
+	font-size: 14px;
+	margin-bottom: 8px;
+}
+
+.field-label .text-danger {
+	color: #FF4D4D !important;
+}
+
+.form-control-akademi {
+	height: 48px;
+	border: 1px solid #E2E8F0;
+	border-radius: 8px;
+	padding: 10px 16px;
+	font-size: 14px;
+	color: #2D1E5F;
+	background-color: #ffffff;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control-akademi:focus {
+	border-color: #4D44B5;
+	box-shadow: 0 0 0 3px rgba(77, 68, 181, 0.15);
+	outline: none;
+}
+
+.form-control-akademi::placeholder {
+	color: #A0A0B0;
+}
+
+.photo-preview-card {
+	width: 175px;
+	height: 195px;
+	background-color: #E2E8F0;
+	border-radius: 12px;
+	overflow: hidden;
+	border: 1px solid #CBD5E1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.file-input-wrapper {
+	display: inline-flex;
+	align-items: center;
+	background: #ffffff;
+	border: 1px solid #E2E8F0;
+	border-radius: 8px;
+	padding: 4px 6px;
+	cursor: pointer;
+	max-width: 200px;
+	width: 100%;
+}
+
+.file-input-btn {
+	background: #F1F5F9;
+	border: 1px solid #CBD5E1;
+	color: #475569;
+	font-size: 12px;
+	font-weight: 600;
+	padding: 5px 12px;
+	border-radius: 6px;
+	white-space: nowrap;
+}
+
+.file-input-name {
+	font-size: 12px;
+	color: #94A3B8;
+	margin-left: 8px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.akademi-card-footer {
+	padding: 20px 32px;
+	border-top: 1px solid #F0F0F5;
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+}
+
+.btn-cancel-akademi {
+	background-color: #FDE8E8;
+	color: #F87171 !important;
+	font-weight: 700;
+	font-size: 14px;
+	padding: 10px 24px;
+	border-radius: 8px;
+	border: none;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	transition: background-color 0.2s ease;
+}
+
+.btn-cancel-akademi:hover {
+	background-color: #fbd5d5;
+	color: #ef4444 !important;
+}
+
+.btn-save-akademi {
+	background-color: #4D44B5;
+	color: #ffffff !important;
+	font-weight: 700;
+	font-size: 14px;
+	padding: 10px 24px;
+	border-radius: 8px;
+	border: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	box-shadow: 0 4px 14px rgba(77, 68, 181, 0.25);
+	transition: background-color 0.2s ease;
+}
+
+.btn-save-akademi:hover {
+	background-color: #3b3398;
+}

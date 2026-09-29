@@ -92,7 +92,7 @@
 										{{-- Estado quando não existem registos no banco de dados --}}
 										<tr>
 											<td colspan="5" class="text-center py-4 text-muted">
-												<i class="fa fa-info-circle me-1"></i> Nenhum curso encontrado na base de dados.
+												<i class="fa fa-info-circle me-1"></i> Nenhum curso castrado.
 											</td>
 										</tr>
 									@endforelse

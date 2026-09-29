@@ -12,14 +12,21 @@
  * e 100% de visibilidade de todas as opções (Ver Detalhes, Editar, Eliminar).
  */
 document.addEventListener('DOMContentLoaded', function () {
-    // Intercepta o evento de abertura do dropdown no Bootstrap 5
-    $(document).on('show.bs.dropdown', '.table-responsive .dropdown, .action-cell .dropdown', function (e) {
+    // Intercepta o evento de abertura do dropdown no Bootstrap 5 apenas para células de acções de tabela
+    $(document).on('show.bs.dropdown', '.action-cell .dropdown, td .dropdown', function (e) {
         var $dropdown = $(this);
+        
+        // Ignorar seletores de paginação ou bootstrap-select para evitar mover o menu de 'Show entries'
+        if ($dropdown.hasClass('bootstrap-select') || $dropdown.closest('.dataTables_length').length) {
+            return;
+        }
+
         var $btn = $dropdown.find('[data-bs-toggle="dropdown"]');
         var $menu = $dropdown.find('.dropdown-menu');
 
         // Anexa o menu ao body apenas uma vez para sair do contexto de recorte da tabela
         if ($menu.length && !$dropdown.data('moved')) {
+            $menu.addClass('table-action-dropdown');
             $('body').append($menu);
             $dropdown.data('moved', true);
             $dropdown.data('menu-el', $menu);
@@ -58,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Intercepta o fecho do dropdown para ocultar o menu anexado ao body
-    $(document).on('hide.bs.dropdown', '.table-responsive .dropdown, .action-cell .dropdown', function (e) {
+    $(document).on('hide.bs.dropdown', '.action-cell .dropdown, td .dropdown', function (e) {
         var $dropdown = $(this);
         var $menu = $dropdown.data('menu-el');
         if ($menu) {
