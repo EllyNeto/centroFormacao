@@ -42,6 +42,26 @@ let dataSet = [
 
 (function($) {
     "use strict"
+
+    $.extend(true, $.fn.dataTable.defaults, {
+        language: {
+            processing:     "A processar...",
+            search:         "Pesquisar:",
+            lengthMenu:     "Mostrar _MENU_ registos",
+            info:           "A mostrar _START_ até _END_ de _TOTAL_ registos",
+            infoEmpty:      "A mostrar 0 até 0 de 0 registos",
+            infoFiltered:   "(filtrado de _MAX_ registos no total)",
+            loadingRecords: "A carregar...",
+            zeroRecords:    "Nenhum registo encontrado",
+            emptyTable:     "Nenhum registo encontrado",
+            paginate: {
+                first:      "Primeiro",
+                previous:   '<i class="fa-solid fa-angle-left"></i>',
+                next:       '<i class="fa-solid fa-angle-right"></i>',
+                last:       "Último"
+            }
+        }
+    });
     //example 1
     var table = $('#example').DataTable({
         createdRow: function ( row, data, index ) {

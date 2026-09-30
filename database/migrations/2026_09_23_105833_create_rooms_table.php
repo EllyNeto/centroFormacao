@@ -18,11 +18,11 @@ class CreateRoomsTable extends Migration
             $table->string('name');
             $table->time('start_time');
             $table->time('end_time');
-            $table->string('days_of_week');
+            $table->json('days_of_week');
             $table->string('shift');
+            $table->integer('max_capacity');
             $table->foreignId('teacher_id')->constrained();
             $table->foreignId('course_id')->constrained();
-            $table->foreignId('student_id')->constrained();
             $table->softDeletes();            
             $table->timestamps();
         });

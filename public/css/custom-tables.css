@@ -359,3 +359,17 @@ body > .dropdown-menu .dropdown-item.text-danger:hover,
         margin-top: 0.5rem;
     }
 }
+
+/* Hide floating support and purchase buttons from external scripts */
+#DZScript,
+.bt-buy-now,
+.bt-support-ticket,
+[class*="bt-support"],
+[class*="bt-buy"],
+[id*="dz-"],
+.at-buy-now {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}

@@ -2,49 +2,125 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room;
+use App\Models\Teacher;
+use App\Models\Course;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class roomController extends Controller
 {
+    /**
+     * Exibe a listagem de turmas.
+     */
     public function index()
     {
-        // $room = Room::all();
-        return view('admin.room.list.index');
+        $rooms = Room::with(['teacher', 'course'])->latest()->get();
+        return view('admin.room.list.index', compact('rooms'));
     }
 
-
+    /**
+     * Exibe o formulário de cadastro de nova turma.
+     */
     public function create()
     {
-        return view('admin.room.create.index');
+        $teachers = Teacher::all();
+        $courses  = Course::all();
+
+        return view('admin.room.create.index', compact('teachers', 'courses'));
     }
 
-
-    public function store(Request $required)
+    /**
+     * Valida e armazena uma nova turma na base de dados.
+     */
+    public function store(Request $request)
     {
-        return view();
+        $validatedData = $request->validate([
+            'name'         => 'required|string|max:255',
+            'start_time'   => 'required',
+            'end_time'     => 'required',
+            'days_of_week' => 'required|array',
+            'shift'        => 'required|string|max:255',
+            'teacher_id'   => 'required|exists:teachers,id',
+            'course_id'    => 'required|exists:courses,id',
+            'max_capacity' => 'required',
+        ], [
+            'name.required'         => 'O nome da turma é obrigatório.',
+            'start_time.required'   => 'A hora de início é obrigatória.',
+            'end_time.required'     => 'A hora de término é obrigatória.',
+            'days_of_week.required' => 'Selecione pelo menos um dia da semana.',
+            'shift.required'        => 'O turno é obrigatório.',
+            'teacher_id.required'   => 'Por favor, selecione um formador responsável.',
+            'course_id.required'    => 'Por favor, selecione um curso associado.',
+        ]);
+
+        Room::create($validatedData);
+
+        return redirect()->route('room.index')->with('success', 'Turma criada com sucesso!');
     }
 
-
-    public function edit($id)
-    {
-        return view();
-    }
-
-
-    public function update(Request $request)
-    {
-        return view();
-    }
-
-
+    /**
+     * Exibe os detalhes de uma turma específica.
+     */
     public function show($id)
     {
-        return view();
+        $room = Room::with(['teacher', 'course'])->findOrFail($id);
+        return view('admin.room.details.index', compact('room'));
     }
 
+    /**
+     * Exibe o formulário de edição de uma turma.
+     */
+    public function edit($id)
+    {
+        $room     = Room::findOrFail($id);
+        $teachers = Teacher::all();
+        $courses  = Course::all();
 
+        return view('admin.room.edit.index', compact('room', 'teachers', 'courses'));
+    }
+
+    /**
+     * Atualiza os dados de uma turma na base de dados.
+     */
+    public function update(Request $request, $id)
+    {
+        $room = Room::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'name'         => 'required|string|max:255',
+            'start_time'   => 'required',
+            'end_time'     => 'required',
+            'days_of_week' => 'required|array',
+            'shift'        => 'required|string|max:255',
+            'teacher_id'   => 'required|exists:teachers,id',
+            'course_id'    => 'required|exists:courses,id',
+            'max_capacity' => 'required',
+        ], [
+            'name.required'         => 'O nome da turma é obrigatório.',
+            'start_time.required'   => 'A hora de início é obrigatória.',
+            'end_time.required'     => 'A hora de término é obrigatória.',
+            'days_of_week.required' => 'Selecione pelo menos um dia da semana.',
+            'shift.required'        => 'O turno é obrigatório.',
+            'teacher_id.required'   => 'Por favor, selecione um formador responsável.',
+            'course_id.required'    => 'Por favor, selecione um curso associado.',
+        ]);
+
+        $room->update($validatedData);
+
+        return redirect()->route('room.index')->with('success', 'Turma atualizada com sucesso!');
+    }
+
+    /**
+     * Remove uma turma (Soft Delete).
+     */
     public function destroy($id)
     {
-        return view();
+        $room = Room::findOrFail($id);
+        $room->delete();
+
+        return redirect()->route('room.index')->with('success', 'Turma eliminada com sucesso!');
     }
 }
+
+

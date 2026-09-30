@@ -1,0 +1,15 @@
+/* Custom CSS styles for Room Select2 integration */
+.select2-container--default .select2-selection--single {
+    height: 40px !important;
+    border-radius: 0.375rem !important;
+    border: 1px solid #dce0ed !important;
+    padding: 5px 10px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 28px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 38px !important;
+}
