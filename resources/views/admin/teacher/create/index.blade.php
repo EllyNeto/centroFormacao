@@ -111,9 +111,7 @@
 						{{-- Rodapé com Botões de Ação --}}
 						<div class="akademi-card-footer">
 							{{-- <a href="{{ route('teacher.index') }}" class="btn-cancel-akademi">Cancelar</a> --}}
-							<button type="submit" class="btn-save-akademi">
-								<i class="fa fa-lock" style="font-size: 13px;"></i> Guardar Formador
-							</button>
+							<button type="submit" class="btn btn-primary"> Guardar Formador</button>
 						</div>
 					</form>
 				</div>

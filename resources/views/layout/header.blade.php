@@ -705,7 +705,7 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end of-visible">
 									<div class="dropdown-header">
-										<h4 class="title mb-0">Notification</h4>
+										<h4 class="title mb-0">Notificações</h4>
 										<a href="javascript:void(0);" class="d-none"><i class="flaticon-381-settings-6"></i></a>
 									</div>
                                     <div id="DZ_W_Notification1" class="widget-media dlab-scroll p-3" style="height:380px;">

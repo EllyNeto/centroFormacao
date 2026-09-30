@@ -640,8 +640,7 @@ var Akademi  = function(){
    } 
    
 	var handleSupport = function(){
-		var support = '<script id="DZScript" src="https://dzassets.s3.amazonaws.com/w3-global-2.0.js?token=W-d214ebad82232157974ddcf63ed59f84"></script>';
-		jQuery('body').append(support);
+		/* support script disabled */
 	}
    	   
 

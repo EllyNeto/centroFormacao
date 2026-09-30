@@ -87,9 +87,7 @@
 
                             {{-- Botão de Submissão --}}
                             <div class="d-flex justify-content-end gap-2">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-check me-1"></i> Guardar Curso
-                                </button>
+                                <button type="submit" class="btn btn-primary"> Guardar Curso </button>
                             </div>
                         </form>
                     </div>
