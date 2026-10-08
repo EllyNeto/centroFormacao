@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\Teacher;
 use App\Models\Course;
 use App\Models\Student;
+use App\Models\Classroom;
 use Illuminate\Http\Request;
 
 class roomController extends Controller
@@ -15,7 +16,7 @@ class roomController extends Controller
      */
     public function index()
     {
-        $rooms = Room::with(['teacher', 'course'])->latest()->get();
+        $rooms = Room::with(['teacher', 'course', 'classroom'])->latest()->get();
         return view('admin.room.list.index', compact('rooms'));
     }
 
@@ -24,10 +25,11 @@ class roomController extends Controller
      */
     public function create()
     {
-        $teachers = Teacher::all();
-        $courses  = Course::all();
+        $teachers   = Teacher::all();
+        $courses    = Course::all();
+        $classrooms = Classroom::all();
 
-        return view('admin.room.create.index', compact('teachers', 'courses'));
+        return view('admin.room.create.index', compact('teachers', 'courses', 'classrooms'));
     }
 
     /**
@@ -43,6 +45,7 @@ class roomController extends Controller
             'shift'        => 'required|string|max:255',
             'teacher_id'   => 'required|exists:teachers,id',
             'course_id'    => 'required|exists:courses,id',
+            'classroom_id' => 'nullable|exists:classrooms,id',
             'max_capacity' => 'required',
         ], [
             'name.required'         => 'O nome da turma é obrigatório.',
@@ -52,7 +55,15 @@ class roomController extends Controller
             'shift.required'        => 'O turno é obrigatório.',
             'teacher_id.required'   => 'Por favor, selecione um formador responsável.',
             'course_id.required'    => 'Por favor, selecione um curso associado.',
+            'classroom_id.exists'   => 'A sala selecionada é inválida.',
         ]);
+
+        if ($request->filled('classroom_id')) {
+            $classroom = Classroom::find($request->classroom_id);
+            if ($classroom && $classroom->capacity) {
+                $validatedData['max_capacity'] = $classroom->capacity;
+            }
+        }
 
         Room::create($validatedData);
 
@@ -64,7 +75,7 @@ class roomController extends Controller
      */
     public function show($id)
     {
-        $room = Room::with(['teacher', 'course'])->findOrFail($id);
+        $room = Room::with(['teacher', 'course', 'classroom'])->findOrFail($id);
         return view('admin.room.details.index', compact('room'));
     }
 
@@ -73,11 +84,12 @@ class roomController extends Controller
      */
     public function edit($id)
     {
-        $room     = Room::findOrFail($id);
-        $teachers = Teacher::all();
-        $courses  = Course::all();
+        $room       = Room::findOrFail($id);
+        $teachers   = Teacher::all();
+        $courses    = Course::all();
+        $classrooms = Classroom::all();
 
-        return view('admin.room.edit.index', compact('room', 'teachers', 'courses'));
+        return view('admin.room.edit.index', compact('room', 'teachers', 'courses', 'classrooms'));
     }
 
     /**
@@ -95,6 +107,7 @@ class roomController extends Controller
             'shift'        => 'required|string|max:255',
             'teacher_id'   => 'required|exists:teachers,id',
             'course_id'    => 'required|exists:courses,id',
+            'classroom_id' => 'nullable|exists:classrooms,id',
             'max_capacity' => 'required',
         ], [
             'name.required'         => 'O nome da turma é obrigatório.',
@@ -104,7 +117,15 @@ class roomController extends Controller
             'shift.required'        => 'O turno é obrigatório.',
             'teacher_id.required'   => 'Por favor, selecione um formador responsável.',
             'course_id.required'    => 'Por favor, selecione um curso associado.',
+            'classroom_id.exists'   => 'A sala selecionada é inválida.',
         ]);
+
+        if ($request->filled('classroom_id')) {
+            $classroom = Classroom::find($request->classroom_id);
+            if ($classroom && $classroom->capacity) {
+                $validatedData['max_capacity'] = $classroom->capacity;
+            }
+        }
 
         $room->update($validatedData);
 
@@ -122,5 +143,3 @@ class roomController extends Controller
         return redirect()->route('room.index')->with('success', 'Turma eliminada com sucesso!');
     }
 }
-
-

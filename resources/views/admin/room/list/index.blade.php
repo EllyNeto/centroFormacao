@@ -39,6 +39,7 @@
 										<th>Nome da Turma</th>
 										<th>Curso</th>
 										<th>Formador</th>
+										<th>Sala</th>
 										<th>Turno</th>
 										<th>Horário</th>
 										<th class="text-end">Acções</th>
@@ -51,6 +52,13 @@
 											<td><strong>{{ $room->name }}</strong></td>
 											<td>{{ $room->course->name ?? 'N/A' }}</td>
 											<td>{{ $room->teacher->name ?? 'N/A' }}</td>
+											<td>
+												@if($room->classroom)
+													<span class="badge light badge-success">{{ $room->classroom->name }} Sala {{ $room->classroom->number_of_classroom }}</span>
+												@else
+													<span class="text-muted">Sem sala</span>
+												@endif
+											</td>
 											<td>
 												<span class="badge light badge-info">{{ $room->shift }}</span>
 											</td>

@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Listar Inscrições')
+@section('title', 'Listar Salas')
 
 @section('content')
 <div class="content-body">
@@ -10,11 +10,11 @@
 				<div class="card" id="accordion-four">
 					<div class="card-header flex-wrap d-flex justify-content-between px-4 py-3 align-items-center">
 						<div>
-							<h4 class="card-title mb-1">Gestão de Candidaturas</h4>
-							<p class="m-0 subtitle text-muted">Listagem dos candidatos e pré-inscrições registadas no sistema</p>
+							<h4 class="card-title mb-1">Gestão de Salas</h4>
+							<p class="m-0 subtitle text-muted">Listagem das salas de aula registadas no sistema</p>
 						</div>
-						<a href="{{ route('enrollment.create') }}" class="btn btn-primary btn-sm">
-							<i class="fa fa-plus me-1"></i> Nova Candidatura
+						<a href="{{ route('classroom.create') }}" class="btn btn-primary btn-sm">
+							<i class="fa fa-plus me-1"></i> Adicionar Nova Sala
 						</a>
 					</div>
 
@@ -30,37 +30,17 @@
 							<table id="example4" class="display table style-1 custom-table" style="min-width: 845px; width: 100%;">
 								<thead>
 									<tr>
-										<th>ID</th>
-										<th>Foto</th>
-										<th>Nome</th>
-										<th>Curso</th>
-										<th>Estado</th>
+										<th>Número da Sala</th>
+										<th>Capacidade</th>
 										<th class="text-end">Acções</th>
 									</tr>
 								</thead>
 								<tbody>
-									@forelse ($enrollments as $enrollment)
+									@forelse ($classrooms as $classroom)
 										<tr>
-											<td>
-												<div class="d-flex align-items-center">
-													<img src="{{ $enrollment->image ? asset('storage/' . $enrollment->image) : asset('images/no-img-avatar.png') }}" 
-														 class="rounded-circle avatar avatar-md" alt="{{ $enrollment->name }}" 
-														 style="width: 45px; height: 45px; object-fit: cover; border: 2px solid #e2e8f0;">
-												</div>
-											</td>
-											<td>
-												<strong>{{ $enrollment->name }}</strong>
-											</td>
-											<td>{{ $enrollment->course->name ?? 'N/A' }}</td>
-											<td>
-												@php
-													$badgeClass = 'badge-warning';
-													if ($enrollment->status === 'Pago') $badgeClass = 'badge-info';
-													elseif ($enrollment->status === 'Cancelado') $badgeClass = 'badge-danger';
-												@endphp
-												<span class="badge light {{ $badgeClass }}">{{ $enrollment->status }}</span>
-											</td>
-
+											<td><span class="badge light badge-primary">Sala {{ $classroom->number_of_classroom }}</span></td>
+											<td>{{ $classroom->capacity ? $classroom->capacity . ' alunos' : 'N/A' }}</td>
+											
 											<td class="text-end action-cell">
 												<div class="dropdown dropup ms-auto text-end c-pointer">
 													<div class="btn-link" data-bs-toggle="dropdown" data-bs-placement="top" aria-expanded="false" role="button">
@@ -74,9 +54,9 @@
 														</svg>
 													</div>
 													<div class="dropdown-menu dropdown-menu-end">
-														<a class="dropdown-item" href="{{ route('enrollment.show', $enrollment->id) }}">Ver Detalhes</a>
-														<a class="dropdown-item" href="{{ route('enrollment.edit', $enrollment->id) }}">Editar</a>
-														<form action="{{ route('enrollment.destroy', $enrollment->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem a certeza que deseja eliminar esta candidatura?')">
+														<a class="dropdown-item" href="{{ route('classroom.show', $classroom->id) }}">Ver Detalhes</a>
+														<a class="dropdown-item" href="{{ route('classroom.edit', $classroom->id) }}">Editar</a>
+														<form action="{{ route('classroom.destroy', $classroom->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem a certeza que deseja eliminar esta sala?')">
 															@csrf
 															@method('DELETE')
 															<button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">Eliminar</button>
@@ -87,8 +67,8 @@
 										</tr>
 									@empty
 										<tr>
-											<td colspan="7" class="text-center py-4 text-muted">
-												<i class="fa fa-info-circle me-1"></i> Nenhuma candidatura registada.
+											<td colspan="6" class="text-center py-4 text-muted">
+												<i class="fa fa-info-circle me-1"></i> Nenhuma sala cadastrada.
 											</td>
 										</tr>
 									@endforelse

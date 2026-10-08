@@ -7,32 +7,31 @@ use Illuminate\Support\Facades\Schema;
 class CreateEnrollmentsTable extends Migration
 {
     /**
-     * Executa a criação da tabela 'enrollments' (Inscrições/Matrículas).
+     * Executa a criação da tabela 'enrollments' (Inscrições / Candidaturas).
      *
      * @return void
      */
     public function up()
     {
         Schema::create('enrollments', function (Blueprint $table) {
-            // Chave primária (id)
             $table->id();
 
-            // Data e hora em que a inscrição foi realizada
-            $table->dateTime('date');
+            // Dados do Candidato
+            $table->string('name');
+            $table->string('email');
+            $table->string('phone');
+            $table->string('number_of_identify');
+            $table->string('image')->nullable();
 
-            // Estado da inscrição: 1 = Activa/Confirmada, 0 = Pendente/Cancelada
-            $table->boolean('status');
+            // Opções da Candidatura
+            $table->string('shift'); // Turno pretendido: Manhã, Tarde, Pós-Laboral
+            $table->string('status')->default('Pendente'); // Pendente, Pago, Matriculado, Lista de Espera, Cancelado
+            $table->dateTime('date')->nullable();
 
-            // Chave estrangeira ligada à tabela 'students' (Formando inscrito)
-            $table->foreignId('student_id')->constrained();
-
-            // Chave estrangeira ligada à tabela 'courses' (Curso seleccionado)
+            // Relações
             $table->foreignId('course_id')->constrained();
 
-            // Suporte para exclusão lógica (coluna 'deleted_at') para SoftDeletes
             $table->softDeletes();
-
-            // Datas de controlo do registo ('created_at' e 'updated_at')
             $table->timestamps();
         });
     }

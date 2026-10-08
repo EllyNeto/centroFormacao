@@ -41,8 +41,6 @@
 										<th>Género</th>
 										<th>Especialização</th>
 										<th>Email</th>
-										<th>Telefone</th>
-										<th>Nº Identificação</th>
 										<th class="text-end">Acções</th>
 									</tr>
 								</thead>
@@ -62,8 +60,6 @@
 												<span class="badge light badge-primary">{{ $teacher->specialization }}</span>
 											</td>
 											<td>{{ $teacher->email }}</td>
-											<td>{{ $teacher->phone }}</td>
-											<td>{{ $teacher->number_of_identify }}</td>
 
 											{{-- Célula de Acções com classe dedicada .action-cell e dropdown flutuante --}}
 											<td class="text-end action-cell">

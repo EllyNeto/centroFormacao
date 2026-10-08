@@ -12,13 +12,6 @@ class studentController extends Controller
         return view('admin.student.list.index');
     }
 
-
-    public function create()
-    {
-        return view('admin.student.create.index');
-    }
-
-
     public function store(Request $required)
     {
         return view();
