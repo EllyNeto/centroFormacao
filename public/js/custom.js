@@ -451,7 +451,7 @@ var Akademi  = function(){
 	   /* Bootstrap Select box function by  = bootstrap-select.min.js */ 
 	   if(jQuery('select').length > 0){
 	   
-		   jQuery('select').selectpicker();
+		   jQuery('select:not(.select2):not(.select2-select)').selectpicker();
 	   /* Bootstrap Select box function by  = bootstrap-select.min.js end*/
 	   }
    }

@@ -58,6 +58,19 @@
                                 </div>
                             </div>
 
+                            {{-- Sala de Aula Atribuída --}}
+                            <div class="col-md-6 mb-4">
+                                <div class="p-3 border rounded bg-light">
+                                    <h5 class="fw-bold mb-3 text-warning"><i class="fa fa-building me-2"></i>Sala de Formações</h5>
+                                    @if($room->classroom)
+                                        <p class="mb-2"><strong>Número:</strong> Sala {{ $room->classroom->number_of_classroom }}</p>
+                                        <p class="mb-2"><strong>Capacidade da Sala:</strong> {{ $room->classroom->capacity ? $room->classroom->capacity . ' alunos' : 'N/A' }}</p>
+                                    @else
+                                        <p class="mb-2 text-muted">Nenhuma sala física atribuída a esta turma.</p>
+                                    @endif
+                                </div>
+                            </div>
+
 
                         </div>
                     </div>

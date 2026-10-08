@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\courseController;
-use App\Http\Controllers\teacherController;
 use App\Http\Controllers\roomController;
+use App\Http\Controllers\classroomController;
 use App\Http\Controllers\studentController;
 use App\Http\Controllers\enrollmentController;
 use App\Http\Controllers\paymentController;
+use App\Http\Controllers\teacherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,7 @@ use App\Http\Controllers\paymentController;
 */
 
 // Página Principal (Dashboard)
-Route::get('/', function () {
+Route::get('/', function (){
     return view('admin.dashboard.index');
 });
 
@@ -38,7 +39,16 @@ Route::get('/formador/edit/{id}', [teacherController::class, 'edit'])->name('tea
 Route::put('/formador/update/{id}', [teacherController::class, 'update'])->name('teacher.update');
 Route::delete('/formador/{id}', [teacherController::class, 'destroy'])->name('teacher.destroy');
 
-// Rotas de Gestão de Turmas / Salas
+// Rotas de Gestão de Salas
+Route::get('/sala/listar', [classroomController::class, 'index'])->name('classroom.index');
+Route::get('/sala/adicionar', [classroomController::class, 'create'])->name('classroom.create');
+Route::post('/sala', [classroomController::class, 'store'])->name('classroom.store');
+Route::get('/sala/{id}', [classroomController::class, 'show'])->name('classroom.show');
+Route::get('/sala/edit/{id}', [classroomController::class, 'edit'])->name('classroom.edit');
+Route::put('/sala/update/{id}', [classroomController::class, 'update'])->name('classroom.update');
+Route::delete('/sala/{id}', [classroomController::class, 'destroy'])->name('classroom.destroy');
+
+// Rotas de Gestão de Turmas
 Route::get('/turma/listar', [roomController::class, 'index'])->name('room.index');
 Route::get('/turma/adicionar', [roomController::class, 'create'])->name('room.create');
 Route::post('/turma', [roomController::class, 'store'])->name('room.store');

@@ -34,6 +34,18 @@
 						<li><a href="{{ route('teacher.create')}}">Adicionar novo</a></li>
 					</ul>
 					</li>
+					{{-- Seção Módulo de Sala --}}
+					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+						<i class="material-symbols-outlined">meeting_room</i>
+						<span class="nav-text">Sala</span>
+					</a>
+					<ul aria-expanded="false">
+						{{-- Link para a listagem de Salas --}}
+						<li><a href="{{ route('classroom.index')}}">Listar</a></li>
+						{{-- Link para registo de nova Sala --}}
+						<li><a href="{{ route('classroom.create')}}">Adicionar nova</a></li>
+					</ul>
+					</li>
 					{{-- Seção Módulo de Turma --}}
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">groups</i>
@@ -43,7 +55,7 @@
 							{{-- Link para a listagem de turmas --}}
 							<li><a href="{{ route('room.index')}}">Listar</a></li>
 							{{-- Link para criação de nova turma --}}
-							<li><a href="{{ route('room.create')}}">Adicionar novo</a></li>
+							<li><a href="{{ route('room.create')}}">Adicionar nova</a></li>
 						</ul>
 					</li>
 					{{-- Seção Módulo de Estudante --}}

@@ -19,6 +19,7 @@ class Room extends Model
         "shift",
         "teacher_id",
         "course_id",
+        "classroom_id",
         "max_capacity",
     ];
 
@@ -40,6 +41,14 @@ class Room extends Model
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_id');
+    }
+
+    /**
+     * Obter a sala física associada à turma.
+     */
+    public function classroom()
+    {
+        return $this->belongsTo(Classroom::class, 'classroom_id');
     }
 
     /**

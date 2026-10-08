@@ -74,8 +74,24 @@
                                     </div>
 
                                     <div class="mb-3">
+                                        <label for="classroom_id" class="form-label text-primary">Sala de Aula</label>
+                                        <select id="classroom_id" name="classroom_id" class="form-control select2 @error('classroom_id') is-invalid @enderror">
+                                            <option value="" data-capacity="">Selecione a Sala (Opcional)</option>
+                                            @foreach($classrooms as $classroom)
+                                                <option value="{{ $classroom->id }}" data-capacity="{{ $classroom->capacity }}" {{ old('classroom_id', $room->classroom_id) == $classroom->id ? 'selected' : '' }}>
+                                                    {{ $classroom->name }} (Sala {{ $classroom->number_of_classroom }}) {{ $classroom->capacity ? '- ' . $classroom->capacity . ' lugares' : '' }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('classroom_id')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-3">
                                         <label for="max_capacity" class="form-label text-primary">Capacidade Máxima <span class="text-danger">*</span></label>
-                                        <input type="number" min="1" id="max_capacity" name="max_capacity" class="form-control @error('max_capacity') is-invalid @enderror" value="{{ old('max_capacity', $room->max_capacity ?? 25) }}" placeholder="Ex: 25" required>
+                                        <input type="number" min="1" id="max_capacity" name="max_capacity" class="form-control bg-light @error('max_capacity') is-invalid @enderror" value="{{ old('max_capacity', $room->max_capacity) }}" placeholder="Definido pela sala" readonly style="background-color: #e9ecef !important; cursor: not-allowed;" required>
+                                        <small class="text-muted d-block mt-1">Definido automaticamente com base na capacidade da sala selecionada.</small>
                                         @error('max_capacity')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -152,4 +168,31 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const classroomSelect = document.getElementById('classroom_id');
+    const maxCapacityInput = document.getElementById('max_capacity');
+
+    function updateCapacity() {
+        if (!classroomSelect || !maxCapacityInput) return;
+        const selectedOption = classroomSelect.options[classroomSelect.selectedIndex];
+        if (selectedOption && selectedOption.dataset && selectedOption.dataset.capacity) {
+            maxCapacityInput.value = selectedOption.dataset.capacity;
+        } else if (!classroomSelect.value) {
+            maxCapacityInput.value = '';
+        }
+    }
+
+    if (classroomSelect && maxCapacityInput) {
+        classroomSelect.addEventListener('change', updateCapacity);
+        if (window.jQuery) {
+            $(classroomSelect).on('change', updateCapacity);
+        }
+        if (!maxCapacityInput.value) {
+            updateCapacity();
+        }
+    }
+});
+</script>
 @endsection
