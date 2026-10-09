@@ -4,23 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable; 
 
 class Teacher extends Model
 {
-    //
     use SoftDeletes;
-    use Notifiable;
-    
+
     protected $table = 'teachers';
 
     protected $fillable = [
-        "name",
-        "specialization",
-        "email",
-        "number_of_identify",
-        "phone",
-        "image",
-        "gender",
+        'name',
+        'email',
+        'gender',
+        'specialization',
+        'number_of_identify',
+        'phone',
+        'image',
     ];
+
+    /**
+     * Turmas leccionadas por este formador.
+     */
+    public function rooms()
+    {
+        return $this->hasMany(Room::class, 'teacher_id');
+    }
 }

@@ -79,7 +79,7 @@
                                             <option value="" data-capacity="">Selecione a Sala (Opcional)</option>
                                             @foreach($classrooms as $classroom)
                                                 <option value="{{ $classroom->id }}" data-capacity="{{ $classroom->capacity }}" {{ old('classroom_id', $room->classroom_id) == $classroom->id ? 'selected' : '' }}>
-                                                    {{ $classroom->name }} (Sala {{ $classroom->number_of_classroom }}) {{ $classroom->capacity ? '- ' . $classroom->capacity . ' lugares' : '' }}
+                                                    Sala {{ $classroom->number_of_classroom }} {{ $classroom->capacity ? '(' . $classroom->capacity . ' lugares)' : '' }}
                                                 </option>
                                             @endforeach
                                         </select>

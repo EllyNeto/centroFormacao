@@ -127,8 +127,7 @@ Todas as tabelas de negócio possuem `id`, `created_at`, `updated_at` e `deleted
 | Coluna | Tipo | Obs. |
 | :--- | :--- | :--- |
 | `id` | bigint | PK |
-| `name` | string | nullable |
-| `number_of_classroom` | integer | Número da sala |
+| `number_of_classroom` | integer | Número da sala (único) |
 | `capacity` | integer | **Define a capacidade das turmas** |
 | `description` | text | nullable |
 
