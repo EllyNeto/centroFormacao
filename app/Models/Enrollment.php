@@ -17,14 +17,19 @@ class Enrollment extends Model
         'phone',
         'number_of_identify',
         'image',
+        'course_id',
+        'room_id',
         'shift',
         'status',
         'date',
-        'course_id',
+    ];
+
+    protected $casts = [
+        'date' => 'datetime',
     ];
 
     /**
-     * Relação com o Curso pretendido.
+     * Curso pretendido.
      */
     public function course()
     {
@@ -32,7 +37,15 @@ class Enrollment extends Model
     }
 
     /**
-     * Relação com os Pagamentos efetuados.
+     * Turma pretendida.
+     */
+    public function room()
+    {
+        return $this->belongsTo(Room::class, 'room_id');
+    }
+
+    /**
+     * Pagamentos efetuados relativos a esta inscrição.
      */
     public function payments()
     {
@@ -40,7 +53,7 @@ class Enrollment extends Model
     }
 
     /**
-     * Relação com o registo de Estudante oficial (após efetivação).
+     * Registo oficial do estudante formado após efectivação.
      */
     public function student()
     {

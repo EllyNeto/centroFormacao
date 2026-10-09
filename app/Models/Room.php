@@ -12,39 +12,28 @@ class Room extends Model
     protected $table = 'rooms';
 
     protected $fillable = [
-        "name",
-        "start_time",
-        "end_time",
-        "days_of_week",
-        "shift",
-        "teacher_id",
-        "course_id",
-        "classroom_id",
-        "max_capacity",
+        'name',
+        'course_id',
+        'teacher_id',
+        'classroom_id',
+        'max_capacity',
+        'shift',
+        'days_of_week',
+        'start_time',
+        'end_time',
+        'start_date',
+        'end_date',
+        'status',
     ];
 
     protected $casts = [
         'days_of_week' => 'array',
+        'start_date'   => 'date',
+        'end_date'     => 'date',
     ];
 
     /**
-     * Obter o formador responsável pela turma.
-     */
-    public function teacher()
-    {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
-    }
-
-    /**
-     * Obter o curso associado à turma.
-     */
-    public function course()
-    {
-        return $this->belongsTo(Course::class, 'course_id');
-    }
-
-    /**
-     * Obter a sala física associada à turma.
+     * Sala física onde decorre a turma.
      */
     public function classroom()
     {
@@ -52,10 +41,60 @@ class Room extends Model
     }
 
     /**
-     * Obter o formando associado à turma.
+     * Curso associado à turma.
      */
-    public function student()
+    public function course()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(Course::class, 'course_id');
+    }
+
+    /**
+     * Formador responsável pela turma.
+     */
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class, 'teacher_id');
+    }
+
+    /**
+     * Inscrições na turma.
+     */
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'room_id');
+    }
+
+    /**
+     * Formandos matriculados nesta turma.
+     */
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'room_id');
+    }
+
+    /**
+     * Total de lugares ocupados (inscrições activas).
+     */
+    public function occupiedSeats(): int
+    {
+        return $this->enrollments()
+            ->whereIn('status', ['Pendente', 'Pago', 'Matriculado'])
+            ->count();
+    }
+
+    /**
+     * Total de lugares disponíveis.
+     */
+    public function availableSeats(): int
+    {
+        return max(0, (int) $this->max_capacity - $this->occupiedSeats());
+    }
+
+    /**
+     * Verifica se a turma está lotada.
+     */
+    public function isFull(): bool
+    {
+        return $this->availableSeats() === 0;
     }
 }

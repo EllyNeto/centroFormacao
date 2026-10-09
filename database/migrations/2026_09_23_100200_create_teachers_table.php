@@ -20,7 +20,7 @@ class CreateTeachersTable extends Migration
             $table->string('gender');
             $table->string('specialization');
             $table->string('number_of_identify')->unique();
-            $table->integer('phone');
+            $table->string('phone', 20);
             $table->string('image')->nullable();
             $table->softDeletes();
             $table->timestamps();

@@ -109,7 +109,6 @@ Todas as tabelas de negócio têm `id`, `created_at`, `updated_at` e `deleted_at
 
 | Coluna | Tipo | Regras |
 | :--- | :--- | :--- |
-| `name` | string | obrigatório |
 | `number_of_classroom` | integer | obrigatório, **único** |
 | `capacity` | unsigned integer | obrigatório, ≥ 1 |
 | `description` | text | nullable |

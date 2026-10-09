@@ -54,7 +54,7 @@
 											<td>{{ $room->teacher->name ?? 'N/A' }}</td>
 											<td>
 												@if($room->classroom)
-													<span class="badge light badge-success">{{ $room->classroom->name }} Sala {{ $room->classroom->number_of_classroom }}</span>
+													<span class="badge light badge-success">Sala {{ $room->classroom->number_of_classroom }}</span>
 												@else
 													<span class="text-muted">Sem sala</span>
 												@endif

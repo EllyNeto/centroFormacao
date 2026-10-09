@@ -16,14 +16,18 @@ class CreateRoomsTable extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('course_id')->constrained();
+            $table->foreignId('teacher_id')->constrained();
+            $table->foreignId('classroom_id')->constrained();
+            $table->unsignedInteger('max_capacity');
+            $table->string('shift');
+            $table->json('days_of_week');
             $table->time('start_time');
             $table->time('end_time');
-            $table->json('days_of_week');
-            $table->string('shift');
-            $table->integer('max_capacity');
-            $table->foreignId('teacher_id')->constrained();
-            $table->foreignId('course_id')->constrained();
-            $table->softDeletes();            
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->string('status')->default('Aberta');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
