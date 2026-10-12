@@ -53,6 +53,7 @@ Route::get('/turma/listar', [roomController::class, 'index'])->name('room.index'
 Route::get('/turma/adicionar', [roomController::class, 'create'])->name('room.create');
 Route::post('/turma', [roomController::class, 'store'])->name('room.store');
 Route::get('/turma/{id}', [roomController::class, 'show'])->name('room.show');
+Route::get('/turma/{id}/imprimir-formandos', [roomController::class, 'printStudents'])->name('room.printStudents');
 Route::get('/turma/edit/{id}', [roomController::class, 'edit'])->name('room.edit');
 Route::put('/turma/update/{id}', [roomController::class, 'update'])->name('room.update');
 Route::delete('/turma/{id}', [roomController::class, 'destroy'])->name('room.destroy');

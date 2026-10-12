@@ -1,4 +1,4 @@
-/* Custom CSS styles for Room Select2 integration */
+/* Custom CSS styles for Room Form & Views */
 .select2-container--default .select2-selection--single {
     height: 40px !important;
     border-radius: 0.375rem !important;
@@ -12,4 +12,58 @@
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 38px !important;
+}
+
+/* Campo de Capacidade Readonly */
+.readonly-capacity {
+    background-color: #e9ecef !important;
+    cursor: not-allowed !important;
+}
+
+/* Alertas de validação */
+.room-form-alert {
+    border-radius: 8px;
+}
+
+/* Barra de progresso de lotação */
+.room-progress-track {
+    height: 8px;
+    background-color: #e2e8f0;
+    border-radius: 4px;
+}
+
+.room-progress-track-sm {
+    height: 8px;
+    width: 80px;
+    background-color: #e2e8f0;
+    border-radius: 4px;
+}
+
+.room-progress-fill {
+    border-radius: 4px;
+}
+
+/* Avatares nas tabelas e detalhes de turma */
+.room-avatar-sm {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+}
+
+.room-avatar-detail {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border: 1px solid #cbd5e1;
+}
+
+.room-avatar-placeholder {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #cbd5e1;
+}
+
+.room-table-min-width {
+    min-width: 845px;
+    width: 100%;
 }

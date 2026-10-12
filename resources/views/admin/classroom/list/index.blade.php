@@ -53,9 +53,9 @@
 								<thead>
 									<tr>
 										<th>Número da Sala</th>
-										<th>Capacidade Física</th>
+										<th>Capacidade </th>
 										<th>Turmas Alocadas</th>
-										<th>Observações / Descrição</th>
+										<th>Observações</th>
 										<th class="text-end">Acções</th>
 									</tr>
 								</thead>
