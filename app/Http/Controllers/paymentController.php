@@ -178,6 +178,16 @@ class paymentController extends Controller
                 ->with('error', $e->getMessage());
         }
 
+        // Envio de notificação nativa por email com o recibo do pagamento
+        try {
+            if ($payment && $payment->enrollment && !empty($payment->enrollment->email)) {
+                $payment->enrollment->notify(new \App\Notifications\PaymentReceiptNotification($payment));
+            }
+        } catch (\Throwable $e) {
+            // Regista no log sem interromper a resposta em caso de indisponibilidade de email
+            \Illuminate\Support\Facades\Log::warning("Falha ao enviar recibo por email: " . $e->getMessage());
+        }
+
         return redirect()
             ->route('payment.show', $payment->id)
             ->with('success', 'Pagamento registado com sucesso!');
@@ -269,6 +279,16 @@ class paymentController extends Controller
                 $enrollment->syncPaymentStatus();
             }
 
+            // Envio de notificação nativa por email informando a anulação do pagamento
+            try {
+                if ($enrollment && !empty($enrollment->email)) {
+                    $enrollment->notify(new \App\Notifications\PaymentCanceledNotification($payment));
+                }
+            } catch (\Throwable $e) {
+                // Registo de falha silenciosa para não quebrar a transação
+                \Illuminate\Support\Facades\Log::warning("Falha ao enviar notificação de cancelamento de pagamento: " . $e->getMessage());
+            }
+
             return redirect()
                 ->route('payment.show', $payment->id)
                 ->with('success', 'Pagamento anulado com sucesso. A inscrição foi revertida para Pendente (se aplicável).');
@@ -313,6 +333,20 @@ class paymentController extends Controller
         if ($enrollment) {
             $enrollment->refresh();
             $enrollment->syncPaymentStatus();
+
+            // Envio de notificação nativa por email conforme a alteração de estado
+            try {
+                if (!empty($enrollment->email)) {
+                    if ($payment->status === 'Anulado') {
+                        $enrollment->notify(new \App\Notifications\PaymentCanceledNotification($payment));
+                    } elseif ($payment->status === 'Confirmado') {
+                        $enrollment->notify(new \App\Notifications\PaymentReceiptNotification($payment));
+                    }
+                }
+            } catch (\Throwable $e) {
+                // Registo de falha silenciosa para não impedir a resposta HTTP
+                \Illuminate\Support\Facades\Log::warning("Falha ao enviar notificação de atualização de pagamento: " . $e->getMessage());
+            }
         }
 
         return redirect()

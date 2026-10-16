@@ -21,12 +21,26 @@
                             <p class="m-0 subtitle text-muted">Acompanhamento dos dados do candidato, turma atribuída e estado do processo</p>
                         </div>
                         <div class="d-flex align-items-center gap-2">
+                            {{-- Ação Rápida: Botão para Efetivar Matrícula quando a propina está liquidada --}}
+                            @if($enrollment->isPaid() && !$enrollment->student)
+                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalEnrollStudent">
+                                    <i class="fa fa-user-plus me-1"></i> Efectivar Matrícula
+                                </button>
+                            @endif
+
+                            {{-- Ação Rápida: Aceder à Ficha do Formando Oficial caso já se encontre matriculado --}}
+                            @if($enrollment->student)
+                                <a href="{{ route('student.show', $enrollment->student->id) }}" class="btn btn-info btn-sm">
+                                    <i class="fa fa-id-badge me-1"></i> Ver Formando ({{ $enrollment->student->formattedCode() }})
+                                </a>
+                            @endif
+
                             @if($enrollment->canReceivePayment())
-                                <a href="{{ route('payment.create', ['enrollment_id' => $enrollment->id]) }}" class="btn btn-success btn-sm">
+                                <a href="{{ route('payment.create', ['enrollment_id' => $enrollment->id]) }}" class="btn btn-primary btn-sm">
                                     <i class="fa fa-money me-1"></i> {{ $enrollment->canRepeat() ? 'Registar Repetição' : 'Registar Pagamento' }}
                                 </a>
                             @endif
-                            <a href="{{ route('enrollment.edit', $enrollment->id) }}" class="btn btn-primary btn-sm">
+                            <a href="{{ route('enrollment.edit', $enrollment->id) }}" class="btn btn-outline-primary btn-sm">
                                 <i class="fa fa-pencil me-1"></i> Editar
                             </a>
                             <a href="{{ route('enrollment.index') }}" class="btn btn-secondary btn-sm">
@@ -298,4 +312,80 @@
         </div>
     </div>
 </div>
+
+{{-- Modal para Efetivar Matrícula Oficial a partir de Candidatura Paga --}}
+@if($enrollment->isPaid() && !$enrollment->student)
+    <div class="modal fade" id="modalEnrollStudent" tabindex="-1" aria-labelledby="modalEnrollStudentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                {{-- Formulário submetido via POST para a rota enrollment.enroll --}}
+                <form action="{{ route('enrollment.enroll', $enrollment->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-header border-bottom">
+                        <h5 class="modal-title text-dark font-w600" id="modalEnrollStudentLabel">
+                            <i class="fa fa-user-plus text-success me-2"></i>Efectivar Matrícula Oficial
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <p class="text-dark mb-3">
+                            A candidatura <strong>{{ $enrollment->formattedCode() }}</strong> de <strong>{{ $enrollment->name }}</strong> possui a propina totalmente liquidada ({{ number_format($enrollment->totalPaid(), 2, ',', '.') }} Kz).
+                        </p>
+                        
+                        <div class="mb-3">
+                            <label class="form-label font-w600 text-dark">
+                                Selecionar Turma para o Formando <span class="text-danger">*</span>
+                            </label>
+                            @if(isset($openRooms) && $openRooms->count() > 0)
+                                <select name="room_id" class="form-control" required>
+                                    <option value="">-- Escolha a Turma --</option>
+                                    @foreach($openRooms as $room)
+                                        @php
+                                            $isSelected = (int) $enrollment->room_id === (int) $room->id;
+                                            $available  = $room->availableSeats();
+                                            $isFull     = $room->isFull();
+                                        @endphp
+                                        <option value="{{ $room->id }}" 
+                                                {{ $isSelected ? 'selected' : '' }} 
+                                                {{ $isFull ? 'disabled' : '' }}>
+                                            {{ $room->name }} 
+                                            &bull; {{ $room->shift }} 
+                                            &bull; {{ $room->classroom ? 'Sala ' . $room->classroom->number_of_classroom : 'Sem sala' }} 
+                                            &bull; {{ $isFull ? '[LOTADA]' : 'Vagas: ' . $available . '/' . $room->max_capacity }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <small class="text-muted d-block mt-1">Lista apenas as turmas abertas pertencentes a este curso.</small>
+                            @elseif($enrollment->room)
+                                <input type="hidden" name="room_id" value="{{ $enrollment->room->id }}">
+                                <div class="p-3 bg-light rounded border">
+                                    <strong class="text-dark">{{ $enrollment->room->name }}</strong>
+                                    <small class="d-block text-muted">
+                                        Turno: {{ $enrollment->room->shift }} &bull; {{ $enrollment->room->classroom ? 'Sala ' . $enrollment->room->classroom->number_of_classroom : 'Sem sala' }} &bull; Vagas livres: {{ $enrollment->room->availableSeats() }}
+                                    </small>
+                                </div>
+                            @else
+                                <div class="alert alert-warning mb-0">
+                                    <i class="fa fa-exclamation-triangle me-1"></i> Não existem turmas abertas para este curso. Crie uma turma primeiro para poder matricular o aluno.
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- Nota informativa sobre a transição de estado --}}
+                        <div class="alert alert-info mb-0 fs-8">
+                            <i class="fa fa-info-circle me-1"></i>
+                            Ao confirmar a efetivação, o sistema criará o registo oficial do <strong>Formando</strong> (código único <code>CF-{{ date('Y') }}-NNNN</code>) e a candidatura passará para o estado <strong>Matriculado</strong>.
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success" {{ (isset($openRooms) && $openRooms->count() === 0 && !$enrollment->room) ? 'disabled' : '' }}>
+                            <i class="fa fa-check me-1"></i> Confirmar Matrícula
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endif
 @endsection

@@ -125,7 +125,17 @@ class roomController extends Controller
         $validatedData['status'] = 'Aberta';
 
         // Cria a turma na base de dados
-        Room::create($validatedData);
+        $room = Room::create($validatedData);
+
+        // 6. Envio de notificação nativa por email ao formador atribuído informando os horários e sala
+        try {
+            if ($room->teacher && !empty($room->teacher->email)) {
+                $room->teacher->notify(new \App\Notifications\TeacherRoomAssignedNotification($room));
+            }
+        } catch (\Throwable $e) {
+            // Em caso de falha de conexão SMTP, regista em log para diagnóstico sem interromper a criação da turma
+            \Illuminate\Support\Facades\Log::warning("Falha ao enviar email de atribuição de turma ao formador: " . $e->getMessage());
+        }
 
         // Redireciona para a listagem com mensagem de sucesso
         return redirect()->route('room.index')->with('success', 'Turma criada com sucesso!');

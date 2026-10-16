@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * Modelo Teacher - Representa um Formador / Professor do Centro de Formação.
@@ -25,6 +26,7 @@ class Teacher extends Model
 {
     // Permite a eliminação lógica (Soft Delete) mantendo o histórico de turmas lecionadas
     use SoftDeletes;
+    use Notifiable; // Permite envio nativo de notificações por email diretamente ao modelo
 
     /**
      * Nome da tabela associada no banco de dados.

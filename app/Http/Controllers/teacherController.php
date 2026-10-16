@@ -110,7 +110,17 @@ class teacherController extends Controller
         }
 
         // Cria o registo do formador na base de dados
-        Teacher::create($validatedData);
+        $teacher = Teacher::create($validatedData);
+
+        // Envio de notificação nativa por email de boas-vindas ao novo docente
+        try {
+            if (!empty($teacher->email)) {
+                $teacher->notify(new \App\Notifications\TeacherWelcomeNotification($teacher));
+            }
+        } catch (\Throwable $e) {
+            // Em caso de falha de conexão SMTP, regista em log para diagnóstico sem quebrar o cadastro
+            \Illuminate\Support\Facades\Log::warning("Falha ao enviar email de boas-vindas ao formador: " . $e->getMessage());
+        }
 
         // Redireciona para a listagem com mensagem de sucesso
         return redirect()->route('teacher.index')->with('success', 'Formador registado com sucesso!');

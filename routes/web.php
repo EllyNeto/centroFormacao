@@ -8,18 +8,17 @@ use App\Http\Controllers\studentController;
 use App\Http\Controllers\enrollmentController;
 use App\Http\Controllers\paymentController;
 use App\Http\Controllers\teacherController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
 | Rotas Web da Aplicação
 |--------------------------------------------------------------------------
-| Mapeamento de todas as URLs para os respectivos controladores e acções.
+| Mapeamento de todas as URLs para os respetivos controladores e ações.
 */
 
-// Página Principal (Dashboard)
-Route::get('/', function (){
-    return view('admin.dashboard.index');
-});
+// Página Principal (Dashboard com Indicadores Reais)
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 // Rotas de Gestão de Cursos
 Route::get('/curso/listar', [courseController::class, 'index'])->name('course.index');
@@ -75,6 +74,8 @@ Route::get('/inscricao/{id}', [enrollmentController::class, 'show'])->name('enro
 Route::get('/inscricao/edit/{id}', [enrollmentController::class, 'edit'])->name('enrollment.edit');
 Route::put('/inscricao/update/{id}', [enrollmentController::class, 'update'])->name('enrollment.update');
 Route::delete('/inscricao/{id}', [enrollmentController::class, 'destroy'])->name('enrollment.destroy');
+// Ação específica: efetivar inscrição com propina paga em formando oficial
+Route::post('/inscricao/{id}/efectivar', [studentController::class, 'storeFromEnrollment'])->name('enrollment.enroll');
 
 // Rotas de Gestão de Pagamentos
 Route::get('/pagamento/listar', [paymentController::class, 'index'])->name('payment.index');

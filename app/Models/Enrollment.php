@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * Modelo Eloquent representativo da entidade Inscrição / Candidatura (Enrollment).
@@ -19,7 +21,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $image
  * @property int $course_id
  * @property int|null $room_id
- * @property string $shift
  * @property string $status
  * @property int $cycle               Ciclo de frequência atual (1 = 1.ª frequência, 2 = 1.ª repetição …)
  * @property \Carbon\Carbon|null $date
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Enrollment extends Model
 {
     use SoftDeletes;
+    use Notifiable; // Permite envio nativo de notificações por email diretamente ao modelo
 
     /**
      * Nome da tabela associada ao modelo na base de dados.
@@ -75,6 +77,7 @@ class Enrollment extends Model
      * Formato: INS-ANO-NNNN  (Ex: INS-2026-0001)
      * O número sequencial é baseado no último ID existente + 1,
      * garantindo unicidade mesmo com soft deletes.
+     * CORREÇÃO: Adicionado bloqueio transacional para evitar condições de corrida na geração de códigos.
      */
     protected static function boot()
     {
@@ -83,8 +86,13 @@ class Enrollment extends Model
         static::creating(function ($enrollment) {
             if (empty($enrollment->code)) {
                 $year   = date('Y');
-                $nextId = (int) self::withTrashed()->max('id') + 1;
-                $enrollment->code = 'INS-' . $year . '-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+                // CORREÇÃO: Usar transação com bloqueio para evitar condições de corrida
+                // Quando dois processos tentam criar inscrições simultaneamente,
+                // o lockForUpdate() garante que apenas um possa ler o máximo ID de cada vez
+                DB::transaction(function () use ($enrollment, $year) {
+                    $nextId = (int) self::withTrashed()->lockForUpdate()->max('id') + 1;
+                    $enrollment->code = 'INS-' . $year . '-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+                });
             }
         });
     }

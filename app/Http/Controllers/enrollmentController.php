@@ -150,6 +150,16 @@ class enrollmentController extends Controller
         // 7. Criação do registo da candidatura na base de dados
         $enrollment = Enrollment::create($validatedData);
 
+        // 8. Envio de notificação nativa por email para o endereço do candidato
+        try {
+            if (!empty($enrollment->email)) {
+                $enrollment->notify(new \App\Notifications\EnrollmentConfirmationNotification($enrollment));
+            }
+        } catch (\Throwable $e) {
+            // Em caso de indisponibilidade momentânea do serviço de email, regista nos logs sem interromper o fluxo
+            \Illuminate\Support\Facades\Log::warning("Falha ao enviar email de candidatura: " . $e->getMessage());
+        }
+
         return redirect()
             ->route('enrollment.index')
             ->with('success', 'Candidatura registada com sucesso (' . $enrollment->formattedCode() . '). Aguarda pagamento para atribuição de turma.');
@@ -171,7 +181,14 @@ class enrollmentController extends Controller
             'student',
         ])->findOrFail($id);
 
-        return view('admin.enrollment.details.index', compact('enrollment'));
+        // Carrega turmas com estado 'Aberta' do mesmo curso para disponibilizar no modal de efetivação de matrícula
+        $openRooms = Room::where('course_id', $enrollment->course_id)
+            ->where('status', 'Aberta')
+            ->with(['classroom', 'teacher'])
+            ->orderBy('name', 'asc')
+            ->get();
+
+        return view('admin.enrollment.details.index', compact('enrollment', 'openRooms'));
     }
 
     /**
