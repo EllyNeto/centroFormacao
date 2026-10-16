@@ -4,138 +4,368 @@ namespace App\Http\Controllers;
 
 use App\Models\Enrollment;
 use App\Models\Course;
+use App\Models\Room;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Controlador responsável pela gestão de Inscrições / Candidaturas (Enrollment).
+ *
+ * Módulo 5: Inscrições
+ * Implementa o fluxo completo de pré-inscrições, validação em linha,
+ * upload de documentos e gestão de vagas/lista de espera por turma.
+ *
+ * Regras de Negócio Implementadas:
+ * R1  - Uma pessoa (mesmo BI) só pode ter uma inscrição ativa por curso.
+ * R11 - O curso selecionado deve ter pelo menos uma turma 'Aberta'.
+ * R9  - Mudança de curso: só antes de Matriculado; recalcula saldo.
+ * R4  - Identificação: código de aluno (opcional) ou BI.
+ */
 class enrollmentController extends Controller
 {
     /**
-     * Exibe a listagem de inscrições/candidaturas.
+     * Exibe a listagem completa de candidaturas e inscrições.
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $enrollments = Enrollment::with('course')->latest()->get();
+        $enrollments = Enrollment::with(['course', 'room'])
+            ->latest()
+            ->get();
+
         return view('admin.enrollment.list.index', compact('enrollments'));
     }
 
     /**
      * Exibe o formulário de registo de nova candidatura.
+     * Carrega cursos com indicação de disponibilidade de turmas abertas.
+     *
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        $courses = Course::all();
+        // Carrega todos os cursos com contagem de turmas abertas
+        $courses = Course::withCount([
+            'rooms as open_rooms_count' => fn($q) => $q->where('status', 'Aberta'),
+        ])->orderBy('name', 'asc')->get();
+
         return view('admin.enrollment.create.index', compact('courses'));
     }
 
     /**
-     * Valida e armazena uma nova candidatura na base de dados (mesma lógica do Formador).
+     * Valida e armazena uma nova candidatura na base de dados.
+     * O estado inicial é sempre 'Pendente' e sem turma associada até haver pagamento.
+     *
+     * @param \Illuminate\Http\Request $request Dados da requisição HTTP
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
+        // 1. Validação em linha dos dados pessoais, curso e turno pretendido
         $validatedData = $request->validate([
             'name'               => 'required|string|max:255',
             'email'              => 'required|email|max:255',
-            'phone'              => 'required|string|max:50',
-            'number_of_identify' => 'required|string|max:100',
+            'phone'              => 'required|string|max:20',
+            'number_of_identify' => 'required|string|max:50',
+            'student_code'       => 'nullable|string|exists:students,code',
             'course_id'          => 'required|exists:courses,id',
-            'shift'              => 'required|string|max:255',
-            'image'              => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:4096',
+            'shift'              => 'required|string|in:Manhã,Tarde,Pós-Laboral',
+            'image'              => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
         ], [
             'name.required'               => 'O nome completo do candidato é obrigatório.',
-            'email.required'              => 'O email do candidato é obrigatório.',
+            'name.max'                    => 'O nome não pode exceder os 255 caracteres.',
+            'email.required'              => 'O endereço de email é obrigatório.',
             'email.email'                 => 'Introduza um endereço de email válido.',
             'phone.required'              => 'O número de telefone é obrigatório.',
-            'number_of_identify.required' => 'O número de identificação é obrigatório.',
-            'course_id.required'          => 'Por favor, selecione o curso pretendido.',
-            'shift.required'              => 'Por favor, selecione o turno pretendido.',
-            'image.image'                 => 'O ficheiro selecionado deve ser uma imagem válida.',
+            'phone.max'                   => 'O telefone não pode exceder 20 dígitos.',
+            'number_of_identify.required' => 'O número do BI ou Passaporte é obrigatório.',
+            'number_of_identify.max'      => 'O documento não pode exceder 50 caracteres.',
+            'student_code.exists'         => 'O código de aluno indicado não existe no sistema.',
+            'course_id.required'          => 'A seleção do curso pretendido é obrigatória.',
+            'course_id.exists'            => 'O curso selecionado não é válido.',
+            'shift.required'              => 'O turno pretendido é obrigatório.',
+            'shift.in'                    => 'Selecione um turno válido (Manhã, Tarde ou Pós-Laboral).',
+            'image.image'                 => 'O ficheiro anexado deve ser uma imagem válida.',
+            'image.mimes'                 => 'A imagem deve estar no formato JPG, PNG ou WEBP.',
+            'image.max'                   => 'A imagem não pode exceder o tamanho máximo de 4MB.',
         ]);
 
-        // Upload de Imagem com a mesma lógica do Formador
+        // 2. R4 — Validação cruzada: código de aluno + BI devem coincidir
+        if (!empty($validatedData['student_code'])) {
+            $student = Student::where('code', $validatedData['student_code'])->first();
+            if ($student && $student->enrollment) {
+                $storedBi = $student->enrollment->number_of_identify;
+                if ($storedBi !== $validatedData['number_of_identify']) {
+                    return back()
+                        ->withInput()
+                        ->withErrors(['student_code' => 'O código de aluno não corresponde ao BI indicado.']);
+                }
+            }
+        }
+
+        // 3. R11 — O curso deve ter pelo menos uma turma 'Aberta'
+        $hasOpenRoom = Room::where('course_id', $validatedData['course_id'])
+            ->where('status', 'Aberta')
+            ->exists();
+
+        if (!$hasOpenRoom) {
+            return back()
+                ->withInput()
+                ->withErrors(['course_id' => 'O curso selecionado não tem turmas abertas neste momento. Aguarde a abertura de uma nova turma.']);
+        }
+
+        // 4. R1 — Verificar inscrição ativa no mesmo curso pelo mesmo BI
+        $existingEnrollment = Enrollment::activeForSameCourse(
+            $validatedData['number_of_identify'],
+            $validatedData['course_id']
+        )->first();
+
+        if ($existingEnrollment) {
+            return back()
+                ->withInput()
+                ->withErrors(['course_id' => 'Este candidato já possui a inscrição ' . $existingEnrollment->formattedCode() . ' neste curso. Para repetir o curso, registe um novo pagamento nessa inscrição após a conclusão da turma.']);
+        }
+
+        // 5. Processamento e Armazenamento da Imagem de Identificação
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $requestImage = $request->file('image');
-            $extension = $requestImage->extension();
-            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
-            $validatedData['image'] = $requestImage->storeAs('candidates', $imageName, 'public');
+            $uploadedImage = $request->file('image');
+            $extension     = $uploadedImage->extension();
+            $fileName      = md5($uploadedImage->getClientOriginalName() . time()) . '.' . $extension;
+            $validatedData['image'] = $uploadedImage->storeAs('candidates', $fileName, 'public');
         } else {
             $validatedData['image'] = null;
         }
 
-        $validatedData['status'] = 'Pendente';
-        $validatedData['date']   = now();
+        // 6. Regra de Negócio: Candidatura nasce Pendente e sem turma
+        $validatedData['room_id'] = null;
+        $validatedData['status']  = 'Pendente';
+        $validatedData['cycle']   = 1;
+        $validatedData['date']    = now();
 
-        Enrollment::create($validatedData);
+        // Remove campo não existente na tabela
+        unset($validatedData['student_code']);
 
-        return redirect()->route('enrollment.index')->with('success', 'Candidatura registada com sucesso!');
+        // 7. Criação do registo da candidatura na base de dados
+        $enrollment = Enrollment::create($validatedData);
+
+        // 8. Envio de notificação nativa por email para o endereço do candidato
+        try {
+            if (!empty($enrollment->email)) {
+                $enrollment->notify(new \App\Notifications\EnrollmentConfirmationNotification($enrollment));
+            }
+        } catch (\Throwable $e) {
+            // Em caso de indisponibilidade momentânea do serviço de email, regista nos logs sem interromper o fluxo
+            \Illuminate\Support\Facades\Log::warning("Falha ao enviar email de candidatura: " . $e->getMessage());
+        }
+
+        return redirect()
+            ->route('enrollment.index')
+            ->with('success', 'Candidatura registada com sucesso (' . $enrollment->formattedCode() . '). Aguarda pagamento para atribuição de turma.');
     }
 
     /**
-     * Exibe os detalhes de uma candidatura.
+     * Exibe o perfil detalhado da candidatura, incluindo dados da turma e pagamentos.
+     *
+     * @param int $id Identificador primário da inscrição
+     * @return \Illuminate\View\View
      */
     public function show($id)
     {
-        $enrollment = Enrollment::with(['course', 'payments'])->findOrFail($id);
-        return view('admin.enrollment.details.index', compact('enrollment'));
+        $enrollment = Enrollment::with([
+            'course',
+            'room.classroom',
+            'room.teacher',
+            'payments.previousRoom',
+            'student',
+        ])->findOrFail($id);
+
+        // Carrega turmas com estado 'Aberta' do mesmo curso para disponibilizar no modal de efetivação de matrícula
+        $openRooms = Room::where('course_id', $enrollment->course_id)
+            ->where('status', 'Aberta')
+            ->with(['classroom', 'teacher'])
+            ->orderBy('name', 'asc')
+            ->get();
+
+        return view('admin.enrollment.details.index', compact('enrollment', 'openRooms'));
     }
 
     /**
-     * Exibe o formulário de edição de uma candidatura.
+     * Exibe o formulário de edição de uma candidatura existente.
+     * Permite alterar dados pessoais, curso e turno pretendido.
+     * O estado e a turma são geridos pelo fluxo de pagamentos e matrículas.
+     *
+     * @param int $id Identificador primário da inscrição
+     * @return \Illuminate\View\View
      */
     public function edit($id)
     {
         $enrollment = Enrollment::findOrFail($id);
-        $courses    = Course::all();
+
+        // Carrega cursos com contagem de turmas abertas
+        $courses = Course::withCount([
+            'rooms as open_rooms_count' => fn($q) => $q->where('status', 'Aberta'),
+        ])->orderBy('name', 'asc')->get();
+
         return view('admin.enrollment.edit.index', compact('enrollment', 'courses'));
     }
 
     /**
-     * Atualiza os dados de uma candidatura na base de dados.
+     * Atualiza os dados de uma candidatura existente na base de dados.
+     *
+     * @param \Illuminate\Http\Request $request Dados da requisição HTTP
+     * @param int $id Identificador primário da inscrição
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
         $enrollment = Enrollment::findOrFail($id);
 
+        // Matriculado não pode mudar de curso
+        if ($enrollment->isEnrolled()) {
+            return back()
+                ->withInput()
+                ->withErrors(['course_id' => 'Não é possível alterar o curso de uma inscrição já matriculada.']);
+        }
+
+        // 1. Validação em linha dos campos editáveis da candidatura
         $validatedData = $request->validate([
             'name'               => 'required|string|max:255',
             'email'              => 'required|email|max:255',
-            'phone'              => 'required|string|max:50',
-            'number_of_identify' => 'required|string|max:100',
+            'phone'              => 'required|string|max:20',
+            'number_of_identify' => 'required|string|max:50',
+            'student_code'       => 'nullable|string|exists:students,code',
             'course_id'          => 'required|exists:courses,id',
-            'shift'              => 'required|string|max:255',
-            'status'             => 'required|string|max:100',
-            'image'              => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:4096',
+            'shift'              => 'required|string|in:Manhã,Tarde,Pós-Laboral',
+            'image'              => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
         ], [
             'name.required'               => 'O nome completo do candidato é obrigatório.',
-            'email.required'              => 'O email do candidato é obrigatório.',
+            'name.max'                    => 'O nome não pode exceder os 255 caracteres.',
+            'email.required'              => 'O endereço de email é obrigatório.',
+            'email.email'                 => 'Introduza um endereço de email válido.',
             'phone.required'              => 'O número de telefone é obrigatório.',
-            'number_of_identify.required' => 'O número de identificação é obrigatório.',
-            'course_id.required'          => 'Por favor, selecione o curso pretendido.',
-            'shift.required'              => 'Por favor, selecione o turno pretendido.',
+            'phone.max'                   => 'O telefone não pode exceder 20 dígitos.',
+            'number_of_identify.required' => 'O número do BI ou Passaporte é obrigatório.',
+            'number_of_identify.max'      => 'O documento não pode exceder 50 caracteres.',
+            'student_code.exists'         => 'O código de aluno indicado não existe no sistema.',
+            'course_id.required'          => 'A seleção do curso pretendido é obrigatória.',
+            'course_id.exists'            => 'O curso selecionado não é válido.',
+            'shift.required'              => 'O turno pretendido é obrigatório.',
+            'shift.in'                    => 'Selecione um turno válido (Manhã, Tarde ou Pós-Laboral).',
+            'image.image'                 => 'O ficheiro anexado deve ser uma imagem válida.',
+            'image.mimes'                 => 'A imagem deve estar no formato JPG, PNG ou WEBP.',
+            'image.max'                   => 'A imagem não pode exceder o tamanho máximo de 4MB.',
         ]);
 
+        // 2. R4 — Validação cruzada: código de aluno + BI devem coincidir
+        if (!empty($validatedData['student_code'])) {
+            $student = Student::where('code', $validatedData['student_code'])->first();
+            if ($student && $student->enrollment) {
+                $storedBi = $student->enrollment->number_of_identify;
+                if ($storedBi !== $validatedData['number_of_identify']) {
+                    return back()
+                        ->withInput()
+                        ->withErrors(['student_code' => 'O código de aluno não corresponde ao BI indicado.']);
+                }
+            }
+        }
+
+        $courseChanged = (int) $validatedData['course_id'] !== (int) $enrollment->course_id;
+
+        // 3. R11 — Se mudar de curso, novo curso deve ter turma 'Aberta'
+        if ($courseChanged) {
+            $hasOpenRoom = Room::where('course_id', $validatedData['course_id'])
+                ->where('status', 'Aberta')
+                ->exists();
+
+            if (!$hasOpenRoom) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['course_id' => 'O curso selecionado não tem turmas abertas neste momento.']);
+            }
+        }
+
+        // 4. R1 — Verificar inscrição ativa no mesmo curso pelo mesmo BI (ignorando esta)
+        $existingEnrollment = Enrollment::activeForSameCourse(
+            $validatedData['number_of_identify'],
+            $validatedData['course_id'],
+            $enrollment->id
+        )->first();
+
+        if ($existingEnrollment) {
+            return back()
+                ->withInput()
+                ->withErrors(['course_id' => 'Este candidato já possui a inscrição ' . $existingEnrollment->formattedCode() . ' neste curso.']);
+        }
+
+        // 5. Substituição da Imagem (caso um novo ficheiro tenha sido enviado)
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             if ($enrollment->image && Storage::disk('public')->exists($enrollment->image)) {
                 Storage::disk('public')->delete($enrollment->image);
             }
-            $requestImage = $request->file('image');
-            $extension = $requestImage->extension();
-            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
-            $validatedData['image'] = $requestImage->storeAs('candidates', $imageName, 'public');
+
+            $uploadedImage = $request->file('image');
+            $extension     = $uploadedImage->extension();
+            $fileName      = md5($uploadedImage->getClientOriginalName() . time()) . '.' . $extension;
+            $validatedData['image'] = $uploadedImage->storeAs('candidates', $fileName, 'public');
         }
 
+        // Remove campo não existente na tabela
+        unset($validatedData['student_code']);
+
+        // 6. Atualização dos dados no modelo
         $enrollment->update($validatedData);
 
-        return redirect()->route('enrollment.index')->with('success', 'Candidatura atualizada com sucesso!');
+        // 7. R9 — Se mudou de curso, recalcular o estado da inscrição
+        if ($courseChanged) {
+            $enrollment->refresh();
+            $enrollment->syncPaymentStatus();
+
+            $balance = $enrollment->remainingBalance();
+            $credit  = $enrollment->creditBalance();
+
+            if ($credit > 0) {
+                $msg = "Candidatura atualizada. O curso anterior era mais caro; existe um crédito de " . number_format($credit, 2, ',', '.') . " Kz.";
+            } elseif ($balance > 0) {
+                $msg = "Candidatura atualizada. O novo curso tem um valor superior; faltam " . number_format($balance, 2, ',', '.') . " Kz para completar o pagamento.";
+            } else {
+                $msg = "Candidatura '{$enrollment->name}' atualizada com sucesso!";
+            }
+
+            return redirect()->route('enrollment.index')->with('success', $msg);
+        }
+
+        return redirect()
+            ->route('enrollment.index')
+            ->with('success', "Candidatura '{$enrollment->name}' atualizada com sucesso!");
     }
 
     /**
-     * Elimina uma candidatura (Soft Delete).
+     * Remove uma candidatura do sistema via Soft Delete.
+     * Impede remoção caso já existam pagamentos confirmados ou aluno oficial matriculado.
+     *
+     * @param int $id Identificador primário da inscrição
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        $enrollment = Enrollment::findOrFail($id);
+        $enrollment = Enrollment::with(['payments', 'student'])->findOrFail($id);
+
+        // Regra de Integridade: Impedir eliminação se o formando já estiver oficializado
+        if ($enrollment->student) {
+            return back()->with('error', 'Não é possível eliminar esta candidatura pois o formando já se encontra matriculado oficialmente.');
+        }
+
+        // Regra de Integridade: Impedir eliminação se houver pagamentos confirmados associados
+        if ($enrollment->payments()->where('status', 'Confirmado')->exists()) {
+            return back()->with('error', 'Não é possível eliminar esta candidatura porque possui pagamentos confirmados registados.');
+        }
+
         $enrollment->delete();
 
-        return redirect()->route('enrollment.index')->with('success', 'Candidatura eliminada com sucesso!');
+        return redirect()
+            ->route('enrollment.index')
+            ->with('success', 'Candidatura eliminada com sucesso!');
     }
 }

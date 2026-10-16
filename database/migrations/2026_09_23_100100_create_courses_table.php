@@ -34,7 +34,7 @@ class CreateCoursesTable extends Migration
             $table->boolean('status')->default(true);
 
             // Preço do curso em Kwanzas (AOA), formatado até 15 dígitos e 2 casas decimais
-            $table->decimal('value', 15, 2);
+            $table->decimal('value', 15, 2)->default(9);
 
             // Suporte para eliminação lógica (deleted_at)
             $table->softDeletes();
