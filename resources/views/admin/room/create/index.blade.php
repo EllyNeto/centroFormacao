@@ -57,7 +57,7 @@
                                             <option value="">Selecione o Curso...</option>
                                             @foreach($courses as $course)
                                                 <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
-                                                    {{ $course->name }} ({{ $course->duration }}h - {{ number_format($course->value, 2, ',', '.') }} Kz)
+                                                   {{ $course->name }}  {{-- ({{ $course->duration }}h - {{ number_format($course->value, 2, ',', '.') }} Kz) --}}
                                                 </option>
                                             @endforeach
                                         </select>

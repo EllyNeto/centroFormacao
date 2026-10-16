@@ -68,13 +68,13 @@
                                             @endif
                                         </li>
 
-                                        {{-- Preço do Curso --}}
+                                        {{-- Preço do Curso
                                         <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 py-2 border-bottom border-light">
                                             <span class="text-dark font-w600 fs-15">
                                                 <i class="fa fa-tag me-2 text-primary"></i> Preço:
                                             </span>
                                             <span class="text-dark font-w700 fs-16">{{ number_format($course->value, 2, ',', '.') }} Kz</span>
-                                        </li>
+                                        </li> --}}
 
                                         {{-- Carga Horária --}}
                                         <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 py-2 border-bottom border-light">

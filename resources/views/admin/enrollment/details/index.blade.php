@@ -21,6 +21,11 @@
                             <p class="m-0 subtitle text-muted">Acompanhamento dos dados do candidato, turma atribuída e estado do processo</p>
                         </div>
                         <div class="d-flex align-items-center gap-2">
+                            @if($enrollment->canReceivePayment())
+                                <a href="{{ route('payment.create', ['enrollment_id' => $enrollment->id]) }}" class="btn btn-success btn-sm">
+                                    <i class="fa fa-money me-1"></i> {{ $enrollment->canRepeat() ? 'Registar Repetição' : 'Registar Pagamento' }}
+                                </a>
+                            @endif
                             <a href="{{ route('enrollment.edit', $enrollment->id) }}" class="btn btn-primary btn-sm">
                                 <i class="fa fa-pencil me-1"></i> Editar
                             </a>
@@ -182,18 +187,30 @@
                                 </div>
                             </div>
 
-                            {{-- 4. Situação Financeira & Pagamentos
+                            {{-- 4. Situação Financeira & Pagamentos --}}
                             <div class="col-md-6">
                                 <div class="p-4 border rounded bg-white h-100 shadow-sm">
-                                    <h5 class="font-w600 mb-3 text-dark border-bottom pb-2">
-                                        <i class="fa fa-money text-muted me-2"></i>Situação Financeira
-                                    </h5>
+                                    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                                        <h5 class="font-w600 text-dark mb-0">
+                                            <i class="fa fa-money text-muted me-2"></i>Situação Financeira
+                                            @if(($enrollment->cycle ?? 1) > 1)
+                                                <span class="badge badge-info ms-2 fs-8">Ciclo {{ $enrollment->cycle }}</span>
+                                            @endif
+                                        </h5>
+                                        @if($enrollment->canReceivePayment())
+                                            <a href="{{ route('payment.create', ['enrollment_id' => $enrollment->id]) }}" class="btn btn-outline-primary btn-xs">
+                                                <i class="fa fa-plus me-1"></i> {{ $enrollment->canRepeat() ? 'Nova Repetição' : 'Registar Pagamento' }}
+                                            </a>
+                                        @endif
+                                    </div>
+
                                     @php
-                                        $totalCourse = $enrollment->course ? (float) $enrollment->course->value : 0.0;
+                                        $coursePrice = $enrollment->course ? (float) $enrollment->course->value : 0.0;
                                         $paid = $enrollment->totalPaid();
                                         $balance = $enrollment->remainingBalance();
                                     @endphp
-                                    <div class="row g-3">
+
+                                    <div class="row g-3 mb-3">
                                         <div class="col-sm-6">
                                             <small class="text-muted d-block text-uppercase font-w600 fs-7 mb-1">Montante Liquidado</small>
                                             <span class="fs-6 font-w600 text-success">
@@ -207,14 +224,70 @@
                                             </span>
                                         </div>
                                         <div class="col-12">
-                                            <small class="text-muted d-block text-uppercase font-w600 fs-7 mb-1">Estado de Liquidação</small>
-                                            @if($enrollment->isPaid() || $balance <= 0)
-                                                <span class="badge light badge-success">Propina Integralmente Liquidada</span>
+                                            <small class="text-muted d-block text-uppercase font-w600 fs-7 mb-1">Estado da Propina</small>
+                                            @php $credit = $enrollment->creditBalance(); @endphp
+                                            @if($credit > 0)
+                                                <span class="badge light badge-info">
+                                                    <i class="fa fa-arrow-left me-1"></i>Crédito: {{ number_format($credit, 2, ',', '.') }} Kz
+                                                </span>
+                                            @elseif($enrollment->isPaid() || $enrollment->isEnrolled())
+                                                <span class="badge light badge-success">
+                                                    <i class="fa fa-check me-1"></i>Propina Liquidada
+                                                </span>
                                             @else
-                                                <span class="badge light badge-warning">Pagamento Pendente</span>
+                                                <span class="badge light badge-warning">Pendente de Pagamento</span>
                                             @endif
                                         </div>
-                                    </div> --}}
+                                    </div>
+
+                                    {{-- Histórico de Pagamentos Agrupado por Ciclo (GAP 5) --}}
+                                    @if($enrollment->payments && $enrollment->payments->count() > 0)
+                                        @php
+                                            $paymentsByCycle = $enrollment->payments->groupBy('cycle')->sortKeys();
+                                        @endphp
+                                        <div class="border-top pt-3">
+                                            <small class="text-muted d-block text-uppercase font-w600 fs-8 mb-2">Comprovativos Registados</small>
+
+                                            @foreach($paymentsByCycle as $cycleNum => $cyclePayments)
+                                                @php
+                                                    $cycleLabel = $cycleNum == 1
+                                                        ? '1.ª Frequência'
+                                                        : ($cycleNum - 1) . '.ª Repetição (Ciclo ' . $cycleNum . ')';
+                                                @endphp
+                                                <div class="mb-2">
+                                                    <small class="text-muted text-uppercase font-w600 fs-8 d-block py-1 px-2 bg-light rounded border mb-1">
+                                                        <i class="fa fa-repeat me-1"></i>{{ $cycleLabel }}
+                                                    </small>
+                                                    <ul class="list-unstyled mb-0">
+                                                        @foreach($cyclePayments as $p)
+                                                            <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                                                <div>
+                                                                    <a href="{{ route('payment.show', $p->id) }}" class="font-w600 text-primary fs-7">
+                                                                        {{ $p->reference }}
+                                                                    </a>
+                                                                    <small class="text-muted d-block fs-8">{{ $p->formattedDate() }} &bull; {{ $p->type_of_payment }}</small>
+                                                                    @if($p->previous_room_id && $p->previousRoom)
+                                                                        <small class="text-warning d-block fs-8">
+                                                                            <i class="fa fa-history me-1"></i>Turma anterior: {{ $p->previousRoom->name }}
+                                                                        </small>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="text-end">
+                                                                    <strong class="fs-7 text-dark">{{ $p->formattedValue() }}</strong>
+                                                                    <span class="badge light {{ $p->statusBadgeClass() }} d-block fs-8 mt-1">{{ $p->status }}</span>
+                                                                    @if($p->isCanceled() && $p->cancellation_reason)
+                                                                        <small class="text-muted d-block fs-8" title="{{ $p->cancellation_reason }}">
+                                                                            <i class="fa fa-info-circle me-1"></i>Ver motivo
+                                                                        </small>
+                                                                    @endif
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

@@ -53,7 +53,7 @@ class courseController extends Controller
         $validatedData = $request->validate([
             'name'        => 'required|string|max:255|unique:courses,name,NULL,id,deleted_at,NULL',
             'duration'    => 'required|integer|min:1',
-            'value'       => 'required|numeric|min:0',
+            'value'       => 'nullable|numeric|min:0',
             'status'      => 'required|boolean',
             'description' => 'nullable|string',
         ], [
@@ -63,9 +63,9 @@ class courseController extends Controller
             'duration.required' => 'A carga horária (duração) é de preenchimento obrigatório.',
             'duration.integer'  => 'A carga horária deve ser um valor inteiro de horas.',
             'duration.min'      => 'A carga horária deve ser de pelo menos 1 hora.',
-            'value.required'    => 'O preço do curso é de preenchimento obrigatório.',
-            'value.numeric'     => 'O preço do curso deve ser um valor numérico válido.',
-            'value.min'         => 'O preço do curso não pode ser um valor negativo.',
+            // 'value.required'    => 'O preço do curso é de preenchimento obrigatório.',
+            // 'value.numeric'     => 'O preço do curso deve ser um valor numérico válido.',
+            // 'value.min'         => 'O preço do curso não pode ser um valor negativo.',
             'status.required'   => 'O estado de atividade do curso é obrigatório.',
             'status.boolean'    => 'O estado do curso deve ser Ativo ou Inativo.',
         ]);
@@ -128,7 +128,7 @@ class courseController extends Controller
         $validatedData = $request->validate([
             'name'        => "required|string|max:255|unique:courses,name,{$id},id,deleted_at,NULL",
             'duration'    => 'required|integer|min:1',
-            'value'       => 'required|numeric|min:0',
+            'value'       => 'nullable|numeric|min:0',
             'status'      => 'required|boolean',
             'description' => 'nullable|string',
         ], [
@@ -138,9 +138,9 @@ class courseController extends Controller
             'duration.required' => 'A carga horária (duração) é de preenchimento obrigatório.',
             'duration.integer'  => 'A carga horária deve ser um valor inteiro de horas.',
             'duration.min'      => 'A carga horária deve ser de pelo menos 1 hora.',
-            'value.required'    => 'O preço do curso é de preenchimento obrigatório.',
-            'value.numeric'     => 'O preço do curso deve ser um valor numérico válido.',
-            'value.min'         => 'O preço do curso não pode ser um valor negativo.',
+            // 'value.required'    => 'O preço do curso é de preenchimento obrigatório.',
+            // 'value.numeric'     => 'O preço do curso deve ser um valor numérico válido.',
+            // 'value.min'         => 'O preço do curso não pode ser um valor negativo.',
             'status.required'   => 'O estado de atividade do curso é obrigatório.',
             'status.boolean'    => 'O estado do curso deve ser Ativo ou Inativo.',
         ]);

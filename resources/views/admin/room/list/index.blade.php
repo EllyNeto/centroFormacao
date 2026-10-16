@@ -66,11 +66,11 @@
 											{{-- Nome da Turma --}}
 											<td>
 												<strong>{{ $room->name }}</strong>
-												@if($room->start_date && $room->end_date)
+												{{-- @if($room->start_date && $room->end_date)
 													<small class="d-block text-muted">
 														<i class="fa fa-calendar me-1"></i> {{ $room->start_date->format('d/m/Y') }} - {{ $room->end_date->format('d/m/Y') }}
 													</small>
-												@endif
+												@endif --}}
 											</td>
 
 											{{-- Curso Associado --}}

@@ -113,17 +113,40 @@
                                             @enderror
                                         </div>
 
+                                        {{-- Código de Aluno (Opcional — R4) --}}
+                                        <div class="col-md-6">
+                                            <label for="student_code" class="form-label text-dark font-w600">Código de Aluno <span class="text-muted fw-normal">(opcional)</span></label>
+                                            <input type="text" name="student_code" id="student_code" class="form-control @error('student_code') is-invalid @enderror" value="{{ old('student_code') }}" placeholder="Ex: ALU-0001">
+                                            <small class="text-muted">Preencha apenas se o candidato já for aluno registado.</small>
+                                            @error('student_code')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
                                         {{-- Curso Pretendido --}}
                                         <div class="col-md-6">
                                             <label for="course_id" class="form-label text-dark font-w600">Curso Pretendido <span class="text-danger">*</span></label>
-                                            <select id="course_id" name="course_id" class="form-control select2 @error('course_id') is-invalid @enderror" required>
+                                            @if($enrollment->isEnrolled())
+                                                {{-- R9/GAP4: select desativado para Matriculados; envia valor via hidden --}}
+                                                <input type="hidden" name="course_id" value="{{ $enrollment->course_id }}">
+                                                <select id="course_id" class="form-control select2" disabled>
+                                            @else
+                                                <select id="course_id" name="course_id" class="form-control select2 @error('course_id') is-invalid @enderror" required>
+                                            @endif
                                                 <option value="">Selecione o Curso...</option>
                                                 @foreach($courses as $course)
-                                                    <option value="{{ $course->id }}" {{ old('course_id', $enrollment->course_id) == $course->id ? 'selected' : '' }}>
+                                                    <option value="{{ $course->id }}" {{ old('course_id', $enrollment->course_id) == $course->id ? 'selected' : '' }}
+                                                            data-open-rooms="{{ $course->open_rooms_count ?? 0 }}">
                                                         {{ $course->name }} ({{ number_format($course->value, 2, ',', '.') }} Kz)
+                                                        @if(($course->open_rooms_count ?? 0) == 0)
+                                                            — ⚠ Sem turmas abertas
+                                                        @endif
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @if($enrollment->isEnrolled())
+                                                <small class="text-muted"><i class="fa fa-lock me-1"></i>Curso bloqueado: candidato já está Matriculado.</small>
+                                            @endif
                                             @error('course_id')
                                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror

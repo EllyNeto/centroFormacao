@@ -11,81 +11,85 @@
 					</li>
 
 					{{-- Seção Módulo de Curso--}} 
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+					<li><a href="{{ route('course.index')}}" aria-expanded="false">
 						<i class="material-symbols-outlined">book</i>
 						<span class="nav-text">Curso</span>
 					</a>
-						<ul aria-expanded="false">
-							{{-- Link para a listagem de cursos --}} 
+						{{--<ul aria-expanded="false">
+							 Link para a listagem de cursos
 							<li><a href="{{ route('course.index')}}">Listar</a></li>
-							{{-- Link para criação de novo curso --}}
+							{{-- Link para criação de novo curso 
 							<li><a href="{{ route('course.create')}}">Adicionar novo</a></li>
-						</ul>
+						</ul>--}}
 					</li>
 					{{-- Seção Módulo de Formador --}}
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+					<li><a href="{{ route('teacher.index')}}" aria-expanded="false">
 						<i class="material-symbols-outlined">person</i>
 						<span class="nav-text">Formador</span>
 					</a>
-					<ul aria-expanded="false">
-						{{-- Link para a listagem de formadores --}}
+					{{-- <ul aria-expanded="false">
+						Link para a listagem de formadores
 						<li><a href="{{ route('teacher.index')}}">Listar</a></li>
-						{{-- Link para registo de novo formador --}}
+						{{-- Link para registo de novo formador 
 						<li><a href="{{ route('teacher.create')}}">Adicionar novo</a></li>
-					</ul>
+					</ul>--}}
 					</li>
 					{{-- Seção Módulo de Sala --}}
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+					<li><a href="{{ route('classroom.index')}}" aria-expanded="false">
 						<i class="material-symbols-outlined">meeting_room</i>
 						<span class="nav-text">Sala</span>
 					</a>
-					<ul aria-expanded="false">
-						{{-- Link para a listagem de Salas --}}
+					{{-- <ul aria-expanded="false">
+						Link para a listagem de Salas
 						<li><a href="{{ route('classroom.index')}}">Listar</a></li>
-						{{-- Link para registo de nova Sala --}}
+						{{-- Link para registo de nova Sala 
 						<li><a href="{{ route('classroom.create')}}">Adicionar nova</a></li>
-					</ul>
+					</ul>--}}
 					</li>
 					{{-- Seção Módulo de Turma --}}
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+					<li><a href="{{ route('room.index')}}" aria-expanded="false">
 						<i class="material-symbols-outlined">groups</i>
 						<span class="nav-text">Turma</span>
 					</a>
-						<ul aria-expanded="false">
-							{{-- Link para a listagem de turmas --}}
-							<li><a href="{{ route('room.index')}}">Listar</a></li>
-							{{-- Link para criação de nova turma --}}
+						{{-- <ul aria-expanded="false">
+							{{-- Link para a listagem de turmas 
+							<li><a href="{{ route('room.index')}}">Listar</a></li>--}}
+							{{-- Link para criação de nova turma 
 							<li><a href="{{ route('room.create')}}">Adicionar nova</a></li>
-						</ul>
+						</ul> --}}
 					</li>
 					{{-- Seção Módulo de Estudante --}}
-					<li><a href="{{ route('student.index')}}">
-						<i class="material-symbols-outlined">school</i>
-						<span class="nav-text">Formando</span>
-					</a>
-					{{-- Seção Módulo de pagamento --}}
-				<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
-					<i class="material-symbols-outlined">payments</i>
-					<span class="nav-text">Pagamento</span>
-				</a>
-				<ul aria-expanded="false">
-					{{-- Link para a listagem de pagamentos --}}
-					<li><a href="{{ route('payment.index')}}">Listar</a></li>
-					{{-- Link para criação de novo pagamento --}}
-					<li><a href="{{ route('payment.create')}}">Adicionar novo</a></li>
-				</ul>
-			</li>
+					<li>
+						<a href="{{ route('student.index')}}">
+							<i class="material-symbols-outlined">school</i>
+							<span class="nav-text">Formando</span>
+						</a>
+					</li>
+
+					{{-- Seção Módulo de Pagamento --}}
+					<li>
+						<a href="{{ route('payment.index')}}" aria-expanded="false">
+							<i class="material-symbols-outlined">payments</i>
+							<span class="nav-text">Pagamento</span>
+						</a>
+						{{--<ul aria-expanded="false">
+							 Link para a listagem de pagamentos
+							<li><a href="{{ route('payment.index')}}">Listar</a></li>
+							{{-- Link para criação de novo pagamento 
+							<li><a href="{{ route('payment.create')}}">Adicionar novo</a></li>
+						</ul>--}}
+					</li>
 						{{-- Seção Módulo de Inscrição --}}
-					<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
+					<li><a href="{{ route('enrollment.index')}}" aria-expanded="false">
 						<i class="material-symbols-outlined">app_registration</i>
 						<span class="nav-text">Inscrição</span>
 					</a>
-					<ul aria-expanded="false">
-						{{-- Link para a listagem de Inscrições --}}
+					{{-- <ul aria-expanded="false">
+						Link para a listagem de Inscrições
 						<li><a href="{{ route('enrollment.index')}}">Listar</a></li>
-						{{-- Link para criação de novo Inscrição --}}
+						{{-- Link para criação de novo Inscrição 
 						<li><a href="{{ route('enrollment.create')}}">Adicionar nova</a></li>
-					</ul>
+					</ul>--}}
 
 
 {{-- 

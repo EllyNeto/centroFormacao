@@ -1,0 +1,275 @@
+/**
+ * Folha de Estilos Externa: Módulo de Pagamentos (Payment)
+ * Centro de Formação Profissional
+ *
+ * Contém todos os estilos visuais para listagem, formulários e recibo de pagamento.
+ * Rigorosamente em conformidade com as regras arquiteturais: SEM CSS inline nos ficheiros Blade.
+ */
+
+/* ==========================================================================
+   1. Cartões de Estatísticas / Métricas no Topo da Listagem
+   ========================================================================== */
+.payment-metric-card {
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    background-color: #ffffff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 1.25rem 1.5rem;
+}
+
+.payment-metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.payment-metric-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.payment-icon-success {
+    background-color: rgba(40, 167, 69, 0.12);
+    color: #28a745;
+}
+
+.payment-icon-primary {
+    background-color: rgba(13, 110, 253, 0.12);
+    color: #0d6efd;
+}
+
+.payment-icon-warning {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #d39e00;
+}
+
+.payment-icon-danger {
+    background-color: rgba(220, 53, 69, 0.12);
+    color: #dc3545;
+}
+
+/* ==========================================================================
+   2. Caixa de Pré-visualização do Candidato no Formulário
+   ========================================================================== */
+.candidate-preview-box {
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.candidate-preview-box.is-active {
+    background-color: #ffffff;
+    border-color: #0d6efd;
+    box-shadow: 0 6px 18px rgba(13, 110, 253, 0.08);
+}
+
+.candidate-avatar-preview {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #dee2e6;
+}
+
+.candidate-avatar-preview-placeholder {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 1.5rem;
+}
+
+.candidate-debt-badge {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+}
+
+/* ==========================================================================
+   3. Recibo Oficial de Pagamento (Página de Detalhes)
+   ========================================================================== */
+.receipt-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    position: relative;
+}
+
+.receipt-header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #ffffff;
+    padding: 2.25rem 2.5rem;
+    position: relative;
+}
+
+.receipt-header .receipt-title {
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.receipt-header .receipt-number {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.15rem;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 0.35rem 0.85rem;
+    border-radius: 6px;
+    display: inline-block;
+    color: #38bdf8;
+    font-weight: 600;
+}
+
+.receipt-body {
+    padding: 2.5rem;
+}
+
+.receipt-section-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #64748b;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 0.5rem;
+}
+
+.receipt-amount-box {
+    background-color: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 1.75rem;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.receipt-amount-display {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+}
+
+.receipt-stamp {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    border: 3px solid;
+    border-radius: 8px;
+    transform: rotate(-3deg);
+    opacity: 0.85;
+}
+
+.receipt-stamp-confirmed {
+    color: #16a34a;
+    border-color: #16a34a;
+    background-color: rgba(22, 163, 74, 0.05);
+}
+
+.receipt-stamp-pending {
+    color: #ca8a04;
+    border-color: #ca8a04;
+    background-color: rgba(202, 138, 4, 0.05);
+}
+
+.receipt-stamp-canceled {
+    color: #dc2626;
+    border-color: #dc2626;
+    background-color: rgba(220, 38, 38, 0.05);
+}
+
+.receipt-signatures {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.signature-line {
+    border-top: 1px solid #475569;
+    width: 80%;
+    margin: 2.5rem auto 0.5rem auto;
+}
+
+/* ==========================================================================
+   4. Botões e Formulário de Pagamento
+   ========================================================================== */
+.btn-preset-val {
+    border-radius: 20px;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.75rem;
+    font-weight: 600;
+}
+
+.payment-reference-input-group .input-group-text {
+    cursor: pointer;
+    background-color: #f1f5f9;
+}
+
+/* ==========================================================================
+   5. Regras de Impressão Direta (Print Styling)
+   ========================================================================== */
+@media print {
+    /* Ocultar elementos desnecessários na impressão */
+    body * {
+        visibility: hidden;
+    }
+    
+    .nav-header,
+    .chatbox,
+    .header,
+    .dlabnav,
+    .footer,
+    .no-print,
+    .btn,
+    .page-titles,
+    .card-header .btn {
+        display: none !important;
+    }
+
+    .content-body {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .receipt-container,
+    .receipt-container * {
+        visibility: visible;
+    }
+
+    .receipt-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100% !important;
+        max-width: 100% !important;
+        border: none !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .receipt-header {
+        background: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}

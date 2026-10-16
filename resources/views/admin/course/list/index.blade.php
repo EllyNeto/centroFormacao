@@ -54,9 +54,9 @@
 									<tr>
 										<th>Nome do Curso</th>
 										<th>Carga Horária</th>
-										<th>Preço (Kz)</th>
+										{{-- <th>Preço (Kz)</th> --}}
 										<th>Estado</th>
-										<th>Turmas Ativas</th>
+										{{-- <th>Turmas Ativas</th> --}}
 										<th class="text-end">Acções</th>
 									</tr>
 								</thead>
@@ -65,7 +65,7 @@
 									@forelse ($courses as $course)
 										<tr>
 											{{-- Nome do Curso --}}
-											<td><strong>{{ $course->name }}</strong></td>
+											<td><a href="{{ route('course.show', $course->id) }}"><strong>{{ $course->name }}</strong></a></td>
 
 											{{-- Duração em Horas --}}
 											<td>
@@ -74,9 +74,9 @@
 											</td>
 
 											{{-- Preço Formatado em Kz --}}
-											<td>
+											{{-- <td>
 												<strong>{{ number_format($course->value, 2, ',', '.') }} Kz</strong>
-											</td>
+											</td> --}}
 
 											{{-- Estado (Ativo / Inativo) --}}
 											<td>
@@ -87,12 +87,12 @@
 												@endif
 											</td>
 
-											{{-- Contagem de Turmas Alocadas --}}
+											{{-- Contagem de Turmas Alocadas 
 											<td>
 												<span class="badge light {{ ($course->rooms_count ?? 0) > 0 ? 'badge-info' : 'badge-secondary' }}">
 													{{ $course->rooms_count ?? 0 }} turma(s)
 												</span>
-											</td>
+											</td>--}}
 
 											{{-- Célula de Ações com menu suspenso --}}
 											<td class="text-end action-cell">

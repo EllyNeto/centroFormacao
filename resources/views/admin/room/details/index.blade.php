@@ -146,10 +146,10 @@
                                                 <small class="text-muted d-block text-uppercase font-w600 fs-7 mb-1">Carga Horária</small>
                                                 <span class="fs-6 font-w600 text-dark">{{ $room->course->duration }} horas</span>
                                             </div>
-                                            <div class="col-sm-6">
+                                            {{-- <div class="col-sm-6">
                                                 <small class="text-muted d-block text-uppercase font-w600 fs-7 mb-1">Preço da Propina</small>
                                                 <span class="fs-6 font-w600 text-dark">{{ number_format($room->course->value, 2, ',', '.') }} Kz</span>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     @else
                                         <p class="text-muted mb-0">Curso não identificado.</p>

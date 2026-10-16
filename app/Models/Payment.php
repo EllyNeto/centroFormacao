@@ -14,17 +14,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property int $id
  * @property int $enrollment_id
+ * @property int $cycle                         Ciclo de frequência a que pertence este pagamento
+ * @property int|null $previous_room_id         Turma anterior (em caso de repetição)
  * @property string $type_of_payment
  * @property float $value
  * @property string $currency
  * @property string $reference
  * @property string $status
+ * @property string|null $cancellation_reason   Motivo da anulação (obrigatório ao anular Confirmado)
+ * @property \Carbon\Carbon|null $canceled_at   Data/hora da anulação
  * @property \Carbon\Carbon|null $date
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
  *
  * @property-read \App\Models\Enrollment $enrollment
+ * @property-read \App\Models\Room|null $previousRoom
  */
 class Payment extends Model
 {
@@ -44,11 +49,15 @@ class Payment extends Model
      */
     protected $fillable = [
         'enrollment_id',
+        'cycle',
+        'previous_room_id',
         'type_of_payment',
         'value',
         'currency',
         'reference',
         'status',
+        'cancellation_reason',
+        'canceled_at',
         'date',
     ];
 
@@ -58,8 +67,10 @@ class Payment extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'value' => 'float',
-        'date'  => 'datetime',
+        'value'        => 'float',
+        'cycle'        => 'integer',
+        'date'         => 'datetime',
+        'canceled_at'  => 'datetime',
     ];
 
     // =========================================================================
@@ -76,9 +87,31 @@ class Payment extends Model
         return $this->belongsTo(Enrollment::class, 'enrollment_id');
     }
 
+    /**
+     * Turma anterior (antes da repetição do curso).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function previousRoom()
+    {
+        return $this->belongsTo(Room::class, 'previous_room_id');
+    }
+
     // =========================================================================
     // MÉTODOS AUXILIARES E REGRAS DE NEGÓCIO
     // =========================================================================
+
+    /**
+     * Verifica se este pagamento ainda pode ser editado (apenas Pendente).
+     * Pagamentos Confirmados só podem ser Anulados.
+     * Pagamentos Anulados são imutáveis.
+     *
+     * @return bool
+     */
+    public function isEditable(): bool
+    {
+        return $this->status === 'Pendente';
+    }
 
     /**
      * Retorna o valor do pagamento devidamente formatado com o símbolo da moeda.

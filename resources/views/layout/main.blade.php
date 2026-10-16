@@ -36,6 +36,7 @@
 	<link href="{{ asset('css/teacher-form.css') }}?v={{ time() }}" rel="stylesheet">
 	<link href="{{ asset('css/turma-form.css') }}?v={{ time() }}" rel="stylesheet">
 	<link href="{{ asset('css/enrollment-form.css') }}?v={{ time() }}" rel="stylesheet">
+	<link href="{{ asset('css/payment-form.css') }}?v={{ time() }}" rel="stylesheet">
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
 	{{-- Folha de Estilos Personalizada para Tabelas Centralizadas e Ampliadas --}}
     <link href="{{asset('css/custom-tables.css')}}?v={{ time() }}" rel="stylesheet">
@@ -169,6 +170,7 @@
 	<script src="{{asset('vendor/select2/js/select2.full.min.js')}}"></script>
 	<script src="{{ asset('js/turma-form.js') }}?v={{ time() }}"></script>
 	<script src="{{ asset('js/enrollment-form.js') }}?v={{ time() }}"></script>
+	<script src="{{ asset('js/payment-form.js') }}?v={{ time() }}"></script>
 
 	<!-- Currency Formatter Utility -->
 	<script src="{{asset('js/currency-formatter.js')}}"></script>

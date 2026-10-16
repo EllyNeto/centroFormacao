@@ -64,13 +64,13 @@
                                 </div>
 
                                 {{-- Campo: Preço / Valor do Curso (Kz) --}}
-                                <div class="col-md-6 mb-3">
+                                {{-- <div class="col-md-6 mb-3">
                                     <label for="value" class="form-label text-primary">Preço do Curso (Kz) <span class="text-danger">*</span></label>
                                     <input type="number" step="0.01" min="0" class="form-control @error('value') is-invalid @enderror" id="value" name="value" value="{{ old('value') }}" placeholder="Ex: 45000" required>
                                     @error('value')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 {{-- Campo: Estado do Curso (Ativo / Inativo) --}}
                                 <div class="col-md-6 mb-3">
@@ -86,8 +86,8 @@
 
                                 {{-- Campo: Descrição / Programa Formativo --}}
                                 <div class="col-md-12 mb-4">
-                                    <label for="description" class="form-label text-primary">Descrição / Conteúdo Programático</label>
-                                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="5" placeholder="Descreva os objetivos, módulos e requisitos do curso...">{{ old('description') }}</textarea>
+                                    <label for="description" class="form-label text-primary">Observação</label>
+                                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="5" placeholder="">{{ old('description') }}</textarea>
                                     @error('description')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

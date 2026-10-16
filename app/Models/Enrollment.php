@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|null $room_id
  * @property string $shift
  * @property string $status
+ * @property int $cycle               Ciclo de frequência atual (1 = 1.ª frequência, 2 = 1.ª repetição …)
  * @property \Carbon\Carbon|null $date
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
@@ -43,6 +44,7 @@ class Enrollment extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'code',
         'name',
         'email',
         'phone',
@@ -52,6 +54,7 @@ class Enrollment extends Model
         'room_id',
         'shift',
         'status',
+        'cycle',
         'date',
     ];
 
@@ -61,8 +64,30 @@ class Enrollment extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'date' => 'datetime',
+        'date'  => 'datetime',
+        'cycle' => 'integer',
     ];
+
+    /**
+     * Boot do modelo: gera automaticamente o código único de inscrição
+     * no momento da criação (evento 'creating').
+     *
+     * Formato: INS-ANO-NNNN  (Ex: INS-2026-0001)
+     * O número sequencial é baseado no último ID existente + 1,
+     * garantindo unicidade mesmo com soft deletes.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($enrollment) {
+            if (empty($enrollment->code)) {
+                $year   = date('Y');
+                $nextId = (int) self::withTrashed()->max('id') + 1;
+                $enrollment->code = 'INS-' . $year . '-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+            }
+        });
+    }
 
     // =========================================================================
     // RELACIONAMENTOS ELOQUENT
@@ -113,13 +138,16 @@ class Enrollment extends Model
     // =========================================================================
 
     /**
-     * Retorna o código oficial formatado da candidatura (Ex: INS-0001).
+     * Retorna o código oficial da candidatura.
+     * Usa o campo 'code' gerado automaticamente (Ex: INS-2026-0001).
+     * Fallback para o formato baseado no ID caso o código ainda não exista
+     * (registos anteriores à migração).
      *
      * @return string
      */
     public function formattedCode(): string
     {
-        return 'INS-' . str_pad($this->id, 4, '0', STR_PAD_LEFT);
+        return $this->code ?? ('INS-' . str_pad($this->id, 4, '0', STR_PAD_LEFT));
     }
 
     /**
@@ -173,26 +201,160 @@ class Enrollment extends Model
     }
 
     /**
-     * Calcula o montante total pago e confirmado para esta inscrição.
+     * Verifica se a turma associada a esta inscrição está Concluída.
+     * Condição necessária para o aluno poder repetir o curso.
+     *
+     * @return bool
+     */
+    public function isFinished(): bool
+    {
+        return $this->room && $this->room->status === 'Concluída';
+    }
+
+    /**
+     * Verifica se o aluno pode repetir o curso.
+     * Condição: inscrição não cancelada E turma concluída E propina paga/matriculado.
+     *
+     * @return bool
+     */
+    public function canRepeat(): bool
+    {
+        return !$this->isCanceled()
+            && $this->isFinished()
+            && ($this->isPaid() || $this->isEnrolled());
+    }
+
+    /**
+     * Retorna os pagamentos do ciclo atual da inscrição.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function currentCyclePayments()
+    {
+        return $this->payments()->where('cycle', $this->cycle ?? 1);
+    }
+
+    /**
+     * Calcula o montante já comprometido (Confirmado + Pendente) no ciclo atual.
+     * Utilizado para bloquear novos pagamentos enquanto houver um Pendente.
+     *
+     * @param int|null $ignorePaymentId Exclui um pagamento específico do cálculo (usado no update)
+     * @return float
+     */
+    public function committedAmount(?int $ignorePaymentId = null): float
+    {
+        $query = $this->payments()
+            ->where('cycle', $this->cycle ?? 1)
+            ->whereIn('status', ['Confirmado', 'Pendente']);
+
+        if ($ignorePaymentId) {
+            $query->where('id', '!=', $ignorePaymentId);
+        }
+
+        return (float) $query->sum('value');
+    }
+
+    /**
+     * Calcula o montante total Confirmado no ciclo atual (para verificar se está pago).
      *
      * @return float
      */
     public function totalPaid(): float
     {
-        return (float) $this->payments()
+        return (float) $this->currentCyclePayments()
             ->where('status', 'Confirmado')
             ->sum('value');
     }
 
     /**
-     * Calcula o saldo em dívida face ao valor total da propina do curso.
+     * Calcula o saldo em dívida face ao valor total da propina do curso no ciclo atual.
+     *
+     * @param int|null $ignorePaymentId Exclui um pagamento do cálculo (usado no update)
+     * @return float
+     */
+    public function remainingBalance(?int $ignorePaymentId = null): float
+    {
+        $coursePrice = $this->course ? (float) $this->course->value : 0.0;
+        return max(0.0, $coursePrice - $this->committedAmount($ignorePaymentId));
+    }
+
+    /**
+     * Calcula o crédito excedente quando o curso mudou para um valor inferior ao pago.
      *
      * @return float
      */
-    public function remainingBalance(): float
+    public function creditBalance(): float
     {
         $coursePrice = $this->course ? (float) $this->course->value : 0.0;
-        return max(0.0, $coursePrice - $this->totalPaid());
+        $committed   = $this->committedAmount();
+        return max(0.0, $committed - $coursePrice);
+    }
+
+    /**
+     * Verifica se esta inscrição pode receber um novo pagamento.
+     * Regra R6: bloqueia se já existe pagamento Pendente ou Confirmado no ciclo atual.
+     * Regra R3: permite se canRepeat() (repetição de curso).
+     *
+     * @return bool
+     */
+    public function canReceivePayment(): bool
+    {
+        if ($this->isCanceled()) {
+            return false;
+        }
+
+        // Pode repetir o curso (turma concluída e paga)
+        if ($this->canRepeat()) {
+            return true;
+        }
+
+        // Tem saldo em dívida (sem pagamento Pendente/Confirmado a cobrir tudo)
+        return $this->remainingBalance() > 0;
+    }
+
+    /**
+     * Sincroniza o estado da inscrição com base nos pagamentos Confirmados do ciclo atual.
+     *
+     * Regra R7: só passa a 'Pago' quando os pagamentos Confirmados cobrem o preço total.
+     * Inscrições 'Matriculado' não são alteradas.
+     *
+     * @return void
+     */
+    public function syncPaymentStatus(): void
+    {
+        // Estado Matriculado é imutável por este método
+        if ($this->isEnrolled()) {
+            return;
+        }
+
+        $coursePrice = $this->course ? (float) $this->course->value : 0.0;
+        $confirmed   = $this->totalPaid();
+
+        if ($coursePrice > 0 && $confirmed >= $coursePrice) {
+            $this->update(['status' => 'Pago']);
+        } else {
+            $this->update(['status' => 'Pendente']);
+        }
+    }
+
+    /**
+     * Scope: inscrições ativas da mesma pessoa no mesmo curso.
+     * Usado para impedir inscrições duplicadas (R1).
+     * Inclui inscrições finalizadas porque a repetição usa a mesma inscrição (R3).
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $bi                Número do BI do candidato
+     * @param int $courseId             ID do curso
+     * @param int|null $ignoreId        ID da inscrição a ignorar (edição)
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActiveForSameCourse($query, string $bi, int $courseId, ?int $ignoreId = null)
+    {
+        return $query
+            ->where('number_of_identify', $bi)
+            ->where('course_id', $courseId)
+            ->whereIn('status', ['Pendente', 'Pago', 'Matriculado', 'Lista de Espera'])
+            ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId));
     }
 
     /**
