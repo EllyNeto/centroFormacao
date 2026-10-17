@@ -1,25 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<!-- Mirrored from http://akademi.dexignlab.com/xhtml/student.html by HTTrack Website Copier/3.x [XR&CO], Sun, 23 Aug 2026 17:14:09 GMT -->
-<head>
+<html lang="pt-AO">
+<!--
+    Sistema de Gestão do Centro de Formação
+    Layout Principal - Baseado no template Admin Dashboard
+    Modificado para atender às necessidades específicas do Centro de Formação
+    
+    SEGURANÇA: Este sistema deve ser protegido com autenticação adequada
+    antes de ser utilizado em produção. Consulte a documentação do Laravel
+    sobre sistemas de autenticação.
+-->
     	
    <meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="author" content="DexignLab" >
-	<meta name="robots" content="" >
-	<meta name="keywords" content="school, school admin, education, academy, admin dashboard, college, college management, education management, institute, school management, school management system, student management, teacher management, university, university management" >
-	<meta name="description" content="Discover Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard" >
-	<meta property="og:title" content="Akademi : School and Education Management Admin Dashboard Template" >
-	<meta property="og:description" content="Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard">
-	<meta property="og:image" content="social-image.png" >
+	<meta name="author" content="Equipe de Desenvolvimento - Centro de Formação" >
+	<meta name="robots" content="noindex, nofollow" >
+	<meta name="keywords" content="centro de formação, educação, gestão escolar, admin dashboard, instituição de ensino" >
+	<meta name="description" content="Sistema de Gestão do Centro de Formação - Plataforma completa para administração de cursos, formandos, formadores e finanças institucionais" >
+	<meta property="og:title" content="Centro de Formação : Sistema de Gestão Educacional" >
+	<meta property="og:description" content="Centro de Formação - Sistema integrado de gestão educacional para instituições de ensino" >
+	<meta property="og:image" content="{{asset('images/logo.png')}}" >
 	<meta name="format-detection" content="telephone=no">
 
 	<!-- Mobile Specific -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- Page Title Here -->
-	<title>@yield('title', 'Akademi : School and Education Management Admin Dashboard Template')</title>
+	<title>@yield('title', 'Centro de Formação : Sistema de Gestão Educacional')</title>
 
 <!-- FAVICONS ICON -->
 	<link rel="shortcut icon" type="image/png" href="{{asset('images/favicon.png')}}" >
@@ -27,7 +33,7 @@
 	<link href="{{asset('vendor/wow-master/css/libs/animate.css')}}" rel="stylesheet">
 	<link href="{{asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css')}}" rel="stylesheet">
 	
-	<link href="{{asset('vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
+	<link href="{{asset('vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')}}}" rel="stylesheet">
 	
 	
 	<!-- Style css -->
@@ -190,5 +196,5 @@
 	<script src="{{asset('js/table-dropdown.js')}}"></script>
 </body>
 
-<!-- Mirrored from http://akademi.dexignlab.com/xhtml/student.html by HTTrack Website Copier/3.x [XR&CO], Sun, 23 Aug 2026 17:14:11 GMT -->
+<!-- Mirrored from http://centroformacao.dexignlab.com/xhtml/student.html by HTTrack Website Copier/3.x [XR&CO], Sun, 23 Aug 2026 17:14:11 GMT -->
 </html>
