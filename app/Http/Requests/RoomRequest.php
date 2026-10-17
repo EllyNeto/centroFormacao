@@ -82,8 +82,8 @@ class RoomRequest extends FormRequest
                 'date',
                 'after_or_equal:start_date',
             ],
-            // Note: max_capacity is not validated here as it's set by the controller
-            // based on the classroom's capacity
+            // Nota: max_capacity não é validado aqui pois é definido pelo controller
+            // com base na capacidade da sala de aula
         ];
     }
 

@@ -21,7 +21,7 @@
     <div class="row">
         <!-- Cards de Estatísticas - Fluxo de Entrada -->
         <div class="col-xl-2 col-md-3">
-            <div class="card">
+            <div class="card hover-card-lift transition-all duration-200">
                 <div class="card-body">
                     <h5 class="card-title">Salas de Aula</h5>
                     <p class="card-text">
@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="col-xl-2 col-md-3">
-            <div class="card">
+            <div class="card hover-card-lift transition-all duration-200">
                 <div class="card-body">
                     <h5 class="card-title">Cursos</h5>
                     <p class="card-text">
@@ -66,7 +66,7 @@
             </div>
         </div>
         <div class="col-xl-2 col-md-3">
-            <div class="card">
+            <div class="card hover-card-lift transition-all duration-200">
                 <div class="card-body">
                     <h5 class="card-title">Formadores</h5>
                     <p class="card-text">
@@ -92,7 +92,7 @@
             </div>
         </div>
         <div class="col-xl-2 col-md-3">
-            <div class="card">
+            <div class="card hover-card-lift transition-all duration-200">
                 <div class="card-body">
                     <h5 class="card-title">Turmas</h5>
                     <p class="card-text">
@@ -157,7 +157,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card">
+                    <div class="card hover-card-lift transition-all duration-200">
                         <div class="card-body">
                             <h5 class="card-title">Formandos</h5>
                             <p class="card-text">
@@ -215,7 +215,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card">
+                    <div class="card hover-card-lift transition-all duration-200">
                         <div class="card-body">
                             <h5 class="card-title">Taxa de Ocupação</h5>
                             <p class="card-text">
@@ -254,7 +254,7 @@
         <!-- MELHORIA: Adicionar sexto card com indicador estratégico importante -->
         <!-- Ex: Card para "Evasão" ou "Satisfação" ou "Resultado de Aprendizagem" -->
         <div class="col-md-3 offset-md-3">
-            <div class="card">
+            <div class="card hover-card-lift transition-all duration-200">
                 <div class="card-body">
                     <h5 class="card-title">Taxa de Conclusão</h5>
                     <p class="card-text">

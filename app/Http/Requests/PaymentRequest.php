@@ -42,9 +42,9 @@ class PaymentRequest extends FormRequest
                 'in:Transferência,Multicaixa,Numerário',
             ],
             'value' => [
-                // Note: In the actual system, value is set by the controller
-                // based on the course price, not from the form
-                // But we'll keep validation for completeness
+                // Nota: No sistema real, o valor é definido pelo controller
+                // com base no preço do curso, não do formulário
+                // Mas manteremos a validação para completude
                 'required',
                 'numeric',
                 'min:0',
@@ -53,14 +53,14 @@ class PaymentRequest extends FormRequest
                 'required',
                 'string',
                 'size:3',
-                // Changed to string with fixed size
+                // Alterado para string com tamanho fixo
             ],
             'reference' => [
                 'required',
                 'string',
                 'max:100',
-                // Changed to string to allow alphanumeric references
-                // Ensure uniqueness, ignoring the current record if updating
+                // Alterado para string para permitir referências alfanuméricas
+                // Garantir unicidade, ignorando o registro atual se estiver atualizando
                 'unique:payments,reference,' . $id,
             ],
             'status' => [
@@ -72,8 +72,8 @@ class PaymentRequest extends FormRequest
                 'required',
                 'date',
             ],
-            // Note: cancellation_reason is required when status is Anulado
-            // This is handled with conditional validation rules
+            // Nota: cancellation_reason é obrigatório quando status é Anulado
+            // Isso é tratado com regras de validação condicionais
         ];
     }
 

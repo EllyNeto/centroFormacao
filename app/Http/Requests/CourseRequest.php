@@ -36,7 +36,7 @@ class CourseRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                // Ensure uniqueness, ignoring the current record if updating
+                // Garantir unicidade, ignorando o registro atual se estiver atualizando
                 'unique:courses,name,' . $id
             ],
             'description' => [

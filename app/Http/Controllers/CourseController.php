@@ -94,6 +94,7 @@ class CourseController extends Controller
     public function update(CourseRequest $request, $id)
     {
         $course = Course::findOrFail($id);
+        // Dados validados pelo Form Request
         $validatedData = $request->validated();
 
         $course->update($validatedData);
@@ -114,6 +115,7 @@ class CourseController extends Controller
     {
         $course = Course::findOrFail($id);
 
+        // Impede exclusão se o curso tiver turmas ou inscrições ativas para manter a integridade dos dados
         if ($course->hasActiveRooms() || $course->hasActiveEnrollments()) {
             return redirect()
                 ->route('course.index')

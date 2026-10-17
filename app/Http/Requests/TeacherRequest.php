@@ -42,7 +42,7 @@ class TeacherRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                // Ensure uniqueness, ignoring the current record if updating
+                // Garantir unicidade, ignorando o registro atual se estiver atualizando
                 'unique:teachers,email,' . $id
             ],
             'gender' => [
@@ -59,14 +59,14 @@ class TeacherRequest extends FormRequest
                 'required',
                 'string',
                 'max:50',
-                // Ensure uniqueness, ignoring the current record if updating
+                // Garantir unicidade, ignorando o registro atual se estiver atualizando
                 'unique:teachers,number_of_identify,' . $id
             ],
             'phone' => [
                 'required',
                 'string',
                 'max:20',
-                // Changed to string to accommodate country codes and leading zeros
+                // Alterado para string para acomodar códigos de país e zeros à esquerda
             ],
             'image' => [
                 'nullable',

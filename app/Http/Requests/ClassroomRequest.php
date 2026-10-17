@@ -20,8 +20,8 @@ class ClassroomRequest extends FormRequest
      */
     public function authorize()
     {
-        // In a real application, you would check permissions here
-        // For now, we allow all authenticated users
+        // Em uma aplicação real, você verificaria as permissões aqui
+        // Por enquanto, permitimos todos os usuários autenticados
         return true;
     }
 
@@ -32,7 +32,7 @@ class ClassroomRequest extends FormRequest
      */
     public function rules()
     {
-        // Get the classroom ID if we're updating (from route parameter)
+        // Obtém o ID da sala se estiver atualizando (do parâmetro da rota)
         $id = $this->route('id');
 
         return [
@@ -40,14 +40,14 @@ class ClassroomRequest extends FormRequest
                 'required',
                 'integer',
                 'min:1',
-                // Ensure uniqueness, ignoring the current record if updating
+                // Garantir unicidade, ignorando o registro atual se estiver atualizando
                 'unique:classrooms,number_of_classroom,' . $id
             ],
             'capacity' => [
                 'required',
                 'integer',
                 'min:1',
-                // Capacity must be at least 1
+                // A capacidade deve ser pelo menos 1
             ],
             'description' => [
                 'nullable',

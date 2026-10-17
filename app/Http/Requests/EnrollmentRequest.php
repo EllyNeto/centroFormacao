@@ -47,7 +47,7 @@ class EnrollmentRequest extends FormRequest
                 'required',
                 'string',
                 'max:20',
-                // Changed to string to accommodate country codes and leading zeros
+                // Alterado para string para acomodar códigos de país e zeros à esquerda
             ],
             'number_of_identify' => [
                 'required',
@@ -69,8 +69,8 @@ class EnrollmentRequest extends FormRequest
                 'mimes:jpeg,png,jpg,webp',
                 'max:4096', // 4MB max
             ],
-            // Note: room_id is handled specially in the controller
-            // It can be null for waitlist enrollments
+            // Nota: room_id é tratado especialmente no controller
+            // Pode ser nulo para inscrições em lista de espera
         ];
     }
 

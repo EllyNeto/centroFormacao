@@ -35,7 +35,7 @@ class StudentRequest extends FormRequest
             'enrollment_id' => [
                 'required',
                 'exists:enrollments,id',
-                // Ensure uniqueness - one enrollment can only have one student
+                // Garantir unicidade - uma inscrição só pode ter um formando
                 'unique:students,enrollment_id,' . $id
             ],
             'room_id' => [
@@ -62,13 +62,13 @@ class StudentRequest extends FormRequest
                 'required',
                 'string',
                 'max:20',
-                // Changed to string to accommodate country codes and leading zeros
+                // Alterado para string para acomodar códigos de país e zeros à esquerda
             ],
             'image' => [
                 'nullable',
                 'image',
                 'mimes:jpeg,png,jpg,webp',
-                'max:4096', // 4MB max
+                'max:4096', // 4MB máximo
             ],
         ];
     }
