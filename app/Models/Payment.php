@@ -63,6 +63,7 @@ class Payment extends Model
 
     /**
      * Conversão e tipificação de atributos (Type Casting).
+     * CORREÇÃO: Era $cast (singular), agora está correto como $casts (plural)
      *
      * @var array<string, string>
      */

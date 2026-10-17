@@ -44,13 +44,13 @@
 			<div class="custom-tab-1">
 				<ul class="nav nav-tabs">
 					<li class="nav-item">
-						<a class="nav-link" data-bs-toggle="tab" href="#notes">Notes</a>
+						<a class="nav-link" data-bs-toggle="tab" href="#notes">Notas</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" data-bs-toggle="tab" href="#alerts">Alerts</a>
+						<a class="nav-link" data-bs-toggle="tab" href="#alerts">Alertas</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link active" data-bs-toggle="tab" href="#chat">Chat</a>
+						<a class="nav-link active" data-bs-toggle="tab" href="#chat">Mensagens</a>
 					</li>
 				</ul>
 				<div class="tab-content">
@@ -412,7 +412,7 @@
 							</div>
 							<div class="card-footer type_msg">
 								<div class="input-group">
-									<textarea class="form-control" placeholder="Type your message..."></textarea>
+									<textarea class="form-control" placeholder="Escreva a sua mensagem..."></textarea>
 									<div class="input-group-append">
 										<button type="button" class="btn btn-primary"><i class="fa fa-location-arrow"></i></button>
 									</div>
@@ -425,7 +425,7 @@
 							<div class="card-header chat-list-header text-center">
 								<a href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"/><circle fill="#000000" cx="5" cy="12" r="2"/><circle fill="#000000" cx="12" cy="12" r="2"/><circle fill="#000000" cx="19" cy="12" r="2"/></g></svg></a>
 								<div>
-									<h6 class="mb-1">Notications</h6>
+									<h6 class="mb-1">Notificações</h6>
 									<p class="mb-0">Ver Todos</p>
 								</div>
 								<a href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"/><path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/><path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero"/></g></svg></a>
@@ -712,73 +712,40 @@
 										<ul class="timeline">
 											<li>
 												<div class="timeline-panel">
-													<div class="media me-2">
-														<img alt="image" width="50" src="././images/avatar/1.jpg">
-													</div>
-													<div class="media-body">
-														<h6 class="mb-1">Dr sultads Send you Photo</h6>
-														<small class="d-block">29 July 2020 - 02:26 PM</small>
-													</div>
-												</div>
-											</li>
-											<li>
-												<div class="timeline-panel">
 													<div class="media me-2 media-info">
-														KG
+														<i class="fa fa-user-plus"></i>
 													</div>
 													<div class="media-body">
-														<h6 class="mb-1">Resport created successfully</h6>
-														<small class="d-block">29 July 2020 - 02:26 PM</small>
+														<h6 class="mb-1">Nova inscrição registada</h6>
+														<small class="d-block">Candidatura submetida com sucesso</small>
 													</div>
 												</div>
 											</li>
 											<li>
 												<div class="timeline-panel">
 													<div class="media me-2 media-success">
-														<i class="fa fa-home"></i>
+														<i class="fa fa-check-circle"></i>
 													</div>
 													<div class="media-body">
-														<h6 class="mb-1">Reminder : Treatment Time!</h6>
-														<small class="d-block">29 July 2020 - 02:26 PM</small>
-													</div>
-												</div>
-											</li>
-											 <li>
-												<div class="timeline-panel">
-													<div class="media me-2">
-														<img alt="image" width="50" src="././images/avatar/1.jpg">
-													</div>
-													<div class="media-body">
-														<h6 class="mb-1">Dr sultads Send you Photo</h6>
-														<small class="d-block">29 July 2020 - 02:26 PM</small>
-													</div>
-												</div>
-											</li>
-											<li>
-												<div class="timeline-panel">
-													<div class="media me-2 media-danger">
-														KG
-													</div>
-													<div class="media-body">
-														<h6 class="mb-1">Resport created successfully</h6>
-														<small class="d-block">29 July 2020 - 02:26 PM</small>
+														<h6 class="mb-1">Pagamento confirmado</h6>
+														<small class="d-block">Propina liquidada em Kwanzas</small>
 													</div>
 												</div>
 											</li>
 											<li>
 												<div class="timeline-panel">
 													<div class="media me-2 media-primary">
-														<i class="fa fa-home"></i>
+														<i class="fa fa-graduation-cap"></i>
 													</div>
 													<div class="media-body">
-														<h6 class="mb-1">Reminder : Treatment Time!</h6>
-														<small class="d-block">29 July 2020 - 02:26 PM</small>
+														<h6 class="mb-1">Formando matriculado</h6>
+														<small class="d-block">Matrícula associada à turma</small>
 													</div>
 												</div>
 											</li>
 										</ul>
 									</div>
-                                    <a class="all-notification" href="javascript:void(0);">See all notifications <i class="ti-arrow-end"></i></a>
+                                    <a class="all-notification" href="{{ route('enrollment.index') }}">Ver todas as inscrições <i class="ti-arrow-end"></i></a>
                                 </div>
                             </li>
 							
@@ -794,50 +761,23 @@
 										<ul class="timeline">
 											<li>
 												<div class="timeline-badge primary"></div>
-												<a class="timeline-panel text-muted" href="javascript:void(0);">
-													<span>10 minutes ago</span>
-													<h6 class="mb-0">Youtube, a video-sharing website, goes live <strong class="text-primary">$500</strong>.</h6>
+												<a class="timeline-panel text-muted" href="{{ route('enrollment.index') }}">
+													<span>Recente</span>
+													<h6 class="mb-0">Candidaturas abertas para novos cursos</h6>
 												</a>
 											</li>
 											<li>
-												<div class="timeline-badge info">
-												</div>
-												<a class="timeline-panel text-muted" href="javascript:void(0);">
-													<span>20 minutes ago</span>
-													<h6 class="mb-0">New order placed <strong class="text-info">#XF-2356.</strong></h6>
-													<p class="mb-0">Quisque a consequat ante Sit amet magna at volutapt...</p>
+												<div class="timeline-badge success"></div>
+												<a class="timeline-panel text-muted" href="{{ route('payment.index') }}">
+													<span>Recente</span>
+													<h6 class="mb-0">Sistema de pagamentos operando normalmente</h6>
 												</a>
 											</li>
 											<li>
-												<div class="timeline-badge danger">
-												</div>
-												<a class="timeline-panel text-muted" href="javascript:void(0);">
-													<span>30 minutes ago</span>
-													<h6 class="mb-0">john just buy your product <strong class="text-warning">Sell $250</strong></h6>
-												</a>
-											</li>
-											<li>
-												<div class="timeline-badge success">
-												</div>
-												<a class="timeline-panel text-muted" href="javascript:void(0);">
-													<span>15 minutes ago</span>
-													<h6 class="mb-0">StumbleUpon is acquired by eBay. </h6>
-												</a>
-											</li>
-											<li>
-												<div class="timeline-badge warning">
-												</div>
-												<a class="timeline-panel text-muted" href="javascript:void(0);">
-													<span>20 minutes ago</span>
-													<h6 class="mb-0">Mashable, a news website and blog, goes live.</h6>
-												</a>
-											</li>
-											<li>
-												<div class="timeline-badge dark">
-												</div>
-												<a class="timeline-panel text-muted" href="javascript:void(0);">
-													<span>20 minutes ago</span>
-													<h6 class="mb-0">Mashable, a news website and blog, goes live.</h6>
+												<div class="timeline-badge info"></div>
+												<a class="timeline-panel text-muted" href="{{ route('room.index') }}">
+													<span>Activo</span>
+													<h6 class="mb-0">Turmas com controlo de capacidade em tempo real</h6>
 												</a>
 											</li>
 										</ul>

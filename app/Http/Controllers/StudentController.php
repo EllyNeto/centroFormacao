@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
+use App\Http\Requests\StudentRequest;
+use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Room;
-use App\Models\Course;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 /**
- * Controlador studentController - Gestão Integral de Formandos / Alunos Oficiais.
+ * Controlador StudentController - Gestão Integral de Formandos / Alunos Oficiais.
  *
  * Módulo 7: Formandos
  * 
@@ -29,7 +30,7 @@ use Illuminate\Validation\Rule;
  * R11 - A turma escolhida deve pertencer ao curso da inscrição, estar com estado 'Aberta' e ter vagas disponíveis.
  * R12 - Ao remover um formando, a inscrição de origem retorna ao estado 'Pago' para permitir nova alocação.
  */
-class studentController extends Controller
+class StudentController extends Controller
 {
     /**
      * Apresenta a listagem geral de todos os formandos oficiais matriculados.
@@ -95,35 +96,13 @@ class studentController extends Controller
      * Valida os dados submetidos e efetiva a matrícula de um formando no sistema.
      * Vincula a inscrição à turma selecionada e atualiza o estado para 'Matriculado'.
      *
-     * @param  \Illuminate\Http\Request  $request Dados recebidos da requisição
+     * @param  \App\Http\Requests\StudentRequest  $request Dados recebidos da requisição
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StudentRequest $request)
     {
         // 1. Validação dos campos obrigatórios da matrícula
-        $validatedData = $request->validate([
-            'enrollment_id'      => 'required|exists:enrollments,id|unique:students,enrollment_id',
-            'room_id'            => 'required|exists:rooms,id',
-            'name'               => 'required|string|max:255',
-            'email'              => 'required|email|max:255',
-            'number_of_identify' => 'required|string|max:50',
-            'phone'              => 'required|string|max:20',
-            'image'              => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
-        ], [
-            'enrollment_id.required'      => 'A seleção da candidatura / inscrição é obrigatória.',
-            'enrollment_id.exists'        => 'A inscrição selecionada não é válida.',
-            'enrollment_id.unique'        => 'Esta inscrição já se encontra formalizada como formando.',
-            'room_id.required'            => 'A seleção da turma a frequentar é obrigatória.',
-            'room_id.exists'              => 'A turma selecionada não existe no sistema.',
-            'name.required'               => 'O nome completo do formando é obrigatório.',
-            'email.required'              => 'O endereço de correio eletrónico é obrigatório.',
-            'email.email'                 => 'Introduza um email válido.',
-            'number_of_identify.required' => 'O número do Bilhete de Identidade (BI) é obrigatório.',
-            'phone.required'              => 'O número de telefone é obrigatório.',
-            'image.image'                 => 'O ficheiro selecionado deve ser uma imagem válida.',
-            'image.mimes'                 => 'A imagem deve estar no formato JPG, PNG ou WEBP.',
-            'image.max'                   => 'A fotografia não pode exceder 4MB de tamanho.',
-        ]);
+        $validatedData = $request->validated();
 
         // 2. Regra de Negócio R9: Verificar se a inscrição está apta para efetivação (estado 'Pago')
         $enrollment = Enrollment::findOrFail($validatedData['enrollment_id']);
@@ -329,37 +308,19 @@ class studentController extends Controller
      * Atualiza as informações cadastrais do formando na base de dados.
      * Caso haja mudança de turma, valida a capacidade disponível na nova turma.
      *
-     * @param  \Illuminate\Http\Request  $request Dados recebidos da requisição HTTP
+     * @param  \App\Http\Requests\StudentRequest  $request Dados recebidos da requisição HTTP
      * @param  int  $id Identificador primário do formando
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(StudentRequest $request, $id)
     {
         // Procura o formando existente
         $student = Student::with(['room', 'enrollment'])->findOrFail($id);
 
         // 1. Validação em linha dos campos editáveis do formando
-        $validatedData = $request->validate([
-            'room_id'            => 'required|exists:rooms,id',
-            'name'               => 'required|string|max:255',
-            'email'              => 'required|email|max:255',
-            'number_of_identify' => 'required|string|max:50',
-            'phone'              => 'required|string|max:20',
-            'image'              => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
-        ], [
-            'room_id.required'            => 'A turma a frequentar é obrigatória.',
-            'room_id.exists'              => 'A turma selecionada não existe no sistema.',
-            'name.required'               => 'O nome completo é obrigatório.',
-            'email.required'              => 'O endereço de email é obrigatório.',
-            'email.email'                 => 'Introduza um email válido.',
-            'number_of_identify.required' => 'O número do BI é obrigatório.',
-            'phone.required'              => 'O telefone é obrigatório.',
-            'image.image'                 => 'O ficheiro anexado deve ser uma imagem válida.',
-            'image.mimes'                 => 'A imagem deve estar no formato JPG, PNG ou WEBP.',
-            'image.max'                   => 'A fotografia não pode exceder 4MB.',
-        ]);
+        $validatedData = $request->validated();
 
-        // 2. Se a turma foi alterada (Transferência de Turma), verifica capacidade e curso
+        // 2. Se a turma foi alterada (Transferência de Turma), verifica a capacidade disponível na nova turma.
         $currentRoomId = (int) $student->room_id;
         $newRoomId     = (int) $validatedData['room_id'];
 
@@ -447,4 +408,3 @@ class studentController extends Controller
             ->with('success', "Formando '{$student->name}' removido com sucesso. A inscrição de origem retornou ao estado 'Pago'.");
     }
 }
-

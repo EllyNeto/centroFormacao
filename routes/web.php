@@ -1,13 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\courseController;
-use App\Http\Controllers\roomController;
-use App\Http\Controllers\classroomController;
-use App\Http\Controllers\studentController;
-use App\Http\Controllers\enrollmentController;
-use App\Http\Controllers\paymentController;
-use App\Http\Controllers\teacherController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\DashboardController;
 
 /*
@@ -15,73 +15,86 @@ use App\Http\Controllers\DashboardController;
 | Rotas Web da Aplicação
 |--------------------------------------------------------------------------
 | Mapeamento de todas as URLs para os respetivos controladores e ações.
+|
+| [!NOTE]
+| AUTENTICAÇÃO: Para proteger as rotas com autenticação, envolva o grupo
+| de rotas abaixo em Route::middleware(['auth']):
+|
+| Route::middleware(['auth'])->group(function () {
+|     // Todas as rotas da aplicação aqui
+| });
+|
+| Isto requer que o sistema de autenticação esteja configurado (ex: laravel/ui).
 */
+
+// Rotas da aplicação (adicionar middleware de autenticação conforme necessário acima)
 
 // Página Principal (Dashboard com Indicadores Reais)
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 // Rotas de Gestão de Cursos
-Route::get('/curso/listar', [courseController::class, 'index'])->name('course.index');
-Route::get('/curso/adicionar', [courseController::class, 'create'])->name('course.create');
-Route::post('/curso', [courseController::class, 'store'])->name('course.store');
-Route::get('/curso/{id}', [courseController::class, 'show'])->name('course.show');
-Route::get('/curso/edit/{id}', [courseController::class, 'edit'])->name('course.edit');
-Route::put('/curso/update/{id}', [courseController::class, 'update'])->name('course.update');
-Route::delete('/curso/{id}', [courseController::class, 'destroy'])->name('course.destroy');
+Route::get('/curso/listar', [CourseController::class, 'index'])->name('course.index');
+Route::get('/curso/adicionar', [CourseController::class, 'create'])->name('course.create');
+Route::post('/curso', [CourseController::class, 'store'])->name('course.store');
+Route::get('/curso/{id}', [CourseController::class, 'show'])->name('course.show');
+Route::get('/curso/edit/{id}', [CourseController::class, 'edit'])->name('course.edit');
+Route::put('/curso/update/{id}', [CourseController::class, 'update'])->name('course.update');
+Route::delete('/curso/{id}', [CourseController::class, 'destroy'])->name('course.destroy');
 
 // Rotas de Gestão de Formadores (Professores)
-Route::get('/formador/listar', [teacherController::class, 'index'])->name('teacher.index');
-Route::get('/formador/adicionar', [teacherController::class, 'create'])->name('teacher.create');
-Route::post('/formador', [teacherController::class, 'store'])->name('teacher.store');
-Route::get('/formador/{id}', [teacherController::class, 'show'])->name('teacher.show');
-Route::get('/formador/edit/{id}', [teacherController::class, 'edit'])->name('teacher.edit');
-Route::put('/formador/update/{id}', [teacherController::class, 'update'])->name('teacher.update');
-Route::delete('/formador/{id}', [teacherController::class, 'destroy'])->name('teacher.destroy');
+Route::get('/formador/listar', [TeacherController::class, 'index'])->name('teacher.index');
+Route::get('/formador/adicionar', [TeacherController::class, 'create'])->name('teacher.create');
+Route::post('/formador', [TeacherController::class, 'store'])->name('teacher.store');
+Route::get('/formador/{id}', [TeacherController::class, 'show'])->name('teacher.show');
+Route::get('/formador/edit/{id}', [TeacherController::class, 'edit'])->name('teacher.edit');
+Route::put('/formador/update/{id}', [TeacherController::class, 'update'])->name('teacher.update');
+Route::delete('/formador/{id}', [TeacherController::class, 'destroy'])->name('teacher.destroy');
 
 // Rotas de Gestão de Salas
-Route::get('/sala/listar', [classroomController::class, 'index'])->name('classroom.index');
-Route::get('/sala/adicionar', [classroomController::class, 'create'])->name('classroom.create');
-Route::post('/sala', [classroomController::class, 'store'])->name('classroom.store');
-Route::get('/sala/{id}', [classroomController::class, 'show'])->name('classroom.show');
-Route::get('/sala/edit/{id}', [classroomController::class, 'edit'])->name('classroom.edit');
-Route::put('/sala/update/{id}', [classroomController::class, 'update'])->name('classroom.update');
-Route::delete('/sala/{id}', [classroomController::class, 'destroy'])->name('classroom.destroy');
+Route::get('/sala/listar', [ClassroomController::class, 'index'])->name('classroom.index');
+Route::get('/sala/adicionar', [ClassroomController::class, 'create'])->name('classroom.create');
+Route::post('/sala', [ClassroomController::class, 'store'])->name('classroom.store');
+Route::get('/sala/{id}', [ClassroomController::class, 'show'])->name('classroom.show');
+Route::get('/sala/edit/{id}', [ClassroomController::class, 'edit'])->name('classroom.edit');
+Route::put('/sala/update/{id}', [ClassroomController::class, 'update'])->name('classroom.update');
+Route::delete('/sala/{id}', [ClassroomController::class, 'destroy'])->name('classroom.destroy');
 
 // Rotas de Gestão de Turmas
-Route::get('/turma/listar', [roomController::class, 'index'])->name('room.index');
-Route::get('/turma/adicionar', [roomController::class, 'create'])->name('room.create');
-Route::post('/turma', [roomController::class, 'store'])->name('room.store');
-Route::get('/turma/{id}', [roomController::class, 'show'])->name('room.show');
-Route::get('/turma/{id}/imprimir-formandos', [roomController::class, 'printStudents'])->name('room.printStudents');
-Route::get('/turma/edit/{id}', [roomController::class, 'edit'])->name('room.edit');
-Route::put('/turma/update/{id}', [roomController::class, 'update'])->name('room.update');
-Route::delete('/turma/{id}', [roomController::class, 'destroy'])->name('room.destroy');
+Route::get('/turma/listar', [RoomController::class, 'index'])->name('room.index');
+Route::get('/turma/adicionar', [RoomController::class, 'create'])->name('room.create');
+Route::post('/turma', [RoomController::class, 'store'])->name('room.store');
+Route::get('/turma/{id}', [RoomController::class, 'show'])->name('room.show');
+Route::get('/turma/{id}/imprimir-formandos', [RoomController::class, 'printStudents'])->name('room.printStudents');
+Route::get('/turma/edit/{id}', [RoomController::class, 'edit'])->name('room.edit');
+Route::put('/turma/update/{id}', [RoomController::class, 'update'])->name('room.update');
+Route::delete('/turma/{id}', [RoomController::class, 'destroy'])->name('room.destroy');
 
 // Rotas de Gestão de Formandos (Alunos)
-Route::get('/formando/listar', [studentController::class, 'index'])->name('student.index');
-Route::get('/formando/adicionar', [studentController::class, 'create'])->name('student.create');
-Route::post('/formando', [studentController::class, 'store'])->name('student.store');
-Route::get('/formando/{id}', [studentController::class, 'show'])->name('student.show');
-Route::get('/formando/edit/{id}', [studentController::class, 'edit'])->name('student.edit');
-Route::put('/formando/update/{id}', [studentController::class, 'update'])->name('student.update');
-Route::delete('/formando/{id}', [studentController::class, 'destroy'])->name('student.destroy');
+Route::get('/formando/listar', [StudentController::class, 'index'])->name('student.index');
+Route::get('/formando/adicionar', [StudentController::class, 'create'])->name('student.create');
+Route::post('/formando', [StudentController::class, 'store'])->name('student.store');
+Route::get('/formando/{id}', [StudentController::class, 'show'])->name('student.show');
+Route::get('/formando/edit/{id}', [StudentController::class, 'edit'])->name('student.edit');
+Route::put('/formando/update/{id}', [StudentController::class, 'update'])->name('student.update');
+Route::delete('/formando/{id}', [StudentController::class, 'destroy'])->name('student.destroy');
 
 // Rotas de Gestão de Inscrições / Matrículas
-Route::get('/inscricao/listar', [enrollmentController::class, 'index'])->name('enrollment.index');
-Route::get('/inscricao/adicionar', [enrollmentController::class, 'create'])->name('enrollment.create');
-Route::post('/inscricao', [enrollmentController::class, 'store'])->name('enrollment.store');
-Route::get('/inscricao/{id}', [enrollmentController::class, 'show'])->name('enrollment.show');
-Route::get('/inscricao/edit/{id}', [enrollmentController::class, 'edit'])->name('enrollment.edit');
-Route::put('/inscricao/update/{id}', [enrollmentController::class, 'update'])->name('enrollment.update');
-Route::delete('/inscricao/{id}', [enrollmentController::class, 'destroy'])->name('enrollment.destroy');
+Route::get('/inscricao/listar', [EnrollmentController::class, 'index'])->name('enrollment.index');
+Route::get('/inscricao/adicionar', [EnrollmentController::class, 'create'])->name('enrollment.create');
+Route::post('/inscricao', [EnrollmentController::class, 'store'])->name('enrollment.store');
+Route::get('/inscricao/{id}', [EnrollmentController::class, 'show'])->name('enrollment.show');
+Route::get('/inscricao/edit/{id}', [EnrollmentController::class, 'edit'])->name('enrollment.edit');
+Route::put('/inscricao/update/{id}', [EnrollmentController::class, 'update'])->name('enrollment.update');
+Route::delete('/inscricao/{id}', [EnrollmentController::class, 'destroy'])->name('enrollment.destroy');
 // Ação específica: efetivar inscrição com propina paga em formando oficial
-Route::post('/inscricao/{id}/efectivar', [studentController::class, 'storeFromEnrollment'])->name('enrollment.enroll');
+Route::post('/inscricao/{id}/efectivar', [StudentController::class, 'storeFromEnrollment'])->name('enrollment.enroll');
 
 // Rotas de Gestão de Pagamentos
-Route::get('/pagamento/listar', [paymentController::class, 'index'])->name('payment.index');
-Route::get('/pagamento/adicionar', [paymentController::class, 'create'])->name('payment.create');
-Route::post('/pagamento', [paymentController::class, 'store'])->name('payment.store');
-Route::get('/pagamento/{id}', [paymentController::class, 'show'])->name('payment.show');
-Route::get('/pagamento/edit/{id}', [paymentController::class, 'edit'])->name('payment.edit');
-Route::put('/pagamento/update/{id}', [paymentController::class, 'update'])->name('payment.update');
-Route::delete('/pagamento/{id}', [paymentController::class, 'destroy'])->name('payment.destroy');
+Route::get('/pagamento/listar', [PaymentController::class, 'index'])->name('payment.index');
+Route::get('/pagamento/adicionar', [PaymentController::class, 'create'])->name('payment.create');
+Route::post('/pagamento', [PaymentController::class, 'store'])->name('payment.store');
+Route::get('/pagamento/{id}', [PaymentController::class, 'show'])->name('payment.show');
+Route::get('/pagamento/edit/{id}', [PaymentController::class, 'edit'])->name('payment.edit');
+Route::put('/pagamento/update/{id}', [PaymentController::class, 'update'])->name('payment.update');
+Route::delete('/pagamento/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
+

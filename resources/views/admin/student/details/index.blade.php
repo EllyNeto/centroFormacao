@@ -40,8 +40,8 @@
                         <div class="p-4 mb-4 rounded border bg-light shadow-sm">
                             <div class="row align-items-center">
                                 <div class="col-md-7 d-flex align-items-center mb-3 mb-md-0">
-                                    <img src="{{ $student->avatarUrl() }}" 
-                                         class="rounded-circle avatar avatar-xl me-3 border border-3 border-white shadow-sm" 
+                                    <img src="{{ $student->avatarUrl() }}"
+                                         class="rounded-circle avatar avatar-xl me-3 border border-3 border-white shadow-sm"
                                          alt="{{ $student->name }}"
                                          style="width: 80px; height: 80px; object-fit: cover;">
                                     <div>
@@ -127,9 +127,13 @@
                                             </div>
                                             <div class="col-sm-6">
                                                 <small class="text-muted d-block text-uppercase font-w600 fs-8 mb-1">Horário das Sessões</small>
-                                                <span class="fs-6 text-dark">
-                                                    {{ \Carbon\Carbon::parse($student->room->start_time)->format('H:i') }} às {{ \Carbon\Carbon::parse($student->room->end_time)->format('H:i') }}
-                                                </span>
+                                                @if($student->room->start_time && $student->room->end_time)
+                                                    <span class="fs-6 text-dark">
+                                                        {{ \Carbon\Carbon::parse($student->room->start_time)->format('H:i') }} às {{ \Carbon\Carbon::parse($student->room->end_time)->format('H:i') }}
+                                                    </span>
+                                                @else
+                                                    <span class="text-muted">Horário não definido</span>
+                                                @endif
                                             </div>
                                             <div class="col-sm-6">
                                                 <small class="text-muted d-block text-uppercase font-w600 fs-8 mb-1">Sala de Aulas</small>
@@ -149,13 +153,17 @@
                                             </div>
                                             <div class="col-12">
                                                 <small class="text-muted d-block text-uppercase font-w600 fs-8 mb-1">Ocupação da Turma</small>
-                                                <div class="progress mt-1" style="height: 10px;">
-                                                    @php $percentage = $student->room->occupancyPercentage(); @endphp
-                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $percentage }}%;" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                                <small class="text-muted mt-1 d-block">
-                                                    {{ $student->room->occupiedSeats() }} ocupadas de {{ $student->room->max_capacity }} vagas ({{ $student->room->availableSeats() }} disponíveis)
-                                                </small>
+                                                @if($student->room)
+                                                    <div class="progress mt-1" style="height: 10px;">
+                                                        @php $percentage = $student->room->occupancyPercentage(); @endphp
+                                                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $percentage }}%;" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                    <small class="text-muted mt-1 d-block">
+                                                        {{ $student->room->occupiedSeats() }} ocupadas de {{ $student->room->max_capacity }} vagas ({{ $student->room->availableSeats() }} disponíveis)
+                                                    </small>
+                                                @else
+                                                    <span class="text-muted">Nenhuma turma atribuída</span>
+                                                @endif
                                             </div>
                                         </div>
                                     @else

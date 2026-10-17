@@ -119,30 +119,30 @@
 						<div class="col-xl-6">
 							<div class="mb-3">
 							  <label for="exampleFormControlInput1" class="form-label">Primeiro Nome</label>
-							  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Yatin">
+							  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ex: Manuel">
 							</div>
 							<div class="mb-3">
 							  <label for="exampleFormControlInput3" class="form-label">Turma Atual</label>
-							  <input type="text" class="form-control" id="exampleFormControlInput3" placeholder="VII A">
+							  <input type="text" class="form-control" id="exampleFormControlInput3" placeholder="ex: Turma A">
 							</div>
 						</div>
 						<div class="col-xl-6">
 							<div class="mb-3">
 							  <label for="exampleFormControlInput2" class="form-label">Apelido</label>
-							  <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="xarma">
+							  <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="ex: Silva">
 							</div>
-							 <label  class="form-label d-block">Gender</label>
-							 <select class="default-select" aria-label="Default select example">
+							 <label  class="form-label d-block">Género</label>
+							 <select class="default-select" aria-label="Exemplo de seleção padrão">
 							  <option selected>Selecionar</option>
-							  <option value="1">Male</option>
-							  <option value="2">Female</option>
-							  <option value="3">Other</option>
+							  <option value="1">Masculino</option>
+							  <option value="2">Feminino</option>
+							  <option value="3">Outro</option>
 							</select>
 						</div>
 					</div>
 				  </div>
 				  <div class="modal-footer">
-					<button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Fechar</button>
 					<button type="button" class="btn btn-primary">Guardar Alterações</button>
 				  </div>
 				</div>

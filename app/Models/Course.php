@@ -51,7 +51,7 @@ class Course extends Model
      */
     protected $casts = [
         'status' => 'boolean',
-        'value'  => 'float',
+        'value'  => 'decimal:10,2',
     ];
 
     /**

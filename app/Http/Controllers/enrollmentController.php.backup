@@ -8,6 +8,7 @@ use App\Models\Room;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * Controlador responsável pela gestão de Inscrições / Candidaturas (Enrollment).
@@ -132,7 +133,7 @@ class enrollmentController extends Controller
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $uploadedImage = $request->file('image');
             $extension     = $uploadedImage->extension();
-            $fileName      = md5($uploadedImage->getClientOriginalName() . time()) . '.' . $extension;
+            $fileName      = Str::uuid() . '.' . $extension;
             $validatedData['image'] = $uploadedImage->storeAs('candidates', $fileName, 'public');
         } else {
             $validatedData['image'] = null;
@@ -307,7 +308,7 @@ class enrollmentController extends Controller
 
             $uploadedImage = $request->file('image');
             $extension     = $uploadedImage->extension();
-            $fileName      = md5($uploadedImage->getClientOriginalName() . time()) . '.' . $extension;
+            $fileName      = Str::uuid() . '.' . $extension;
             $validatedData['image'] = $uploadedImage->storeAs('candidates', $fileName, 'public');
         }
 
