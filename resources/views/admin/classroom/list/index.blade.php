@@ -49,11 +49,11 @@
 
 						{{-- Tabela Responsiva de Salas --}}
 						<div class="table-responsive">
-							<table id="example4" class="display table style-1 custom-table" style="min-width: 845px; width: 100%;">
+							<table id="example4" class="display table table-hover style-1 custom-table">
 								<thead>
 									<tr>
 										<th>Número da Sala</th>
-										<th>Capacidade </th>
+										<th>Capacidade</th>
 										<th>Turmas Alocadas</th>
 										<th>Observações</th>
 										<th class="text-end">Acções</th>
@@ -65,9 +65,9 @@
 										<tr>
 											{{-- Número da Sala --}}
 											<td>
-												<span class="badge light badge-primary fs-14 fw-bold">
+												<a href="{{ route('classroom.show', $classroom->id) }}" class="badge light badge-primary fs-14 fw-bold text-decoration-none">
 													Sala {{ $classroom->number_of_classroom }}
-												</span>
+												</a>
 											</td>
 
 											{{-- Capacidade de Lugares --}}
@@ -91,7 +91,6 @@
 											{{-- Menu suspenso de ações por registo --}}
 											<td class="text-end action-cell">
 												<div class="dropdown dropup ms-auto text-end c-pointer">
-													{{-- Ícone dos 3 pontos para abrir opções --}}
 													<div class="btn-link" data-bs-toggle="dropdown" data-bs-placement="top" aria-expanded="false" role="button">
 														<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
 															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -103,20 +102,14 @@
 														</svg>
 													</div>
 
-													{{-- Links de Ação: Ver Detalhes, Editar, Eliminar --}}
 													<div class="dropdown-menu dropdown-menu-end">
-														{{-- Ver Detalhes da Sala --}}
 														<a class="dropdown-item" href="{{ route('classroom.show', $classroom->id) }}">
 															<i class="fa fa-eye me-2 text-primary"></i> Ver Detalhes
 														</a>
-														
-														{{-- Editar Dados da Sala --}}
 														<a class="dropdown-item" href="{{ route('classroom.edit', $classroom->id) }}">
 															<i class="fa fa-edit me-2 text-warning"></i> Editar
 														</a>
-
-														{{-- Eliminar Sala (Soft Delete com confirmação) --}}
-														<form action="{{ route('classroom.destroy', $classroom->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem a certeza que deseja eliminar a Sala {{ $classroom->number_of_classroom }}?')">
+														<form action="{{ route('classroom.destroy', $classroom->id) }}" method="POST" class="d-inline" data-confirm="Tem a certeza que deseja eliminar a Sala {{ $classroom->number_of_classroom }}?">
 															@csrf
 															@method('DELETE')
 															<button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">

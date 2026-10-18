@@ -190,10 +190,10 @@ class Payment extends Model
         $icons = [
             'Transferência' => 'fa fa-university',
             'Multicaixa'    => 'fa fa-credit-card',
-            'Numerário'     => 'fa fa-money',
+            'Numerário'     => 'fa fa-money-bill-wave',
         ];
 
-        return $icons[$this->type_of_payment] ?? 'fa fa-money-bill';
+        return $icons[$this->type_of_payment] ?? 'fa fa-money-bill-wave';
     }
 
     /**

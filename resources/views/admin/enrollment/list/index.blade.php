@@ -47,13 +47,13 @@
 
 						{{-- Tabela Responsiva de Inscrições --}}
 						<div class="table-responsive">
-							<table id="example4" class="display table style-1 custom-table enrollment-table-min-width">
+							<table id="example4" class="display table table-hover style-1 custom-table enrollment-table-min-width">
 								<thead>
 									<tr>
 										<th>Código</th>
-										<th>Foto</th>
-										<th>Nome</th>
-										<th>Curso</th>
+										<th>Candidato</th>
+										<th>Documento &amp; Contacto</th>
+										<th>Curso &amp; Turno</th>
 										<th>Estado</th>
 										<th class="text-end">Acções</th>
 									</tr>
@@ -68,7 +68,7 @@
 												</span>
 											</td>
 
-											{{-- Fotografia de Identificação do Candidato --}}
+											{{-- Fotografia e Nome do Candidato --}}
 											<td>
 												<div class="d-flex align-items-center">
 													@if($enrollment->image)
@@ -80,14 +80,25 @@
 															<i class="fa fa-user"></i>
 														</div>
 													@endif
+													<div>
+														<a href="{{ route('enrollment.show', $enrollment->id) }}" class="font-w600 text-dark d-block">
+															{{ $enrollment->name }}
+														</a>
+														<small class="text-muted">{{ $enrollment->email }}</small>
+													</div>
 												</div>
 											</td>
+
+											{{-- BI e Telefone --}}
 											<td>
-												<strong class="text-dark d-block">{{ $enrollment->name }}</strong>
+												<span class="text-dark font-w500 d-block">{{ $enrollment->number_of_identify }}</span>
+												<small class="text-muted"><i class="fa fa-phone me-1"></i>{{ $enrollment->phone }}</small>
 											</td>
-											{{-- Curso Pretendido --}}
+
+											{{-- Curso Pretendido e Turno --}}
 											<td>
-												<span class="fw-semibold text-dark">{{ $enrollment->course->name ?? 'N/A' }}</span>
+												<span class="fw-semibold text-dark d-block">{{ $enrollment->course->name ?? 'N/A' }}</span>
+												<small class="text-muted">Turno: {{ $enrollment->shift }}</small>
 											</td>
 
 											{{-- Estado da Candidatura com Cores Consistentes --}}
@@ -114,10 +125,20 @@
 														<a class="dropdown-item" href="{{ route('enrollment.show', $enrollment->id) }}">
 															<i class="fa fa-eye me-2 text-primary"></i> Ver Detalhes
 														</a>
+														@if($enrollment->canReceivePayment())
+															<a class="dropdown-item" href="{{ route('payment.create', ['enrollment_id' => $enrollment->id]) }}">
+																<i class="fa fa-money me-2 text-success"></i> Registar Pagamento
+															</a>
+														@endif
+														@if($enrollment->isPaid() && !$enrollment->student)
+															<a class="dropdown-item" href="{{ route('enrollment.show', $enrollment->id) }}">
+																<i class="fa fa-user-plus me-2 text-info"></i> Efectivar Matrícula
+															</a>
+														@endif
 														<a class="dropdown-item" href="{{ route('enrollment.edit', $enrollment->id) }}">
 															<i class="fa fa-pencil me-2 text-warning"></i> Editar
 														</a>
-														<form action="{{ route('enrollment.destroy', $enrollment->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem a certeza que deseja eliminar esta candidatura?')">
+														<form action="{{ route('enrollment.destroy', $enrollment->id) }}" method="POST" class="d-inline" data-confirm="Tem a certeza que deseja eliminar esta candidatura?">
 															@csrf
 															@method('DELETE')
 															<button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">
@@ -130,7 +151,7 @@
 										</tr>
 									@empty
 										<tr>
-											<td colspan="7" class="text-center py-5 text-muted">
+											<td colspan="6" class="text-center py-5 text-muted">
 												<i class="fa fa-id-card-o fa-2x mb-2 d-block"></i>
 												Nenhuma candidatura ou inscrição registada até ao momento.
 											</td>

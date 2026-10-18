@@ -132,9 +132,13 @@
         // Event listener para alteração da seleção
         enrollmentSelect.addEventListener('change', updateCandidatePreview);
 
-        // Suporte para Select2 caso esteja ativo
-        if (window.jQuery && window.jQuery(enrollmentSelect).data('select2')) {
-            window.jQuery(enrollmentSelect).on('select2:select', updateCandidatePreview);
+        // Inicializa Select2 no campo de seleção de inscrição
+        if (window.jQuery && window.jQuery.fn.select2) {
+            window.jQuery(enrollmentSelect).select2({
+                placeholder: "Selecione o candidato...",
+                allowClear: true,
+                width: '100%'
+            }).on('select2:select', updateCandidatePreview);
         }
 
         // Ação de geração de referência automática

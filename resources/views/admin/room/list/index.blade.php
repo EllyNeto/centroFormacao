@@ -65,12 +65,14 @@
 										<tr>
 											{{-- Nome da Turma --}}
 											<td>
-												<strong>{{ $room->name }}</strong>
-												{{-- @if($room->start_date && $room->end_date)
+												<a href="{{ route('room.show', $room->id) }}" class="text-dark font-w600 d-block">
+													{{ $room->name }}
+												</a>
+												@if($room->start_date && $room->end_date)
 													<small class="d-block text-muted">
 														<i class="fa fa-calendar me-1"></i> {{ $room->start_date->format('d/m/Y') }} - {{ $room->end_date->format('d/m/Y') }}
 													</small>
-												@endif --}}
+												@endif
 											</td>
 
 											{{-- Curso Associado --}}
@@ -99,12 +101,13 @@
 												@endif
 											</td>
 
-											{{-- Turno, Horário e Dias da Semana --}}
+											{{-- Turno e Horário --}}
 											<td>
 												<div>
 													<i class="fa fa-clock-o me-1 text-muted"></i>
 													{{ \Carbon\Carbon::parse($room->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($room->end_time)->format('H:i') }}
 												</div>
+												<small class="text-muted">{{ $room->shift }}</small>
 											</td>
 
 											{{-- Indicador de Vagas e Lotação --}}
@@ -114,11 +117,11 @@
 														{{ $occupied }}/{{ $capacity }}
 													</small>
 												</div>
-												{{-- @if($room->isFull())
-													<small class="text-danger font-w500 d-block"><i class="fa fa-exclamation-circle"></i> Turma Lotada</small>
+												@if($room->isFull())
+													<small class="text-danger font-w500 d-block"><i class="fa fa-exclamation-circle"></i> Lotada</small>
 												@else
-													<small class="text-success d-block">{{ $room->availableSeats() }} vagas livres</small>
-												@endif --}}
+													<small class="text-success d-block">{{ $room->availableSeats() }} livres</small>
+												@endif
 											</td>
 
 											{{-- Estado da Turma --}}
@@ -137,7 +140,6 @@
 											{{-- Célula de Acções com menu flutuante --}}
 											<td class="text-end action-cell">
 												<div class="dropdown dropup ms-auto text-end c-pointer">
-													{{-- Ícone dos 3 pontos (...) --}}
 													<div class="btn-link" data-bs-toggle="dropdown" data-bs-placement="top" aria-expanded="false" role="button">
 														<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
 															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -148,15 +150,17 @@
 															</g>
 														</svg>
 													</div>
-													{{-- Menu suspenso de ações por turma --}}
 													<div class="dropdown-menu dropdown-menu-end">
 														<a class="dropdown-item" href="{{ route('room.show', $room->id) }}">
 															<i class="fa fa-eye me-2 text-primary"></i> Ver Detalhes
 														</a>
+														<a class="dropdown-item" href="{{ route('room.printStudents', $room->id) }}" target="_blank">
+															<i class="fa fa-print me-2 text-info"></i> Imprimir Pauta
+														</a>
 														<a class="dropdown-item" href="{{ route('room.edit', $room->id) }}">
 															<i class="fa fa-pencil me-2 text-warning"></i> Editar
 														</a>
-														<form action="{{ route('room.destroy', $room->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem a certeza que deseja eliminar a turma \'{{ $room->name }}\'?')">
+														<form action="{{ route('room.destroy', $room->id) }}" method="POST" class="d-inline" data-confirm="Tem a certeza que deseja eliminar a turma {{ $room->name }}?">
 															@csrf
 															@method('DELETE')
 															<button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">
@@ -168,7 +172,6 @@
 											</td>
 										</tr>
 									@empty
-										{{-- Estado exibido quando não existem turmas cadastradas --}}
 										<tr>
 											<td colspan="8" class="text-center py-4 text-muted">
 												<i class="fa fa-info-circle me-1"></i> Nenhuma turma registada no sistema.

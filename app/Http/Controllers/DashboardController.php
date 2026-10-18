@@ -148,7 +148,7 @@ class DashboardController extends Controller
         $chartData = [
             'monthsLabels'         => $monthsLabels,
             'monthlyEnrollments'   => $monthlyEnrollments,
-            'monthlyStudents      ' => $monthlyStudents,
+            'monthlyStudents'      => $monthlyStudents,
             'monthlyRevenue'       => $monthlyRevenue,
             'monthlyPaymentsCount' => $monthlyPaymentsCount,
             'shiftLabels'          => $shiftLabels,
