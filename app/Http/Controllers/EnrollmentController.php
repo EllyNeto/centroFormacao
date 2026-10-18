@@ -80,15 +80,22 @@ class EnrollmentController extends Controller
             }
         }
 
-        // 3. R11 — O curso deve ter pelo menos uma turma 'Aberta'
-        $hasOpenRoom = Room::where('course_id', $validatedData['course_id'])
+        // 3. R11 — Verificar disponibilidade de turma 'Aberta' com vagas para o curso
+        $openRooms = Room::where('course_id', $validatedData['course_id'])
             ->where('status', 'Aberta')
-            ->exists();
+            ->orderByRaw('CASE WHEN shift = ? THEN 0 ELSE 1 END', [$validatedData['shift']])
+            ->orderBy('id', 'asc')
+            ->get();
 
-        if (!$hasOpenRoom) {
+        $availableRoom = $openRooms->first(fn(Room $room) => !$room->isFull());
+        $joinWaitlist  = $request->boolean('join_waitlist');
+
+        if (!$availableRoom && !$joinWaitlist) {
             return back()
                 ->withInput()
-                ->withErrors(['course_id' => 'O curso selecionado não tem turmas abertas neste momento. Aguarde a abertura de uma nova turma.']);
+                ->withErrors([
+                    'course_id' => 'O curso selecionado não possui turmas abertas com vagas disponíveis neste momento. Marque a opção "Ir para a Lista de Espera" abaixo para registar o aluno e adicioná-lo automaticamente assim que uma turma for criada.',
+                ]);
         }
 
         // 4. R1 — Verificar inscrição ativa no mesmo curso pelo mesmo BI
@@ -113,14 +120,19 @@ class EnrollmentController extends Controller
             $validatedData['image'] = null;
         }
 
-        // 6. Regra de Negócio: Candidatura nasce Pendente e sem turma
-        $validatedData['room_id'] = null;
-        $validatedData['status']  = 'Pendente';
-        $validatedData['cycle']   = 1;
-        $validatedData['date']    = now();
+        // 6. Regra de Negócio: Atribui turma aberta se disponível, ou coloca na Lista de Espera
+        if ($availableRoom && !$joinWaitlist) {
+            $validatedData['room_id'] = $availableRoom->id;
+            $validatedData['status']  = 'Pendente';
+        } else {
+            $validatedData['room_id'] = null;
+            $validatedData['status']  = 'Lista de Espera';
+        }
+        $validatedData['cycle'] = 1;
+        $validatedData['date']  = now();
 
-        // Remove campo não existente na tabela
-        unset($validatedData['student_code']);
+        // Remove campos auxiliares não existentes na tabela
+        unset($validatedData['student_code'], $validatedData['join_waitlist']);
 
         // 7. Criação do registo da candidatura na base de dados
         $enrollment = Enrollment::create($validatedData);
@@ -135,9 +147,15 @@ class EnrollmentController extends Controller
             \Illuminate\Support\Facades\Log::warning("Falha ao enviar email de candidatura: " . $e->getMessage());
         }
 
+        if ($enrollment->isWaitlist()) {
+            return redirect()
+                ->route('enrollment.index')
+                ->with('success', 'Candidatura registada na Lista de Espera (' . $enrollment->formattedCode() . '). Logo que for criada uma turma para este curso, o aluno será adicionado automaticamente na mesma.');
+        }
+
         return redirect()
             ->route('enrollment.index')
-            ->with('success', 'Candidatura registada com sucesso (' . $enrollment->formattedCode() . '). Aguarda pagamento para atribuição de turma.');
+            ->with('success', 'Candidatura registada com sucesso (' . $enrollment->formattedCode() . ') e associada à turma "' . $availableRoom->name . '".');
     }
 
     /**
@@ -221,18 +239,23 @@ class EnrollmentController extends Controller
         }
 
         $courseChanged = (int) $validatedData['course_id'] !== (int) $enrollment->course_id;
+        $joinWaitlist  = $request->boolean('join_waitlist');
 
-        // 3. R11 — Se mudar de curso, novo curso deve ter turma 'Aberta'
-        if ($courseChanged) {
-            $hasOpenRoom = Room::where('course_id', $validatedData['course_id'])
-                ->where('status', 'Aberta')
-                ->exists();
+        // 3. R11 — Verificar disponibilidade de turma 'Aberta' caso mude de curso ou esteja sem turma
+        $openRooms = Room::where('course_id', $validatedData['course_id'])
+            ->where('status', 'Aberta')
+            ->orderByRaw('CASE WHEN shift = ? THEN 0 ELSE 1 END', [$validatedData['shift']])
+            ->orderBy('id', 'asc')
+            ->get();
 
-            if (!$hasOpenRoom) {
-                return back()
-                    ->withInput()
-                    ->withErrors(['course_id' => 'O curso selecionado não tem turmas abertas neste momento.']);
-            }
+        $availableRoom = $openRooms->first(fn(Room $room) => !$room->isFull());
+
+        if ($courseChanged && !$availableRoom && !$joinWaitlist) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'course_id' => 'O curso selecionado não possui turmas abertas com vagas disponíveis neste momento. Marque a opção "Ir para a Lista de Espera" abaixo para prosseguir.',
+                ]);
         }
 
         // 4. R1 — Verificar inscrição ativa no mesmo curso pelo mesmo BI (ignorando esta)
@@ -260,8 +283,21 @@ class EnrollmentController extends Controller
             $validatedData['image'] = $uploadedImage->storeAs('candidates', $fileName, 'public');
         }
 
-        // Remove campo não existente na tabela
-        unset($validatedData['student_code']);
+        // Atualiza alocação de turma se mudou de curso ou se solicitou Lista de Espera
+        if ($courseChanged || !$enrollment->room_id || $joinWaitlist) {
+            if ($availableRoom && !$joinWaitlist) {
+                $validatedData['room_id'] = $availableRoom->id;
+                if ($enrollment->isWaitlist()) {
+                    $validatedData['status'] = 'Pendente';
+                }
+            } elseif (!$availableRoom || $joinWaitlist) {
+                $validatedData['room_id'] = null;
+                $validatedData['status']  = 'Lista de Espera';
+            }
+        }
+
+        // Remove campos auxiliares não existentes na tabela
+        unset($validatedData['student_code'], $validatedData['join_waitlist']);
 
         // 6. Atualização dos dados no modelo
         $enrollment->update($validatedData);

@@ -61,7 +61,7 @@
                                             </label>
                                             <select name="enrollment_id"
                                                     id="enrollment_id"
-                                                    class="form-control default-select wide @error('enrollment_id') is-invalid @enderror"
+                                                    class="form-control select2 @error('enrollment_id') is-invalid @enderror"
                                                     required>
                                                 <option value="">Selecione o candidato...</option>
                                                 @foreach($enrollments as $enrollment)
@@ -181,6 +181,11 @@
                                             <label for="value_display" class="form-label font-w600 text-dark">
                                                 Montante a Liquidar (Kz)
                                             </label>
+                                            <input type="hidden"
+                                                   name="value"
+                                                   id="payment_value"
+                                                   value="{{ $selectedEnrollment ? ($selectedEnrollment->canRepeat() ? (float)$selectedEnrollment->course->value : $selectedEnrollment->remainingBalance()) : 0 }}">
+                                            <input type="hidden" name="currency" value="AOA">
                                             <div class="input-group">
                                                 <input type="text"
                                                        id="value_display"

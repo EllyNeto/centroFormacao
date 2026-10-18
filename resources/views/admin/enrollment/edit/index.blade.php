@@ -165,6 +165,23 @@
                                             @enderror
                                         </div>
 
+                                        {{-- Opção de Lista de Espera (exibida quando não existem turmas abertas para o curso) --}}
+                                        <div class="col-12 {{ $enrollment->isWaitlist() ? '' : 'd-none' }}" id="waitlistOptionCard">
+                                            <div class="alert alert-warning border mb-0 p-3 rounded">
+                                                <div class="form-check d-flex align-items-start gap-2 mb-0">
+                                                    <input class="form-check-input mt-1" type="checkbox" name="join_waitlist" id="join_waitlist" value="1" {{ old('join_waitlist', $enrollment->isWaitlist()) ? 'checked' : '' }}>
+                                                    <label class="form-check-label text-dark" for="join_waitlist">
+                                                        <strong class="d-block mb-1">
+                                                            <i class="fa fa-clock-o me-1"></i> Ir para a Lista de Espera
+                                                        </strong>
+                                                        <span class="fs-7 text-muted d-block">
+                                                            Este curso não possui turmas abertas neste momento. Ao confirmar esta opção, o aluno ficará na <strong>Lista de Espera</strong> e será adicionado automaticamente logo que uma turma for criada para este curso.
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

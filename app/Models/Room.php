@@ -252,5 +252,57 @@ class Room extends Model
             ->whereIn('status', ['Pendente', 'Pago', 'Matriculado'])
             ->exists();
     }
+
+    /**
+     * Aloca automaticamente candidatos da Lista de Espera (ou sem turma atribuída)
+     * pertencentes ao mesmo curso para esta turma, respeitando a lotação máxima (FIFO)
+     * e dando prioridade aos candidatos que escolheram o mesmo turno.
+     *
+     * @return int Quantidade de candidatos alocados automaticamente nesta turma.
+     */
+    public function allocateWaitingEnrollments(): int
+    {
+        if ($this->status !== 'Aberta') {
+            return 0;
+        }
+
+        $available = $this->availableSeats();
+        if ($available <= 0) {
+            return 0;
+        }
+
+        $waitingEnrollments = Enrollment::with('course')
+            ->where('course_id', $this->course_id)
+            ->whereNull('room_id')
+            ->whereIn('status', ['Lista de Espera', 'Pendente', 'Pago'])
+            ->orderByRaw('CASE WHEN shift = ? THEN 0 ELSE 1 END', [$this->shift])
+            ->orderBy('created_at', 'asc')
+            ->orderBy('id', 'asc')
+            ->limit($available)
+            ->get();
+
+        $allocatedCount = 0;
+
+        foreach ($waitingEnrollments as $enrollment) {
+            $coursePrice = $enrollment->course ? (float) $enrollment->course->value : 0.0;
+            $isPaidFull  = $coursePrice > 0 && $enrollment->totalPaid() >= $coursePrice;
+
+            $newStatus = $enrollment->status;
+            if ($enrollment->status === 'Lista de Espera') {
+                $newStatus = $isPaidFull ? 'Pago' : 'Pendente';
+            }
+
+            $enrollment->update([
+                'room_id' => $this->id,
+                'shift'   => $this->shift ?: $enrollment->shift,
+                'status'  => $newStatus,
+            ]);
+
+            $allocatedCount++;
+        }
+
+        return $allocatedCount;
+    }
 }
+
 

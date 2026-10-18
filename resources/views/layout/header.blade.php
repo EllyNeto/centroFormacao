@@ -100,19 +100,34 @@
                                 </a>
                             </li>
 
-                            {{-- Identificação Institucional --}}
-                            <li class="nav-item ps-2">
-                                <div class="cf-header-profile" title="Secretaria Académica - Centro de Formação">
+                            {{-- Identificação do Utilizador Autenticado e Botão de Terminar Sessão --}}
+                            <li class="nav-item ps-2 d-flex align-items-center gap-2">
+                                <div class="cf-header-profile" title="{{ Auth::check() ? Auth::user()->email : 'Secretaria Académica' }}">
                                     <div class="cf-header-avatar">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
                                         </svg>
                                     </div>
                                     <div class="cf-header-info d-none d-md-block">
-                                        <span class="cf-header-name">Administração</span>
-                                        <small class="cf-header-role">Secretaria Geral</small>
+                                        <span class="cf-header-name">{{ Auth::check() ? Auth::user()->name : 'Administração' }}</span>
+                                        <small class="cf-header-role">{{ Auth::check() ? Auth::user()->email : 'Secretaria Geral' }}</small>
                                     </div>
                                 </div>
+
+                                @auth
+                                    <form action="{{ route('logout') }}" method="POST" class="d-inline m-0">
+                                        @csrf
+                                        <button type="submit" class="cf-header-quick-btn cf-header-quick-btn-alt border-0" title="Terminar Sessão">
+                                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                                <polyline points="16 17 21 12 16 7"></polyline>
+                                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                                            </svg>
+                                            <span class="d-none d-md-inline ms-1">Sair</span>
+                                        </button>
+                                    </form>
+                                @endauth
                             </li>
                         </ul>
                     </div>

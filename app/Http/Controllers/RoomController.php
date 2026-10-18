@@ -99,7 +99,10 @@ class RoomController extends Controller
         // Cria a turma na base de dados
         $room = Room::create($validatedData);
 
-        // 6. Envio de notificação nativa por email ao formador atribuído informando os horários e sala
+        // 6. Alocação automática de candidatos na Lista de Espera deste curso
+        $allocatedCount = $room->allocateWaitingEnrollments();
+
+        // 7. Envio de notificação nativa por email ao formador atribuído informando os horários e sala
         try {
             if ($room->teacher && !empty($room->teacher->email)) {
                 $room->teacher->notify(new \App\Notifications\TeacherRoomAssignedNotification($room));
@@ -109,8 +112,14 @@ class RoomController extends Controller
             \Illuminate\Support\Facades\Log::warning("Falha ao enviar email de atribuição de turma ao formador: " . $e->getMessage());
         }
 
+        $successMessage = 'Turma criada com sucesso!';
+        if ($allocatedCount > 0) {
+            $label = $allocatedCount === 1 ? 'aluno da lista de espera foi adicionado automaticamente' : 'alunos da lista de espera foram adicionados automaticamente';
+            $successMessage .= " {$allocatedCount} {$label} à turma '{$room->name}'.";
+        }
+
         // Redireciona para a listagem com mensagem de sucesso
-        return redirect()->route('room.index')->with('success', 'Turma criada com sucesso!');
+        return redirect()->route('room.index')->with('success', $successMessage);
     }
 
     /**
@@ -212,8 +221,17 @@ class RoomController extends Controller
         // Atualiza a turma na base de dados
         $room->update($validatedData);
 
+        // Aloca candidatos em Lista de Espera caso a turma esteja Aberta e com vagas disponíveis
+        $allocatedCount = $room->allocateWaitingEnrollments();
+
+        $successMessage = 'Turma atualizada com sucesso!';
+        if ($allocatedCount > 0) {
+            $label = $allocatedCount === 1 ? 'aluno da lista de espera foi adicionado automaticamente' : 'alunos da lista de espera foram adicionados automaticamente';
+            $successMessage .= " {$allocatedCount} {$label} à turma '{$room->name}'.";
+        }
+
         // Redireciona com mensagem de sucesso
-        return redirect()->route('room.index')->with('success', 'Turma atualizada com sucesso!');
+        return redirect()->route('room.index')->with('success', $successMessage);
     }
 
     /**

@@ -68,22 +68,15 @@ class Student extends Model
     {
         parent::boot();
 
-        // Intercepta a criação para atribuir o código único sequencial anual
         static::creating(function ($student) {
             if (empty($student->code)) {
                 $year = date('Y');
-                /* CORREÇÃO: Usar transação com bloqueio para evitar condições de corrida
-                 *
-                 * PROBLEMA: Sem bloqueio, dois processos podem ler o mesmo max('id')
-                 * antes de qualquer um inserir, resultando em IDs duplicados.
-                 *
-                 * SOLUÇÃO: lockForUpdate() bloqueia as linhas lidas até o fim da transação,
-                 * garantindo que apenas um processo por vez calcule o próximo ID.
-                 */
                 DB::transaction(function () use ($student, $year) {
-                    // Procura o maior ID existente (mesmo eliminado via soft delete) para evitar colisões
                     $nextId = (int) self::withTrashed()->lockForUpdate()->max('id') + 1;
-                    $student->code = 'CF-' . $year . '-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+                    do {
+                        $code = 'CF-' . $year . '-' . str_pad($nextId++, 4, '0', STR_PAD_LEFT);
+                    } while (self::withTrashed()->where('code', $code)->exists());
+                    $student->code = $code;
                 });
             }
         });

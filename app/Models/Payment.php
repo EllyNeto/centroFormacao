@@ -204,6 +204,10 @@ class Payment extends Model
     public static function generateSuggestedReference(): string
     {
         $nextId = (int) self::withTrashed()->max('id') + 1;
-        return 'REC-' . date('Y') . '-' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
+        do {
+            $ref = 'REC-' . date('Y') . '-' . str_pad($nextId++, 5, '0', STR_PAD_LEFT);
+        } while (self::withTrashed()->where('reference', $ref)->exists());
+
+        return $ref;
     }
 }

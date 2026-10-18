@@ -31,6 +31,52 @@ class PaymentRequest extends FormRequest
     {
         $id = $this->route('id');
 
+        // Caso seja atualização de um pagamento existente (PUT /pagamento/update/{id})
+        if ($id) {
+            $payment = \App\Models\Payment::find($id);
+
+            // Se o pagamento já está Confirmado, o formulário apenas submete o motivo de anulação (R8)
+            if ($payment && $payment->isConfirmed()) {
+                return [
+                    'cancellation_reason' => [
+                        'required',
+                        'string',
+                        'max:500',
+                    ],
+                ];
+            }
+
+            // Edição de pagamento Pendente
+            return [
+                'type_of_payment' => [
+                    'required',
+                    'string',
+                    'in:Transferência,Multicaixa,Numerário',
+                ],
+                'reference' => [
+                    'required',
+                    'string',
+                    'max:100',
+                    'unique:payments,reference,' . $id,
+                ],
+                'status' => [
+                    'required',
+                    'string',
+                    'in:Pendente,Confirmado,Anulado',
+                ],
+                'date' => [
+                    'required',
+                    'date',
+                ],
+                'cancellation_reason' => [
+                    'nullable',
+                    'string',
+                    'max:500',
+                ],
+            ];
+        }
+
+        // Registo de novo pagamento (POST /pagamento/store)
         return [
             'enrollment_id' => [
                 'required',
@@ -42,26 +88,22 @@ class PaymentRequest extends FormRequest
                 'in:Transferência,Multicaixa,Numerário',
             ],
             'value' => [
-                // Nota: No sistema real, o valor é definido pelo controller
-                // com base no preço do curso, não do formulário
-                // Mas manteremos a validação para completude
-                'required',
+                // O valor é calculado e fixado pelo PaymentController com base no preço do curso (R5)
+                'nullable',
                 'numeric',
                 'min:0',
             ],
             'currency' => [
-                'required',
+                // Moeda assume 'AOA' por omissão no controlador
+                'nullable',
                 'string',
                 'size:3',
-                // Alterado para string com tamanho fixo
             ],
             'reference' => [
                 'required',
                 'string',
                 'max:100',
-                // Alterado para string para permitir referências alfanuméricas
-                // Garantir unicidade, ignorando o registro atual se estiver atualizando
-                'unique:payments,reference,' . $id,
+                'unique:payments,reference',
             ],
             'status' => [
                 'required',
@@ -72,8 +114,6 @@ class PaymentRequest extends FormRequest
                 'required',
                 'date',
             ],
-            // Nota: cancellation_reason é obrigatório quando status é Anulado
-            // Isso é tratado com regras de validação condicionais
         ];
     }
 
@@ -89,10 +129,8 @@ class PaymentRequest extends FormRequest
             'enrollment_id.exists' => 'A inscrição selecionada não existe.',
             'type_of_payment.required' => 'O tipo de pagamento é obrigatório.',
             'type_of_payment.in' => 'O tipo de pagamento deve ser Transferência, Multicaixa ou Numerário.',
-            'value.required' => 'O valor do pagamento é obrigatório.',
             'value.numeric' => 'O valor deve ser um número.',
             'value.min' => 'O valor do pagamento não pode ser negativo.',
-            'currency.required' => 'A moeda é obrigatória.',
             'currency.string' => 'A moeda deve ser um texto.',
             'currency.size' => 'A moeda deve ter exatamente 3 caracteres (ex: AOA).',
             'reference.required' => 'A referência é obrigatória.',
@@ -103,6 +141,8 @@ class PaymentRequest extends FormRequest
             'status.in' => 'O status deve ser Pendente, Confirmado ou Anulado.',
             'date.required' => 'A data do pagamento é obrigatória.',
             'date.date' => 'A data fornecida não é válida.',
+            'cancellation_reason.required' => 'O motivo da anulação é obrigatório.',
+            'cancellation_reason.max' => 'O motivo da anulação não pode exceder 500 caracteres.',
         ];
     }
 

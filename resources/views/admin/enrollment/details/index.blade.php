@@ -188,11 +188,11 @@
                                     @else
                                         <div class="p-3 bg-light rounded border">
                                             <div class="d-flex align-items-center">
-                                                <i class="fa fa-info-circle fa-2x text-primary me-3"></i>
+                                                <i class="fa fa-clock-o fa-2x text-warning me-3"></i>
                                                 <div>
-                                                    <strong class="text-dark d-block mb-1">Turma Não Atribuída</strong>
+                                                    <strong class="text-dark d-block mb-1">Em Lista de Espera (Sem Turma Atribuída)</strong>
                                                     <span class="text-muted fs-7">
-                                                        Turno de preferência: <strong>{{ $enrollment->shift }}</strong>. A alocação da turma oficial será realizada após a confirmação do pagamento e efetivação da matrícula.
+                                                        Turno de preferência: <strong>{{ $enrollment->shift }}</strong>. O aluno encontra-se na <strong>Lista de Espera</strong> e será adicionado automaticamente logo que for criada uma turma para este curso.
                                                     </span>
                                                 </div>
                                             </div>

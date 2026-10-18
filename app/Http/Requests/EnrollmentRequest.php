@@ -69,6 +69,10 @@ class EnrollmentRequest extends FormRequest
                 'mimes:jpeg,png,jpg,webp',
                 'max:4096', // 4MB max
             ],
+            'join_waitlist' => [
+                'nullable',
+                'boolean',
+            ],
             // Nota: room_id é tratado especialmente no controller
             // Pode ser nulo para inscrições em lista de espera
         ];

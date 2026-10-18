@@ -39,6 +39,7 @@
     function initPaymentForm() {
         var enrollmentSelect = document.getElementById('enrollment_id');
         var valueDisplay     = document.getElementById('value_display');
+        var paymentValueInput = document.getElementById('payment_value');
         var repeatAlert      = document.getElementById('repeatCourseAlert');
         var previewBox       = document.getElementById('candidatePreviewBox');
         var previewPlaceholder = document.getElementById('candidatePreviewPlaceholder');
@@ -76,6 +77,7 @@
                 if (previewContent)     previewContent.classList.add('d-none');
                 if (previewBox)         previewBox.classList.remove('is-active');
                 if (valueDisplay)       valueDisplay.value = '—';
+                if (paymentValueInput)  paymentValueInput.value = 0;
                 if (repeatAlert)        repeatAlert.classList.add('d-none');
                 return;
             }
@@ -113,10 +115,13 @@
             if (previewContent)     previewContent.classList.remove('d-none');
             if (previewBox)         previewBox.classList.add('is-active');
 
-            // R5: atualiza o campo de valor readonly
+            // R5: atualiza o campo de valor readonly e o input hidden
+            var amount = isRepeat ? courseValue : balance;
             if (valueDisplay) {
-                var amount = isRepeat ? courseValue : balance;
                 valueDisplay.value = formatKz(amount);
+            }
+            if (paymentValueInput) {
+                paymentValueInput.value = amount;
             }
 
             // R3: mostra/oculta aviso de repetição
@@ -133,12 +138,15 @@
         enrollmentSelect.addEventListener('change', updateCandidatePreview);
 
         // Inicializa Select2 no campo de seleção de inscrição
-        if (window.jQuery && window.jQuery.fn.select2) {
-            window.jQuery(enrollmentSelect).select2({
-                placeholder: "Selecione o candidato...",
-                allowClear: true,
-                width: '100%'
-            }).on('select2:select', updateCandidatePreview);
+        if (window.jQuery) {
+            if (window.jQuery.fn.select2) {
+                window.jQuery(enrollmentSelect).select2({
+                    placeholder: "Selecione o candidato...",
+                    allowClear: true,
+                    width: '100%'
+                });
+            }
+            window.jQuery(enrollmentSelect).on('change select2:select select2:clear', updateCandidatePreview);
         }
 
         // Ação de geração de referência automática
@@ -198,6 +206,9 @@
         }
 
         statusSelect.addEventListener('change', toggleCancelReason);
+        if (window.jQuery) {
+            window.jQuery(statusSelect).on('change', toggleCancelReason);
+        }
         toggleCancelReason(); // executa na inicialização
     }
 
