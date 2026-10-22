@@ -80,8 +80,29 @@
                     </button>
                 </form>
 
+                {{-- <form action="{{ route('lead.store') }}" method="POST" class="mt-3">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="lead_email" class="cf-auth-label">Deixe o seu e‑mail para contacto futuro</label>
+                        <input type="email"
+                               name="lead_email"
+                               id="lead_email"
+                               class="form-control cf-auth-input @error('lead_email') is-invalid @enderror"
+                               placeholder="Introduza o seu e‑mail"
+                               required>
+                    </div>
+                    <button type="submit" class="cf-auth-btn">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                            <polyline points="10 17 15 12 10 7"/>
+                            <line x1="15" y1="12" x2="3" y2="12"/>
+                        </svg>
+                        <span>Enviar</span>
+                    </button>
+                </form> --}}
+
                 <div class="cf-auth-footer">
-                    Acesso restrito a utilizadores autorizados pela Administração.
+                    Ainda não tem acesso ao sistema? <a href="contact"> Contactar a administação</a>
                 </div>
             </div>
         </div>

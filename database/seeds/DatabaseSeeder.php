@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@centroformacao.ao'],
             [
-                'name'     => 'Administrador Geral',
+                'name'     => 'Administrador',
                 'password' => Hash::make('12345678'),
             ]
         );

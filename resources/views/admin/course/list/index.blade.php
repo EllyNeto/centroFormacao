@@ -69,9 +69,6 @@
 												<a href="{{ route('course.show', $course->id) }}" class="text-dark font-w600">
 													{{ $course->name }}
 												</a>
-												@if(($course->enrollments_count ?? 0) > 0)
-													<small class="d-block text-muted">{{ $course->enrollments_count }} inscrição(ões)</small>
-												@endif
 											</td>
 
 											{{-- Duração em Horas --}}

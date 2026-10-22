@@ -17,7 +17,7 @@
         <div id="dashboardAnalyticsData" class="d-none" data-chart='@json($chartData)'></div>
 
         {{-- Banner Institucional de Boas-Vindas & Ações Rápidas --}}
-        <div class="cf-hero-banner mb-4">
+        {{-- <div class="cf-hero-banner mb-4">
             <div class="row align-items-center g-3">
                 <div class="col-xl-7 col-lg-6">
                     <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
@@ -74,7 +74,7 @@
             </div>
 
             {{-- Barra de Alertas Acionáveis da Secretaria --}}
-            @if($pendingEnrollments > 0 || $approvedEnrollments > 0 || $waitingEnrollments > 0)
+             {{-- @if($pendingEnrollments > 0 || $approvedEnrollments > 0 || $waitingEnrollments > 0)
                 <div class="cf-hero-alerts-strip mt-3 pt-3">
                     <div class="d-flex flex-wrap align-items-center gap-3">
                         <span class="cf-hero-alert-label">
@@ -104,7 +104,7 @@
                     </div>
                 </div>
             @endif
-        </div>
+        </div>  --}}
 
         {{-- Linha 1: 4 Cartões Principais de KPIs Executivos (Ícones Vetoriais Outline em Badges Translúcidos) --}}
         <div class="row g-3 mb-4">
@@ -244,7 +244,7 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="cf-mini-stat-title">Salas Físicas</span>
+                        <span class="cf-mini-stat-title">Salas</span>
                         <strong class="cf-mini-stat-num">{{ $activeClassrooms }} ativas de {{ $totalClassrooms }}</strong>
                     </div>
                 </a>

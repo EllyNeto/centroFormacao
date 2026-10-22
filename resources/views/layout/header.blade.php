@@ -51,7 +51,7 @@
 
                         <ul class="navbar-nav header-right align-items-center">
                             {{-- Atalhos Rápidos de Secretaria (visíveis em desktop) --}}
-                            <li class="nav-item d-none d-lg-flex align-items-center me-2 gap-2">
+                            {{-- <li class="nav-item d-none d-lg-flex align-items-center me-2 gap-2">
                                 <a href="{{ route('enrollment.create') }}" class="cf-header-quick-btn" title="Registar Nova Candidatura">
                                     <svg class="me-1" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                         <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -68,7 +68,7 @@
                                     </svg>
                                     <span>Pagamento</span>
                                 </a>
-                            </li>
+                            </li> --}}
 
                             {{-- Alternador de Modo Claro / Escuro --}}
                             <li class="nav-item dropdown notification_dropdown">

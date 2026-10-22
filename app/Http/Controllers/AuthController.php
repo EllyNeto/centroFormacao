@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Lead;
 
 /**
  * Controlador responsável pela Autenticação (Login / Logout) e
@@ -146,4 +147,33 @@ class AuthController extends Controller
             ->route('user.index')
             ->with('success', 'Utilizador removido com sucesso!');
     }
+
+    public function showContactForm()
+    {
+        return view('auth.contact');
+    }
+
+    // ------------------------------
+    // Store lead from login page
+    // ------------------------------
+    /**
+     * Store a lead email submitted from the login page.
+     */
+    public function storeLead(Request $request)
+    {
+        $validated = $request->validate([
+            'lead_email' => ['required', 'email', 'max:255', 'unique:leads,email'],
+        ], [
+            'lead_email.required' => 'O endereço de e‑mail é obrigatório.',
+            'lead_email.email'    => 'Por favor, indique um e‑mail válido.',
+            'lead_email.unique'   => 'Este e‑mail já está registado como lead.',
+        ]);
+
+        \App\Models\Lead::create([
+            'email' => $validated['lead_email'],
+        ]);
+
+        return back()->with('status', 'Obrigado! Entraremos em contacto brevemente.');
+    }
+
 }

@@ -39,8 +39,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Nome Completo</th>
-                                        <th>E-mail de Acesso</th>
-                                        <th>Data de Registo</th>
+                                        <th>E-mail</th>
                                         <th class="text-end">Acções</th>
                                     </tr>
                                 </thead>
@@ -57,7 +56,6 @@
                                                 @endif
                                             </td>
                                             <td>{{ $user->email }}</td>
-                                            <td>{{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : '-' }}</td>
                                             <td class="text-end">
                                                 @if (Auth::id() !== $user->id)
                                                     <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="d-inline" data-confirm="Tem a certeza que deseja remover este utilizador?">
