@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
@@ -13,12 +14,12 @@ use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
-| Rotas de Autenticação (Apenas Login para Visitantes)
+| Rotas de Autenticação (laravel/ui)
 |--------------------------------------------------------------------------
 */
+Auth::routes();
+
 Route::middleware(['guest'])->group(function () {
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     Route::get('/contact', [AuthController::class, 'showContactForm'])->name('contact');
     Route::post('/lead', [AuthController::class, 'storeLead'])->name('lead.store');
 });
@@ -29,9 +30,6 @@ Route::middleware(['guest'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
-    // Terminar Sessão (Logout)
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
     // Página Principal (Dashboard com Indicadores Reais)
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -107,3 +105,4 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/pagamento/update/{id}', [PaymentController::class, 'update'])->name('payment.update');
     Route::delete('/pagamento/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
 });
+
