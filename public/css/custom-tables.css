@@ -681,6 +681,11 @@ body {
     border: 1px solid rgba(245, 158, 11, 0.18);
 }
 
+.cf-mini-stat-body {
+    min-width: 0;
+    flex: 1;
+}
+
 .cf-mini-stat-title {
     display: block;
     font-size: 0.72rem;
@@ -695,19 +700,47 @@ body {
     font-size: 0.85rem;
     font-weight: 700;
     color: #0f172a;
+    word-break: break-word;
 }
 
-/* Contentores de Gráficos Analíticos */
+/* Contentores de Gráficos Analíticos e Responsividade do Dashboard */
+.cf-dashboard-card {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden !important;
+}
+
+.cf-dashboard-card > .card-body {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden !important;
+}
+
+.cf-card-header-info {
+    min-width: 0;
+    flex: 1 1 240px;
+}
+
+.cf-chart-summary-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+
 .cf-chart-container {
     position: relative;
-    height: 290px;
+    height: 300px;
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .cf-doughnut-container {
     position: relative;
-    height: 135px;
+    height: 145px;
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .cf-chart-summary-pill {
@@ -716,17 +749,148 @@ body {
     border-radius: 0.5rem;
     padding: 0.35rem 0.75rem;
     line-height: 1.2;
+    flex: 1 1 auto;
 }
 
 .cf-chart-summary-pill small {
     font-size: 0.68rem;
     text-transform: uppercase;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .cf-chart-summary-pill strong {
     font-size: 0.9rem;
     font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Tabelas Operacionais Responsivas do Dashboard */
+.cf-dashboard-table-wrap {
+    overflow-x: auto;
+    overflow-y: hidden !important;
+    max-width: 100%;
+    border-radius: 0 0 0.875rem 0.875rem;
+}
+
+.cf-dashboard-table.custom-table {
+    min-width: 0 !important;
+    width: 100%;
+    table-layout: auto;
+}
+
+.cf-table-user-cell {
+    min-width: 0;
+}
+
+.cf-table-cell-text {
+    min-width: 0;
+    max-width: 220px;
+}
+
+@media (max-width: 1399.98px) {
+    .cf-table-cell-text {
+        max-width: 175px;
+    }
+    .cf-kpi-value {
+        font-size: 1.45rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .cf-chart-container {
+        height: 260px;
+    }
+    .cf-doughnut-container {
+        height: 160px;
+    }
+    .cf-table-cell-text {
+        max-width: 240px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .cf-chart-summary-group {
+        width: 100%;
+    }
+    .cf-chart-summary-pill {
+        text-align: center;
+        padding: 0.4rem 0.5rem;
+    }
+    .cf-chart-container {
+        height: 235px;
+    }
+    .cf-doughnut-container {
+        height: 180px;
+    }
+    .cf-kpi-card {
+        padding: 1.15rem 1.2rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-chart-container {
+        height: 215px;
+    }
+    .cf-doughnut-container {
+        height: 195px;
+    }
+    /* Layout em cartões empilhados para as tabelas do Dashboard em ecrãs móveis */
+    .cf-dashboard-table thead {
+        display: none;
+    }
+    .cf-dashboard-table,
+    .cf-dashboard-table tbody,
+    .cf-dashboard-table tr,
+    .cf-dashboard-table td {
+        display: block;
+        width: 100%;
+    }
+    .cf-dashboard-table tbody tr {
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    [data-theme-version="dark"] .cf-dashboard-table tbody tr {
+        border-bottom-color: #334155;
+    }
+    .cf-dashboard-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.35rem 0 !important;
+        border-bottom: 0 !important;
+        text-align: right !important;
+    }
+    .cf-dashboard-table tbody td::before {
+        content: attr(data-label);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: #64748b;
+        text-align: left;
+        flex-shrink: 0;
+    }
+    [data-theme-version="dark"] .cf-dashboard-table tbody td::before {
+        color: #94a3b8;
+    }
+    .cf-dashboard-table tbody td[colspan] {
+        display: block;
+        text-align: center !important;
+        padding: 1.5rem 0.5rem !important;
+    }
+    .cf-dashboard-table tbody td[colspan]::before {
+        display: none;
+    }
+    .cf-table-user-cell {
+        justify-content: flex-end;
+        text-align: right;
+    }
+    .cf-table-cell-text {
+        max-width: 190px;
+        text-align: right;
+    }
 }
 
 /* ==========================================================================
@@ -777,8 +941,74 @@ body {
 }
 
 /* ==========================================================================
-   6. TABELAS, AVATARES E DATA TABLES
+   6. RODAPÉ CENTRALIZADO (.cf-footer), TABELAS, AVATARES E DATA TABLES
    ========================================================================== */
+.cf-footer {
+    background-color: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    margin-top: auto;
+}
+
+.cf-footer .cf-footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1.15rem 1.5rem !important;
+    gap: 0.2rem;
+}
+
+.cf-footer .cf-footer-title {
+    font-size: 0.84rem;
+    color: #334155;
+    line-height: 1.4;
+}
+
+.cf-footer .cf-footer-title strong {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.cf-footer .cf-footer-meta {
+    font-size: 0.78rem;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.cf-footer .cf-footer-link {
+    color: #1E40AF !important;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.cf-footer .cf-footer-link:hover {
+    color: #1E3A8A !important;
+    text-decoration: underline;
+}
+
+[data-theme-version="dark"] .cf-footer {
+    background-color: #1e293b !important;
+    border-top: 1px solid #334155 !important;
+}
+
+[data-theme-version="dark"] .cf-footer .cf-footer-title {
+    color: #cbd5e1 !important;
+}
+
+[data-theme-version="dark"] .cf-footer .cf-footer-title strong {
+    color: #f8fafc !important;
+}
+
+[data-theme-version="dark"] .cf-footer .cf-footer-meta {
+    color: #94a3b8 !important;
+}
+
+[data-theme-version="dark"] .cf-footer .cf-footer-link {
+    color: #60a5fa !important;
+}
+
 .content-body {
     padding-bottom: 2rem;
 }
@@ -861,7 +1091,7 @@ body {
 }
 
 .custom-table {
-    min-width: 845px;
+    min-width: 0;
     width: 100%;
 }
 

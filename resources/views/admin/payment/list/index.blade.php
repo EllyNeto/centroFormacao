@@ -94,12 +94,9 @@
                             <table id="example3" class="display table table-hover style-1 custom-table">
                                 <thead>
                                     <tr>
-                                        <th>Ref.</th>
-                                        <th>Candidato / Inscrição</th>
-                                        <th>Curso</th>
-                                        <th>Método</th>
+                                        <th>Recibo</th>
+                                        <th>Candidato</th>
                                         <th>Valor</th>
-                                        <th>Data</th>
                                         <th>Estado</th>
                                         <th class="text-end">Ações</th>
                                     </tr>
@@ -114,42 +111,20 @@
                                                 </a>
                                             </td>
 
-                                            {{-- Nome e Código da Inscrição do Candidato --}}
+                                            {{-- Nome do Candidato --}}
                                             <td>
                                                 @if($payment->enrollment)
                                                     <a href="{{ route('enrollment.show', $payment->enrollment->id) }}" class="font-w600 text-dark d-block">
                                                         {{ $payment->enrollment->name }}
                                                     </a>
-                                                    <small class="text-muted">{{ $payment->enrollment->formattedCode() }}</small>
                                                 @else
                                                     <span class="text-muted">Inscrição Não Encontrada</span>
                                                 @endif
                                             </td>
 
-                                            {{-- Nome do Curso --}}
-                                            <td>
-                                                @if($payment->enrollment && $payment->enrollment->course)
-                                                    <span class="font-w500 text-dark">{{ $payment->enrollment->course->name }}</span>
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
-                                            </td>
-
-                                            {{-- Tipo / Método de Pagamento com Ícone --}}
-                                            <td>
-                                                <span class="badge light badge-info font-w500">
-                                                    <i class="{{ $payment->typeIcon() }} me-1"></i>{{ $payment->type_of_payment }}
-                                                </span>
-                                            </td>
-
                                             {{-- Valor Liquidado --}}
                                             <td>
                                                 <strong class="text-dark">{{ $payment->formattedValue() }}</strong>
-                                            </td>
-
-                                            {{-- Data da Transação --}}
-                                            <td>
-                                                <span class="text-muted fs-7">{{ $payment->formattedDate() }}</span>
                                             </td>
 
                                             {{-- Estado do Pagamento --}}
@@ -225,7 +200,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="text-center py-4 text-muted">
+                                            <td colspan="5" class="text-center py-4 text-muted">
                                                 <i class="fa fa-info-circle me-1"></i>Nenhum pagamento registado até ao momento.
                                             </td>
                                         </tr>

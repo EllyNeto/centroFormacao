@@ -52,8 +52,7 @@
 							<table id="example4" class="display table table-hover style-1 custom-table">
 								<thead>
 									<tr>
-										<th>Nome do Curso</th>
-										<th>Carga Horária</th>
+										<th>Curso</th>
 										<th>Preço (Kz)</th>
 										<th>Turmas</th>
 										<th>Estado</th>
@@ -69,12 +68,6 @@
 												<a href="{{ route('course.show', $course->id) }}" class="text-dark font-w600">
 													{{ $course->name }}
 												</a>
-											</td>
-
-											{{-- Duração em Horas --}}
-											<td>
-												<i class="fa fa-clock-o me-1 text-muted"></i>
-												{{ $course->duration }} horas
 											</td>
 
 											{{-- Preço Formatado em Kz --}}
@@ -132,7 +125,7 @@
 										</tr>
 									@empty
 										<tr>
-											<td colspan="6" class="text-center py-4 text-muted">
+											<td colspan="5" class="text-center py-4 text-muted">
 												<i class="fa fa-info-circle me-1"></i> Nenhum curso registado até ao momento.
 											</td>
 										</tr>

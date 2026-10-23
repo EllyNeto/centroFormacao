@@ -40,6 +40,8 @@
         }
 
         var colors = getThemeColors();
+        var isMobile = window.innerWidth < 576;
+        var isCompact = window.innerWidth < 768;
 
         // 1. Gráfico Combinado: Inscrições vs Matrículas (Últimos 6 Meses)
         var ctxMain = document.getElementById('enrollmentRevenueChart');
@@ -61,8 +63,8 @@
                             borderWidth: 1,
                             borderRadius: 6,
                             data: chartData.monthlyEnrollments || [],
-                            barPercentage: 0.55,
-                            categoryPercentage: 0.65
+                            barPercentage: isMobile ? 0.75 : 0.55,
+                            categoryPercentage: isMobile ? 0.78 : 0.65
                         },
                         {
                             label: 'Formandos Matriculados',
@@ -72,8 +74,8 @@
                             borderWidth: 1,
                             borderRadius: 6,
                             data: chartData.monthlyStudents || [],
-                            barPercentage: 0.55,
-                            categoryPercentage: 0.65
+                            barPercentage: isMobile ? 0.75 : 0.55,
+                            categoryPercentage: isMobile ? 0.78 : 0.65
                         }
                     ]
                 },
@@ -86,9 +88,9 @@
                         labels: {
                             fontColor: colors.textColor,
                             fontFamily: "'Poppins', sans-serif",
-                            fontSize: 12,
-                            boxWidth: 12,
-                            padding: 16
+                            fontSize: isMobile ? 11 : 12,
+                            boxWidth: isMobile ? 10 : 12,
+                            padding: isMobile ? 10 : 16
                         }
                     },
                     tooltips: {
@@ -121,7 +123,9 @@
                             ticks: {
                                 fontColor: colors.textColor,
                                 fontFamily: "'Poppins', sans-serif",
-                                fontSize: 12
+                                fontSize: isMobile ? 10 : 12,
+                                maxRotation: isMobile ? 35 : 0,
+                                autoSkip: false
                             }
                         }],
                         yAxes: [{
@@ -136,7 +140,7 @@
                                 stepSize: 1,
                                 fontColor: colors.textColor,
                                 fontFamily: "'Poppins', sans-serif",
-                                fontSize: 12
+                                fontSize: isMobile ? 10 : 12
                             }
                         }]
                     }
@@ -170,16 +174,16 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutoutPercentage: 68,
+                    cutoutPercentage: isCompact ? 62 : 68,
                     legend: {
                         display: true,
-                        position: 'right',
+                        position: isCompact ? 'bottom' : 'right',
                         labels: {
                             fontColor: colors.textColor,
                             fontFamily: "'Poppins', sans-serif",
-                            fontSize: 12,
-                            boxWidth: 12,
-                            padding: 12
+                            fontSize: isMobile ? 11 : 12,
+                            boxWidth: isMobile ? 10 : 12,
+                            padding: isCompact ? 10 : 12
                         }
                     },
                     tooltips: {
@@ -199,12 +203,20 @@
         }
     }
 
+    var resizeTimer = null;
+
     document.addEventListener('DOMContentLoaded', function () {
         initDashboardCharts();
 
         // Re-renderiza com cores adequadas ao alternar entre Modo Claro e Escuro
         window.addEventListener('cf:theme-changed', function () {
             setTimeout(initDashboardCharts, 30);
+        });
+
+        // Adapta legendas e dimensões dos gráficos ao redimensionar o ecrã
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(initDashboardCharts, 180);
         });
     });
 })();

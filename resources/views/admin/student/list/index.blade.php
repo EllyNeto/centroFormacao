@@ -52,28 +52,16 @@
 							<table id="example4" class="display table table-hover style-1 custom-table">
 								<thead>
 									<tr>
-										<th>Fotografia</th>
 										<th>Código</th>
-										<th>Nome Completo</th>
-										<th>Documento (BI)</th>
+										<th>Formando</th>
 										<th>Curso</th>
 										<th>Turma</th>
-										<th>Contactos</th>
 										<th class="text-end">Acções</th>
 									</tr>
 								</thead>
 								<tbody>
 									@forelse ($students as $student)
 										<tr>
-											{{-- Fotografia de Perfil do Formando --}}
-											<td>
-												<div class="d-flex align-items-center">
-													<img src="{{ $student->avatarUrl() }}" 
-														 class="cf-avatar-md me-2" 
-														 alt="{{ $student->name }}">
-												</div>
-											</td>
-
 											{{-- Código Oficial Único do Formando --}}
 											<td>
 												<span class="badge light badge-primary font-w600 fs-7">
@@ -88,11 +76,6 @@
 												</a>
 											</td>
 
-											{{-- Bilhete de Identidade (BI) --}}
-											<td>
-												<span class="text-dark">{{ $student->number_of_identify }}</span>
-											</td>
-
 											{{-- Curso Frequentado --}}
 											<td>
 												@if($student->course)
@@ -104,27 +87,13 @@
 												@endif
 											</td>
 
-											{{-- Turma e Sala --}}
+											{{-- Turma --}}
 											<td>
 												@if($student->room)
-													<div>
-														<strong class="text-dark">{{ $student->room->name }}</strong>
-														<small class="d-block text-muted">
-															{{ $student->room->shift }} &bull; 
-															{{ $student->room->classroom ? 'Sala ' . $student->room->classroom->number_of_classroom : 'Sem sala' }}
-														</small>
-													</div>
+													<strong class="text-dark">{{ $student->room->name }}</strong>
 												@else
 													<span class="badge light badge-warning">Não alocado</span>
 												@endif
-											</td>
-
-											{{-- Contactos (Telefone e Email) --}}
-											<td>
-												<div class="fs-7">
-													<div><i class="fa fa-phone text-muted me-1"></i>{{ $student->phone }}</div>
-													<div class="text-muted"><i class="fa fa-envelope text-muted me-1"></i>{{ $student->email }}</div>
-												</div>
 											</td>
 
 											{{-- Célula de Ações com Menu Dropdown --}}
@@ -168,7 +137,7 @@
 									@empty
 										{{-- Estado quando ainda não existem formandos registados --}}
 										<tr>
-											<td colspan="8" class="text-center py-5 text-muted">
+											<td colspan="5" class="text-center py-5 text-muted">
 												<i class="fa fa-graduation-cap fa-3x mb-3 d-block text-muted"></i>
 												<h5 class="text-dark">Nenhum formando matriculado até ao momento</h5>
 												<p class="text-muted fs-7">Para matricular formandos, efetive as inscrições que já possuem pagamento liquidado ('Pago').</p>

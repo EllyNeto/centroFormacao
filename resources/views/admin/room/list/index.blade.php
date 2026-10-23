@@ -47,8 +47,6 @@
 										<th>Turma</th>
 										<th>Curso</th>
 										<th>Formador</th>
-										<th>Sala Física</th>
-										<th>Horário</th>
 										<th>Vagas</th>
 										<th>Estado</th>
 										<th class="text-end">Acções</th>
@@ -60,7 +58,6 @@
 										@php
 											$occupied = $room->occupiedSeats();
 											$capacity = $room->max_capacity;
-											$percentage = $room->occupancyPercentage();
 										@endphp
 										<tr>
 											{{-- Nome da Turma --}}
@@ -68,11 +65,6 @@
 												<a href="{{ route('room.show', $room->id) }}" class="text-dark font-w600 d-block">
 													{{ $room->name }}
 												</a>
-												@if($room->start_date && $room->end_date)
-													<small class="d-block text-muted">
-														<i class="fa fa-calendar me-1"></i> {{ $room->start_date->format('d/m/Y') }} - {{ $room->end_date->format('d/m/Y') }}
-													</small>
-												@endif
 											</td>
 
 											{{-- Curso Associado --}}
@@ -82,46 +74,12 @@
 
 											{{-- Formador Responsável --}}
 											<td>
-												<div class="d-flex align-items-center">
-													@if($room->teacher && $room->teacher->image)
-														<img src="{{ asset('storage/' . $room->teacher->image) }}" class="rounded-circle avatar avatar-sm me-2 room-avatar-sm" alt="{{ $room->teacher->name }}">
-													@endif
-													<span>{{ $room->teacher->name ?? 'Não atribuído' }}</span>
-												</div>
-											</td>
-
-											{{-- Sala Física com Capacidade --}}
-											<td>
-												@if($room->classroom)
-													<span class="badge light badge-info font-w500">
-														<i class="fa fa-building me-1"></i> Sala {{ $room->classroom->number_of_classroom }}
-													</span>
-												@else
-													<span class="text-muted">Sem sala</span>
-												@endif
-											</td>
-
-											{{-- Turno e Horário --}}
-											<td>
-												<div>
-													<i class="fa fa-clock-o me-1 text-muted"></i>
-													{{ \Carbon\Carbon::parse($room->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($room->end_time)->format('H:i') }}
-												</div>
-												<small class="text-muted">{{ $room->shift }}</small>
+												<span>{{ $room->teacher->name ?? 'Não atribuído' }}</span>
 											</td>
 
 											{{-- Indicador de Vagas e Lotação --}}
 											<td>
-												<div class="d-flex align-items-center gap-2">
-													<small class="font-w600 text-dark">
-														{{ $occupied }}/{{ $capacity }}
-													</small>
-												</div>
-												@if($room->isFull())
-													<small class="text-danger font-w500 d-block"><i class="fa fa-exclamation-circle"></i> Lotada</small>
-												@else
-													<small class="text-success d-block">{{ $room->availableSeats() }} livres</small>
-												@endif
+												<span class="font-w600 text-dark">{{ $occupied }}/{{ $capacity }}</span>
 											</td>
 
 											{{-- Estado da Turma --}}
@@ -173,7 +131,7 @@
 										</tr>
 									@empty
 										<tr>
-											<td colspan="8" class="text-center py-4 text-muted">
+											<td colspan="6" class="text-center py-4 text-muted">
 												<i class="fa fa-info-circle me-1"></i> Nenhuma turma registada no sistema.
 											</td>
 										</tr>
