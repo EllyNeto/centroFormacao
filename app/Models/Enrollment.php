@@ -86,12 +86,12 @@ class Enrollment extends Model
         static::creating(function ($enrollment) {
             if (empty($enrollment->code)) {
                 $year   = date('Y');
-                // CORREÇÃO: Usar transação com bloqueio para evitar condições de corrida
-                // Quando dois processos tentam criar inscrições simultaneamente,
-                // o lockForUpdate() garante que apenas um possa ler o máximo ID de cada vez
                 DB::transaction(function () use ($enrollment, $year) {
                     $nextId = (int) self::withTrashed()->lockForUpdate()->max('id') + 1;
-                    $enrollment->code = 'INS-' . $year . '-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+                    do {
+                        $code = 'INS-' . $year . '-' . str_pad($nextId++, 4, '0', STR_PAD_LEFT);
+                    } while (self::withTrashed()->where('code', $code)->exists());
+                    $enrollment->code = $code;
                 });
             }
         });
@@ -341,7 +341,15 @@ class Enrollment extends Model
         if ($coursePrice > 0 && $confirmed >= $coursePrice) {
             $this->update(['status' => 'Pago']);
         } else {
-            $this->update(['status' => 'Pendente']);
+            $hasOpenRoom = Room::where('course_id', $this->course_id)
+                ->where('status', 'Aberta')
+                ->exists();
+
+            $fallbackStatus = (!$this->room_id && (!$hasOpenRoom || $this->status === 'Lista de Espera'))
+                ? 'Lista de Espera'
+                : 'Pendente';
+
+            $this->update(['status' => $fallbackStatus]);
         }
     }
 

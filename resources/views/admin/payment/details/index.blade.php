@@ -15,7 +15,7 @@
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     {{-- Botão de Impressão Acionado via JS Externo --}}
-                    <a href="{{ route('payment.show', $payment->id) }}" class="btn btn-outline-primary btn-sm">
+                    <a href="{{ route('payment.show', $payment->id) }}" id="btnPrintReceipt" class="btn btn-outline-primary btn-sm">
                         <i class="fa fa-print me-1"></i> Imprimir Recibo
                     </a>
 

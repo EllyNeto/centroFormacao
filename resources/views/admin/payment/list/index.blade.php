@@ -22,23 +22,23 @@
         @endif
 
         {{-- Painel de Métricas e Resumo Financeiro do Topo --}}
-        {{-- <div class="row g-3 mb-4">
+        <div class="row g-3 mb-4">
             <div class="col-xl-3 col-sm-6">
-                <div class="payment-metric-card d-flex align-items-center justify-content-between">
-                    <div>1
-                        <span class="text-muted d-block text-uppercase font-w600 fs-7 mb-1">Total Liquidado</span>
+                <div class="payment-metric-card d-flex align-items-center justify-content-between h-100">
+                    <div>
+                        <span class="text-muted d-block text-uppercase font-w600 fs-8 mb-1">Total Liquidado</span>
                         <h4 class="mb-0 font-w700 text-dark">{{ number_format($totalCollected, 2, ',', '.') }} Kz</h4>
                     </div>
                     <div class="payment-metric-icon payment-icon-success">
-                        <i class="fa fa-money"></i>
+                        <i class="fa fa-coins"></i>
                     </div>
                 </div>
             </div>
 
             <div class="col-xl-3 col-sm-6">
-                <div class="payment-metric-card d-flex align-items-center justify-content-between">
+                <div class="payment-metric-card d-flex align-items-center justify-content-between h-100">
                     <div>
-                        <span class="text-muted d-block text-uppercase font-w600 fs-7 mb-1">Confirmados</span>
+                        <span class="text-muted d-block text-uppercase font-w600 fs-8 mb-1">Confirmados</span>
                         <h4 class="mb-0 font-w700 text-success">{{ $totalConfirmed }}</h4>
                     </div>
                     <div class="payment-metric-icon payment-icon-primary">
@@ -48,21 +48,21 @@
             </div>
 
             <div class="col-xl-3 col-sm-6">
-                <div class="payment-metric-card d-flex align-items-center justify-content-between">
+                <div class="payment-metric-card d-flex align-items-center justify-content-between h-100">
                     <div>
-                        <span class="text-muted d-block text-uppercase font-w600 fs-7 mb-1">Pendentes</span>
+                        <span class="text-muted d-block text-uppercase font-w600 fs-8 mb-1">Pendentes</span>
                         <h4 class="mb-0 font-w700 text-warning">{{ $totalPending }}</h4>
                     </div>
                     <div class="payment-metric-icon payment-icon-warning">
-                        <i class="fa fa-clock-o"></i>
+                        <i class="fa fa-clock"></i>
                     </div>
                 </div>
             </div>
 
             <div class="col-xl-3 col-sm-6">
-                <div class="payment-metric-card d-flex align-items-center justify-content-between">
+                <div class="payment-metric-card d-flex align-items-center justify-content-between h-100">
                     <div>
-                        <span class="text-muted d-block text-uppercase font-w600 fs-7 mb-1">Anulados</span>
+                        <span class="text-muted d-block text-uppercase font-w600 fs-8 mb-1">Anulados</span>
                         <h4 class="mb-0 font-w700 text-danger">{{ $totalCanceled }}</h4>
                     </div>
                     <div class="payment-metric-icon payment-icon-danger">
@@ -70,7 +70,7 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
         {{-- Tabela Principal de Pagamentos --}}
         <div class="row">
@@ -91,13 +91,15 @@
 
                     <div class="card-body p-4">
                         <div class="table-responsive">
-                            <table id="example3" class="display table table-striped table-hover responsive-table min-w850">
+                            <table id="example3" class="display table table-hover style-1 custom-table">
                                 <thead>
                                     <tr>
                                         <th>Ref.</th>
-                                        <th>Inscrição</th>
+                                        <th>Candidato / Inscrição</th>
+                                        <th>Curso</th>
                                         <th>Método</th>
                                         <th>Valor</th>
+                                        <th>Data</th>
                                         <th>Estado</th>
                                         <th class="text-end">Ações</th>
                                     </tr>
@@ -118,19 +120,20 @@
                                                     <a href="{{ route('enrollment.show', $payment->enrollment->id) }}" class="font-w600 text-dark d-block">
                                                         {{ $payment->enrollment->name }}
                                                     </a>
+                                                    <small class="text-muted">{{ $payment->enrollment->formattedCode() }}</small>
                                                 @else
                                                     <span class="text-muted">Inscrição Não Encontrada</span>
                                                 @endif
                                             </td>
 
-                                            {{-- Nome do Curso
+                                            {{-- Nome do Curso --}}
                                             <td>
                                                 @if($payment->enrollment && $payment->enrollment->course)
                                                     <span class="font-w500 text-dark">{{ $payment->enrollment->course->name }}</span>
                                                 @else
                                                     <span class="text-muted">-</span>
                                                 @endif
-                                            </td> --}}
+                                            </td>
 
                                             {{-- Tipo / Método de Pagamento com Ícone --}}
                                             <td>
@@ -142,6 +145,11 @@
                                             {{-- Valor Liquidado --}}
                                             <td>
                                                 <strong class="text-dark">{{ $payment->formattedValue() }}</strong>
+                                            </td>
+
+                                            {{-- Data da Transação --}}
+                                            <td>
+                                                <span class="text-muted fs-7">{{ $payment->formattedDate() }}</span>
                                             </td>
 
                                             {{-- Estado do Pagamento --}}
@@ -158,7 +166,7 @@
                                                     <a href="{{ route('payment.show', $payment->id) }}" 
                                                        class="btn btn-info btn-xs sharp" 
                                                        title="Ver Recibo Oficial">
-                                                        <i class="fa fa-file-text-o"></i>
+                                                        <i class="fa fa-file-invoice"></i>
                                                     </a>
 
                                                     {{-- Botão de Edição / Anulação (oculto para Anulado) --}}

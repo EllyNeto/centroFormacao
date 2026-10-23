@@ -49,7 +49,7 @@
 
 						{{-- Container responsivo da Tabela com DataTables integrado --}}
 						<div class="table-responsive">
-							<table id="example4" class="display table style-1 custom-table" style="min-width: 845px; width: 100%;">
+							<table id="example4" class="display table table-hover style-1 custom-table">
 								<thead>
 									<tr>
 										<th>Fotografia</th>
@@ -69,9 +69,8 @@
 											<td>
 												<div class="d-flex align-items-center">
 													<img src="{{ $student->avatarUrl() }}" 
-														 class="rounded-circle avatar avatar-md me-2" 
-														 alt="{{ $student->name }}" 
-														 style="width: 45px; height: 45px; object-fit: cover; border: 2px solid #e2e8f0;">
+														 class="cf-avatar-md me-2" 
+														 alt="{{ $student->name }}">
 												</div>
 											</td>
 
@@ -155,7 +154,7 @@
 																<i class="fa fa-print me-2 text-info"></i> Pauta da Turma
 															</a>
 														@endif
-														<form action="{{ route('student.destroy', $student->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem a certeza que deseja remover o formando {{ $student->name }}? A inscrição de origem retornará ao estado Pago.')">
+														<form action="{{ route('student.destroy', $student->id) }}" method="POST" class="d-inline" data-confirm="Tem a certeza que deseja remover o formando {{ $student->name }}? A inscrição de origem retornará ao estado Pago.">
 															@csrf
 															@method('DELETE')
 															<button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">

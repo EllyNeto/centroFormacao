@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoomRequest;
+use App\Models\Classroom;
+use App\Models\Course;
 use App\Models\Room;
 use App\Models\Teacher;
-use App\Models\Course;
-use App\Models\Classroom;
 use Illuminate\Http\Request;
 
 /**
- * Controlador roomController - Gestão Integral de Turmas (Rooms).
+ * Controlador RoomController - Gestão Integral de Turmas (Rooms).
  * 
  * Módulo 4: Turmas
  * 
@@ -22,7 +23,7 @@ use Illuminate\Http\Request;
  *   3. No Mesmo Curso (impede sobreposição de turmas do mesmo curso nos mesmos dias e horário).
  * - Proteção de integridade no Soft Delete contra eliminação de turmas com inscrições ou alunos.
  */
-class roomController extends Controller
+class RoomController extends Controller
 {
     /**
      * Exibe a listagem de todas as turmas registadas no centro de formação.
@@ -67,42 +68,13 @@ class roomController extends Controller
      * Valida os dados submetidos e armazena uma nova turma na base de dados.
      * Aplica herança de capacidade da sala e verificações de conflito temporal.
      *
-     * @param \Illuminate\Http\Request $request Dados da requisição HTTP
+     * @param \App\Http\Requests\RoomRequest $request Dados da requisição HTTP
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(RoomRequest $request)
     {
-        // 1. Validação em linha (inline validation) com mensagens personalizadas em português
-        $validatedData = $request->validate([
-            'name'           => 'required|string|max:255',
-            'course_id'      => 'required|exists:courses,id',
-            'teacher_id'     => 'required|exists:teachers,id',
-            'classroom_id'   => 'required|exists:classrooms,id',
-            'shift'          => 'required|string|in:Manhã,Tarde,Pós-Laboral',
-            'days_of_week'   => 'required|array|min:1',
-            'days_of_week.*' => 'string|in:Segunda-feira,Terça-feira,Quarta-feira,Quinta-feira,Sexta-feira,Sábado',
-            'start_time'     => 'required|date_format:H:i',
-            'end_time'       => 'required|date_format:H:i',
-            'start_date'     => 'nullable|date',
-            'end_date'       => 'nullable|date|after_or_equal:start_date',
-        ], [
-            'name.required'                 => 'O nome descritivo da turma é obrigatório.',
-            'course_id.required'            => 'Por favor, selecione o curso associado.',
-            'course_id.exists'              => 'O curso selecionado não é válido.',
-            'teacher_id.required'           => 'Por favor, selecione o formador responsável.',
-            'teacher_id.exists'             => 'O formador selecionado não é válido.',
-            'classroom_id.required'         => 'A seleção da sala de aula física é obrigatória.',
-            'classroom_id.exists'           => 'A sala de aula física selecionada é inválida.',
-            'shift.required'                => 'O turno de formação é obrigatório.',
-            'shift.in'                      => 'O turno deve ser Manhã, Tarde ou Pós-Laboral.',
-            'days_of_week.required'         => 'Selecione pelo menos um dia da semana para as aulas.',
-            'days_of_week.min'              => 'Selecione pelo menos um dia da semana para as aulas.',
-            'start_time.required'           => 'A hora de início das aulas é obrigatória.',
-            'start_time.date_format'        => 'A hora de início deve estar no formato HH:MM.',
-            'end_time.required'             => 'A hora de término das aulas é obrigatória.',
-            'end_time.date_format'          => 'A hora de término deve estar no formato HH:MM.',
-            'end_date.after_or_equal'       => 'A data de fim deve ser igual ou posterior à data de início.',
-        ]);
+        // 1. Dados validados pelo Form Request (regras básicas)
+        $validatedData = $request->validated();
 
         // 2. Validação Temporal: Hora de término deve ser estritamente posterior à hora de início
         if (strtotime($request->end_time) <= strtotime($request->start_time)) {
@@ -127,7 +99,10 @@ class roomController extends Controller
         // Cria a turma na base de dados
         $room = Room::create($validatedData);
 
-        // 6. Envio de notificação nativa por email ao formador atribuído informando os horários e sala
+        // 6. Alocação automática de candidatos na Lista de Espera deste curso
+        $allocatedCount = $room->allocateWaitingEnrollments();
+
+        // 7. Envio de notificação nativa por email ao formador atribuído informando os horários e sala
         try {
             if ($room->teacher && !empty($room->teacher->email)) {
                 $room->teacher->notify(new \App\Notifications\TeacherRoomAssignedNotification($room));
@@ -137,8 +112,14 @@ class roomController extends Controller
             \Illuminate\Support\Facades\Log::warning("Falha ao enviar email de atribuição de turma ao formador: " . $e->getMessage());
         }
 
+        $successMessage = 'Turma criada com sucesso!';
+        if ($allocatedCount > 0) {
+            $label = $allocatedCount === 1 ? 'aluno da lista de espera foi adicionado automaticamente' : 'alunos da lista de espera foram adicionados automaticamente';
+            $successMessage .= " {$allocatedCount} {$label} à turma '{$room->name}'.";
+        }
+
         // Redireciona para a listagem com mensagem de sucesso
-        return redirect()->route('room.index')->with('success', 'Turma criada com sucesso!');
+        return redirect()->route('room.index')->with('success', $successMessage);
     }
 
     /**
@@ -208,49 +189,17 @@ class roomController extends Controller
      * Valida e atualiza os dados da turma na base de dados.
      * Reavalia conflitos de horários ignorando a própria turma sendo editada.
      *
-     * @param \Illuminate\Http\Request $request Dados da requisição
+     * @param \App\Http\Requests\RoomRequest $request Dados da requisição
      * @param int $id Identificador primário da turma
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(RoomRequest $request, $id)
     {
         // Procura a turma a ser atualizada
         $room = Room::findOrFail($id);
 
-        // 1. Validação dos campos
-        $validatedData = $request->validate([
-            'name'           => 'required|string|max:255',
-            'course_id'      => 'required|exists:courses,id',
-            'teacher_id'     => 'required|exists:teachers,id',
-            'classroom_id'   => 'required|exists:classrooms,id',
-            'shift'          => 'required|string|in:Manhã,Tarde,Pós-Laboral',
-            'days_of_week'   => 'required|array|min:1',
-            'days_of_week.*' => 'string|in:Segunda-feira,Terça-feira,Quarta-feira,Quinta-feira,Sexta-feira,Sábado',
-            'start_time'     => 'required|date_format:H:i',
-            'end_time'       => 'required|date_format:H:i',
-            'start_date'     => 'nullable|date',
-            'end_date'       => 'nullable|date|after_or_equal:start_date',
-            'status'         => 'required|string|in:Aberta,Em curso,Concluída',
-        ], [
-            'name.required'                 => 'O nome descritivo da turma é obrigatório.',
-            'course_id.required'            => 'Por favor, selecione o curso associado.',
-            'course_id.exists'              => 'O curso selecionado não é válido.',
-            'teacher_id.required'           => 'Por favor, selecione o formador responsável.',
-            'teacher_id.exists'             => 'O formador selecionado não é válido.',
-            'classroom_id.required'         => 'A seleção da sala de aula física é obrigatória.',
-            'classroom_id.exists'           => 'A sala de aula física selecionada é inválida.',
-            'shift.required'                => 'O turno de formação é obrigatório.',
-            'shift.in'                      => 'O turno deve ser Manhã, Tarde ou Pós-Laboral.',
-            'days_of_week.required'         => 'Selecione pelo menos um dia da semana para as aulas.',
-            'days_of_week.min'              => 'Selecione pelo menos um dia da semana para as aulas.',
-            'start_time.required'           => 'A hora de início das aulas é obrigatória.',
-            'start_time.date_format'        => 'A hora de início deve estar no formato HH:MM.',
-            'end_time.required'             => 'A hora de término das aulas é obrigatória.',
-            'end_time.date_format'          => 'A hora de término deve estar no formato HH:MM.',
-            'end_date.after_or_equal'       => 'A data de fim deve ser igual ou posterior à data de início.',
-            'status.required'               => 'O estado da turma é obrigatório.',
-            'status.in'                     => 'O estado da turma selecionado é inválido.',
-        ]);
+        // 1. Dados validados pelo Form Request (regras básicas)
+        $validatedData = $request->validated();
 
         // 2. Validação Temporal: Hora de término > início
         if (strtotime($request->end_time) <= strtotime($request->start_time)) {
@@ -272,8 +221,17 @@ class roomController extends Controller
         // Atualiza a turma na base de dados
         $room->update($validatedData);
 
+        // Aloca candidatos em Lista de Espera caso a turma esteja Aberta e com vagas disponíveis
+        $allocatedCount = $room->allocateWaitingEnrollments();
+
+        $successMessage = 'Turma atualizada com sucesso!';
+        if ($allocatedCount > 0) {
+            $label = $allocatedCount === 1 ? 'aluno da lista de espera foi adicionado automaticamente' : 'alunos da lista de espera foram adicionados automaticamente';
+            $successMessage .= " {$allocatedCount} {$label} à turma '{$room->name}'.";
+        }
+
         // Redireciona com mensagem de sucesso
-        return redirect()->route('room.index')->with('success', 'Turma atualizada com sucesso!');
+        return redirect()->route('room.index')->with('success', $successMessage);
     }
 
     /**
@@ -415,4 +373,3 @@ class roomController extends Controller
         return null;
     }
 }
-

@@ -2,248 +2,157 @@
             Sidebar start
         ***********************************-->
         <div class="dlabnav">
-			<div class="dlabnav-scroll">	
-				<ul class="metismenu" id="menu">
-					<li><a href="{{url('/')}}" >
-							<i class="material-symbols-outlined">home</i>
-							<span class="nav-text">Dashboard</span>
-						</a>
-					</li>
+            <div class="dlabnav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="cf-nav-section-title">
+                        <span>Visão Geral</span>
+                    </li>
+                    <li class="{{ request()->routeIs('dashboard') ? 'mm-active' : '' }}">
+                        <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'mm-active' : '' }}">
+                            <span class="cf-nav-icon-wrap">
+                                <svg class="cf-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="3" y="3" width="7" height="9" rx="2"></rect>
+                                    <rect x="14" y="3" width="7" height="5" rx="2"></rect>
+                                    <rect x="14" y="12" width="7" height="9" rx="2"></rect>
+                                    <rect x="3" y="16" width="7" height="5" rx="2"></rect>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="cf-nav-section-title">
+                        <span>Administração</span>
+                    </li>
+                    {{-- Módulo de Utilizadores do Sistema --}}
+                    <li class="{{ request()->routeIs('user.*') ? 'mm-active' : '' }}">
+                        <a href="{{ route('user.index') }}" class="{{ request()->routeIs('user.*') ? 'mm-active' : '' }}">
+                            <span class="cf-nav-icon-wrap">
+                                <svg class="cf-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Utilizadores</span>
+                        </a>
+                    </li>
+                    <li class="cf-nav-section-title">
+                        <span>Infraestrutura &amp; Ensino</span>
+                    </li>
+                    {{-- Módulo de Salas de Aula --}}
+                    <li class="{{ request()->routeIs('classroom.*') ? 'mm-active' : '' }}">
+                        <a href="{{ route('classroom.index') }}" class="{{ request()->routeIs('classroom.*') ? 'mm-active' : '' }}">
+                            <span class="cf-nav-icon-wrap">
+                                <svg class="cf-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M13 4h3a2 2 0 0 1 2 2v14"></path>
+                                    <path d="M2 20h3"></path>
+                                    <path d="M13 20h9"></path>
+                                    <path d="M10 12v.01"></path>
+                                    <path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Salas de Aula</span>
+                        </a>
+                    </li>
 
-					{{-- Seção Módulo de Curso--}} 
-					<li><a href="{{ route('course.index')}}" aria-expanded="false">
-						<i class="material-symbols-outlined">book</i>
-						<span class="nav-text">Curso</span>
-					</a>
-						{{--<ul aria-expanded="false">
-							 Link para a listagem de cursos
-							<li><a href="{{ route('course.index')}}">Listar</a></li>
-							{{-- Link para criação de novo curso 
-							<li><a href="{{ route('course.create')}}">Adicionar novo</a></li>
-						</ul>--}}
-					</li>
-					{{-- Seção Módulo de Formador --}}
-					<li><a href="{{ route('teacher.index')}}" aria-expanded="false">
-						<i class="material-symbols-outlined">person</i>
-						<span class="nav-text">Formador</span>
-					</a>
-					{{-- <ul aria-expanded="false">
-						Link para a listagem de formadores
-						<li><a href="{{ route('teacher.index')}}">Listar</a></li>
-						{{-- Link para registo de novo formador 
-						<li><a href="{{ route('teacher.create')}}">Adicionar novo</a></li>
-					</ul>--}}
-					</li>
-					{{-- Seção Módulo de Sala --}}
-					<li><a href="{{ route('classroom.index')}}" aria-expanded="false">
-						<i class="material-symbols-outlined">meeting_room</i>
-						<span class="nav-text">Sala</span>
-					</a>
-					{{-- <ul aria-expanded="false">
-						Link para a listagem de Salas
-						<li><a href="{{ route('classroom.index')}}">Listar</a></li>
-						{{-- Link para registo de nova Sala 
-						<li><a href="{{ route('classroom.create')}}">Adicionar nova</a></li>
-					</ul>--}}
-					</li>
-					{{-- Seção Módulo de Turma --}}
-					<li><a href="{{ route('room.index')}}" aria-expanded="false">
-						<i class="material-symbols-outlined">groups</i>
-						<span class="nav-text">Turma</span>
-					</a>
-						{{-- <ul aria-expanded="false">
-							{{-- Link para a listagem de turmas 
-							<li><a href="{{ route('room.index')}}">Listar</a></li>--}}
-							{{-- Link para criação de nova turma 
-							<li><a href="{{ route('room.create')}}">Adicionar nova</a></li>
-						</ul> --}}
-					</li>
-					{{-- Seção Módulo de Estudante --}}
-					<li>
-						<a href="{{ route('student.index')}}">
-							<i class="material-symbols-outlined">school</i>
-							<span class="nav-text">Formando</span>
-						</a>
-					</li>
+                    {{-- Módulo de Cursos --}}
+                    <li class="{{ request()->routeIs('course.*') ? 'mm-active' : '' }}">
+                        <a href="{{ route('course.index') }}" class="{{ request()->routeIs('course.*') ? 'mm-active' : '' }}">
+                            <span class="cf-nav-icon-wrap">
+                                <svg class="cf-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Cursos</span>
+                        </a>
+                    </li>
 
-					{{-- Seção Módulo de Pagamento --}}
-					<li>
-						<a href="{{ route('payment.index')}}" aria-expanded="false">
-							<i class="material-symbols-outlined">payments</i>
-							<span class="nav-text">Pagamento</span>
-						</a>
-						{{--<ul aria-expanded="false">
-							 Link para a listagem de pagamentos
-							<li><a href="{{ route('payment.index')}}">Listar</a></li>
-							{{-- Link para criação de novo pagamento 
-							<li><a href="{{ route('payment.create')}}">Adicionar novo</a></li>
-						</ul>--}}
-					</li>
-						{{-- Seção Módulo de Inscrição --}}
-					<li><a href="{{ route('enrollment.index')}}" aria-expanded="false">
-						<i class="material-symbols-outlined">app_registration</i>
-						<span class="nav-text">Inscrição</span>
-					</a>
-					{{-- <ul aria-expanded="false">
-						Link para a listagem de Inscrições
-						<li><a href="{{ route('enrollment.index')}}">Listar</a></li>
-						{{-- Link para criação de novo Inscrição 
-						<li><a href="{{ route('enrollment.create')}}">Adicionar nova</a></li>
-					</ul>--}}
+                    {{-- Módulo de Formadores --}}
+                    <li class="{{ request()->routeIs('teacher.*') ? 'mm-active' : '' }}">
+                        <a href="{{ route('teacher.index') }}" class="{{ request()->routeIs('teacher.*') ? 'mm-active' : '' }}">
+                            <span class="cf-nav-icon-wrap">
+                                <svg class="cf-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                                    <path d="M8 21h8"></path>
+                                    <path d="M12 17v4"></path>
+                                    <path d="m7 11 3-3 2 2 4-4"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Formadores</span>
+                        </a>
+                    </li>
 
+                    <li class="cf-nav-section-title">
+                        <span>Gestão Pedagógica</span>
+                    </li>
+                    {{-- Módulo de Turmas --}}
+                    <li class="{{ request()->routeIs('room.*') ? 'mm-active' : '' }}">
+                        <a href="{{ route('room.index') }}" class="{{ request()->routeIs('room.*') ? 'mm-active' : '' }}">
+                            <span class="cf-nav-icon-wrap">
+                                <svg class="cf-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Turmas</span>
+                        </a>
+                    </li>
 
-{{-- 
-					</li>
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-						<i class="material-icons">folder</i>	
-						<span class="nav-text">File Manager</span>
-					</a>
-					<ul aria-expanded="false">
-						<li><a href="file-manager.html">File Manager</a></li>
-						<li><a href="user.html">User</a></li>	
-						<li><a href="celandar.html">Calendar</a></li>		
-						<li><a href="chat.html">Chat</a></li>
-						<li><a href="activity.html">Activity</a></li>	
-					</ul>
-					</li>
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-						<i class="material-icons"> app_registration </i>
-						<span class="nav-text">Apps</span>
-						</a>
-						<ul aria-expanded="false">
-							<li><a href="app-profile.html">Profile</a></li>
-							<li><a href="edit-profile.html">Edit Profile</a></li>
-							<li><a href="post-details.html">Post Details</a></li>
-							<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">Email</a>
-								<ul aria-expanded="false">
-									<li><a href="email-compose.html">Compose</a></li>
-									<li><a href="email-inbox.html">Inbox</a></li>
-									<li><a href="email-read.html">Read</a></li>
-								</ul>
-							</li>
-							<li><a href="app-calender.html">Calendar</a></li>
-							<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">Shop</a>
-								<ul aria-expanded="false">
-									<li><a href="ecom-product-grid.html">Product Grid</a></li>
-									<li><a href="ecom-product-list.html">Product List</a></li>
-									<li><a href="ecom-product-detail.html">Product Details</a></li>
-									<li><a href="ecom-product-order.html">Order</a></li>
-									<li><a href="ecom-checkout.html">Checkout</a></li>
-									<li><a href="ecom-invoice.html">Invoice</a></li>
-									<li><a href="ecom-customers.html">Customers</a></li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-						<i class="material-icons"> assessment </i>
-							<span class="nav-text">Charts</span>
-						</a>
-						<ul aria-expanded="false">
-							<li><a href="chart-flot.html">Flot</a></li>
-							<li><a href="chart-morris.html">Morris</a></li>
-							<li><a href="chart-chartjs.html">Chartjs</a></li>
-							<li><a href="chart-chartist.html">Chartist</a></li>
-							<li><a href="chart-sparkline.html">Sparkline</a></li>
-							<li><a href="chart-peity.html">Peity</a></li>
-						</ul>
-					</li>
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-							
-							<i class="material-icons"> favorite </i>
-							<span class="nav-text">Bootstrap</span>
-						</a>
-						<ul aria-expanded="false">
-							<li><a href="ui-accordion.html">Accordion</a></li>
-							<li><a href="ui-alert.html">Alert</a></li>
-							<li><a href="ui-badge.html">Badge</a></li>
-							<li><a href="ui-button.html">Button</a></li>
-							<li><a href="ui-modal.html">Modal</a></li>
-							<li><a href="ui-button-group.html">Button Group</a></li>
-							<li><a href="ui-list-group.html">List Group</a></li>
-							<li><a href="ui-card.html">Cards</a></li>
-							<li><a href="ui-carousel.html">Carousel</a></li>
-							<li><a href="ui-dropdown.html">Dropdown</a></li>
-							<li><a href="ui-popover.html">Popover</a></li>
-							<li><a href="ui-progressbar.html">Progressbar</a></li>
-							<li><a href="ui-tab.html">Tab</a></li>
-							<li><a href="ui-typography.html">Typography</a></li>
-							<li><a href="ui-pagination.html">Pagination</a></li>
-							<li><a href="ui-grid.html">Grid</a></li>
+                    {{-- Módulo de Formandos --}}
+                    <li class="{{ request()->routeIs('student.*') ? 'mm-active' : '' }}">
+                        <a href="{{ route('student.index') }}" class="{{ request()->routeIs('student.*') ? 'mm-active' : '' }}">
+                            <span class="cf-nav-icon-wrap">
+                                <svg class="cf-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Formandos</span>
+                        </a>
+                    </li>
 
-						</ul>
-					</li>
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-							<i class="material-icons"> extension </i>
-							<span class="nav-text">Plugins</span>
-						</a>
-						<ul aria-expanded="false">
-							<li><a href="uc-select2.html">Select 2</a></li>
-							<li><a href="uc-nestable.html">Nestedable</a></li>
-							<li><a href="uc-noui-slider.html">Noui Slider</a></li>
-							<li><a href="uc-sweetalert.html">Sweet Alert</a></li>
-							<li><a href="uc-toastr.html">Toastr</a></li>
-							<li><a href="map-jqvmap.html">Jqv Map</a></li>
-							<li><a href="uc-lightgallery.html">Light Gallery</a></li>
-						</ul>
-					</li>
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-							<i class="material-icons"> widgets </i>
-							<span class="nav-text">Widget</span>
-						</a>
-						<ul aria-expanded="false">
-							<li><a href="widget-chart.html">Chart</a></li>
-							<li><a href="widget-card.html">Card</a></li>
-							<li><a href="widget-list.html">List</a></li>
-						</ul>
-					</li>
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-							<i class="material-icons"> insert_drive_file </i>
-							<span class="nav-text">Forms</span>
-						</a>
-						<ul aria-expanded="false">
-							<li><a href="form-element.html">Form Elements</a></li>
-							<li><a href="form-wizard.html">Wizard</a></li>
-							<li><a href="form-ckeditor.html">CkEditor</a></li>
-							<li><a href="form-pickers.html">Pickers</a></li>
-							<li><a href="form-validation.html">Form Validate</a></li>
-						</ul>
-					</li>
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-							<i class="material-icons"> table_chart </i>
-							<span class="nav-text">Table</span>
-						</a>
-						<ul aria-expanded="false">
-							<li><a href="table-bootstrap-basic.html">Bootstrap</a></li>
-							<li><a href="table-datatable-basic.html">Datatable</a></li>
-						</ul>
-					</li>
-					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-							<i class="material-icons">article</i>
-							<span class="nav-text">Pages</span>
-						</a>
-						<ul aria-expanded="false">
-							<li><a href="page-login.html">Login</a></li>
-							<li><a href="page-register.html">Register</a></li>
-							<li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">Error</a>
-								<ul aria-expanded="false">
-									<li><a href="page-error-400.html">Error 400</a></li>
-									<li><a href="page-error-403.html">Error 403</a></li>
-									<li><a href="page-error-404.html">Error 404</a></li>
-									<li><a href="page-error-500.html">Error 500</a></li>
-									<li><a href="page-error-503.html">Error 503</a></li>
-								</ul>
-							</li>
-							<li><a href="page-lock-screen.html">Lock Screen</a></li>
-							<li><a href="empty-page.html">Empty Page</a></li>
-						</ul>
-					</li>
-				</ul> --}}
-				{{-- <div class="copyright">
-					<p><strong>School Admission Dashboard</strong></p>
-					<p class="fs-12">Made with <span class="heart"></span> by DexignLab</p>
-				</div> --}}
-			</div>
+                    <li class="cf-nav-section-title">
+                        <span>Secretaria &amp; Finanças</span>
+                    </li>
+                    {{-- Módulo de Inscrições / Candidaturas --}}
+                    <li class="{{ request()->routeIs('enrollment.*') ? 'mm-active' : '' }}">
+                        <a href="{{ route('enrollment.index') }}" class="{{ request()->routeIs('enrollment.*') ? 'mm-active' : '' }}">
+                            <span class="cf-nav-icon-wrap">
+                                <svg class="cf-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                    <path d="m9 14 2 2 4-4"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Inscrições</span>
+                        </a>
+                    </li>
+
+                    {{-- Módulo de Pagamentos --}}
+                    <li class="{{ request()->routeIs('payment.*') ? 'mm-active' : '' }}">
+                        <a href="{{ route('payment.index') }}" class="{{ request()->routeIs('payment.*') ? 'mm-active' : '' }}">
+                            <span class="cf-nav-icon-wrap">
+                                <svg class="cf-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Pagamentos</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="cf-sidebar-footer">
+                    <div class="cf-sidebar-status">
+                        <span class="cf-status-dot"></span>
+                        <div>
+                            <strong>Sistema Operacional</strong>
+                            <small class="d-block">Ano Académico {{ date('Y') }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!--**********************************
             Sidebar end

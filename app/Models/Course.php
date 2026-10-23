@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 /**
  * Modelo Course - Representa um Curso (Oferta Formativa) do Centro de Formação.
  *
  * Atributos:
  * @property int $id Identificador único do curso.
+ * @property string $slug Identificador amigável único (URL slug).
  * @property string $name Designação única do curso.
  * @property string|null $description Descrição do conteúdo programático.
  * @property int $duration Carga horária total em horas.
@@ -37,6 +39,7 @@ class Course extends Model
      * @var array<string>
      */
     protected $fillable = [
+        'slug',        // Slug único do curso
         'name',        // Nome do curso
         'description', // Descrição detalhada
         'duration',    // Carga horária em horas
@@ -51,8 +54,54 @@ class Course extends Model
      */
     protected $casts = [
         'status' => 'boolean',
-        'value'  => 'float',
+        'value'  => 'decimal:2',
     ];
+
+    /**
+     * Regista eventos do ciclo de vida do modelo para geração automática de slug único.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function (Course $course) {
+            if (empty($course->slug)) {
+                $course->slug = static::generateUniqueSlug($course->name);
+            }
+        });
+
+        static::updating(function (Course $course) {
+            if ($course->isDirty('name') || empty($course->slug)) {
+                $course->slug = static::generateUniqueSlug($course->name, $course->id);
+            }
+        });
+    }
+
+    /**
+     * Gera um slug único para o curso (incluindo registos em Soft Delete).
+     *
+     * @param  string    $name
+     * @param  int|null  $ignoreId
+     * @return string
+     */
+    public static function generateUniqueSlug(string $name, ?int $ignoreId = null): string
+    {
+        $baseSlug = Str::slug($name) ?: 'curso';
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while (
+            static::withTrashed()
+                ->where('slug', $slug)
+                ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
 
     /**
      * Relacionamento 1:N com as Turmas (Room).

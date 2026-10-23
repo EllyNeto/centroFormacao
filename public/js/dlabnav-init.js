@@ -32,9 +32,14 @@ function getUrlParams(dParam)
         direction = 'ltr'; 
     } */
 	
+	var savedThemeVersion = (typeof getCookie === 'function' && getCookie('version')) || localStorage.getItem('version') || 'light';
+	if (savedThemeVersion !== 'dark' && savedThemeVersion !== 'light') {
+		savedThemeVersion = 'light';
+	}
+
 	dlabSettingsOptions = {
 			typography: "poppins",
-			version: "light",
+			version: savedThemeVersion,
 			layout: "vertical",
 			primary: "color_1",
 			headerBg: "color_3",
@@ -51,8 +56,8 @@ function getUrlParams(dParam)
 
 	jQuery(window).on('resize',function(){
         /*Check container layout on resize */
-		///alert(dlabSettingsOptions.primary);
         dlabSettingsOptions.containerLayout = $('#container_layout').val();
+        dlabSettingsOptions.version = document.body.getAttribute('data-theme-version') || savedThemeVersion;
         /*Check container layout on resize END */
         
 		new dlabSettings(dlabSettingsOptions); 

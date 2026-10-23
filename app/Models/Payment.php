@@ -63,6 +63,7 @@ class Payment extends Model
 
     /**
      * Conversão e tipificação de atributos (Type Casting).
+     * CORREÇÃO: Era $cast (singular), agora está correto como $casts (plural)
      *
      * @var array<string, string>
      */
@@ -189,10 +190,10 @@ class Payment extends Model
         $icons = [
             'Transferência' => 'fa fa-university',
             'Multicaixa'    => 'fa fa-credit-card',
-            'Numerário'     => 'fa fa-money',
+            'Numerário'     => 'fa fa-money-bill-wave',
         ];
 
-        return $icons[$this->type_of_payment] ?? 'fa fa-money-bill';
+        return $icons[$this->type_of_payment] ?? 'fa fa-money-bill-wave';
     }
 
     /**
@@ -203,6 +204,10 @@ class Payment extends Model
     public static function generateSuggestedReference(): string
     {
         $nextId = (int) self::withTrashed()->max('id') + 1;
-        return 'REC-' . date('Y') . '-' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
+        do {
+            $ref = 'REC-' . date('Y') . '-' . str_pad($nextId++, 5, '0', STR_PAD_LEFT);
+        } while (self::withTrashed()->where('reference', $ref)->exists());
+
+        return $ref;
     }
 }

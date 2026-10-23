@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payment;
+use App\Http\Requests\PaymentRequest;
 use App\Models\Enrollment;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -22,7 +23,7 @@ use Carbon\Carbon;
  * R8  - Pagamento Confirmado só pode ser Anulado (com motivo obrigatório); para corrigir regista-se um novo.
  * R3  - Repetição: incrementa ciclo, guarda turma anterior, limpa room_id.
  */
-class paymentController extends Controller
+class PaymentController extends Controller
 {
     /**
      * Apresenta a listagem global de todos os pagamentos registados.
@@ -93,32 +94,12 @@ class paymentController extends Controller
      * - R6: bloqueia se já existe Pendente ou Confirmado no ciclo atual
      * - R3: se canRepeat(), incrementa ciclo e guarda turma anterior
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\PaymentRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(PaymentRequest $request)
     {
-        $validatedData = $request->validate([
-            'enrollment_id'   => 'required|exists:enrollments,id',
-            'type_of_payment' => 'required|string|in:Transferência,Multicaixa,Numerário',
-            'currency'        => 'nullable|string|size:3',
-            'reference'       => 'required|string|max:100|unique:payments,reference',
-            'status'          => 'required|string|in:Pendente,Confirmado',
-            'date'            => 'required|date',
-        ], [
-            'enrollment_id.required'   => 'É obrigatório selecionar o candidato / inscrição.',
-            'enrollment_id.exists'     => 'A inscrição selecionada não existe no sistema.',
-            'type_of_payment.required' => 'O tipo de pagamento é obrigatório.',
-            'type_of_payment.in'       => 'O tipo de pagamento deve ser Transferência, Multicaixa ou Numerário.',
-            'currency.size'            => 'A divisa monetária deve ter exatamente 3 caracteres (Ex: AOA).',
-            'reference.required'       => 'A referência ou número do recibo é obrigatória.',
-            'reference.unique'         => 'Esta referência ou número de recibo já se encontra registada.',
-            'reference.max'            => 'A referência não pode exceder 100 caracteres.',
-            'status.required'          => 'O estado do pagamento é obrigatório.',
-            'status.in'                => 'O estado deve ser Pendente ou Confirmado.',
-            'date.required'            => 'A data da transação é obrigatória.',
-            'date.date'                => 'A data informada não possui um formato válido.',
-        ]);
+        $validatedData = $request->validated();
 
         // C2: try/catch para capturar violações de regras de negócio (R6, R3)
         // e devolver mensagem amigável em vez de página de erro 500.
@@ -137,7 +118,7 @@ class paymentController extends Controller
                 $isRepetition = $enrollment->canRepeat();
                 $currentCycle = $enrollment->cycle ?? 1;
 
-                // R3: Repetição do curso — incrementa ciclo, guarda turma anterior, limpa turma atual
+                // R3: Repetição do curso — incrementa ciclo e guarda turma anterior
                 if ($isRepetition) {
                     $previousRoomId = $enrollment->room_id;
                     $currentCycle   = $currentCycle + 1;
@@ -242,11 +223,11 @@ class paymentController extends Controller
      * - Pendente   → permite editar forma, referência e data (valor e inscrição bloqueados).
      * - Anulado    → imutável; redireciona com erro.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\PaymentRequest $request
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(PaymentRequest $request, $id)
     {
         $payment = Payment::findOrFail($id);
 
@@ -257,15 +238,10 @@ class paymentController extends Controller
                 ->with('error', 'Este pagamento já foi anulado e não pode ser alterado.');
         }
 
+        $validatedData = $request->validated();
+
         // Pagamento Confirmado: só permite anular
         if ($payment->isConfirmed()) {
-            $validatedData = $request->validate([
-                'cancellation_reason' => 'required|string|max:500',
-            ], [
-                'cancellation_reason.required' => 'O motivo da anulação é obrigatório.',
-                'cancellation_reason.max'      => 'O motivo não pode exceder 500 caracteres.',
-            ]);
-
             $payment->update([
                 'status'               => 'Anulado',
                 'cancellation_reason'  => $validatedData['cancellation_reason'],
@@ -295,37 +271,7 @@ class paymentController extends Controller
         }
 
         // Pagamento Pendente: permite editar forma, referência e data
-        $validatedData = $request->validate([
-            'type_of_payment'     => 'required|string|in:Transferência,Multicaixa,Numerário',
-            'reference'           => 'required|string|max:100|unique:payments,reference,' . $id,
-            'status'              => 'required|string|in:Pendente,Confirmado,Anulado',
-            'date'                => 'required|date',
-            'cancellation_reason' => 'nullable|string|max:500',
-        ], [
-            'type_of_payment.required' => 'O tipo de pagamento é obrigatório.',
-            'type_of_payment.in'       => 'O tipo de pagamento deve ser Transferência, Multicaixa ou Numerário.',
-            'reference.required'       => 'A referência ou número do recibo é obrigatória.',
-            'reference.unique'         => 'Esta referência já se encontra registada.',
-            'reference.max'            => 'A referência não pode exceder 100 caracteres.',
-            'status.required'          => 'O estado do pagamento é obrigatório.',
-            'status.in'                => 'Estado inválido.',
-            'date.required'            => 'A data da transação é obrigatória.',
-            'date.date'                => 'A data informada não possui um formato válido.',
-        ]);
-
-        // Se estiver a anular, cancellation_reason é obrigatório
-        if ($validatedData['status'] === 'Anulado') {
-            $request->validate([
-                'cancellation_reason' => 'required|string|max:500',
-            ], [
-                'cancellation_reason.required' => 'O motivo da anulação é obrigatório ao anular um pagamento.',
-            ]);
-            $validatedData['cancellation_reason'] = $request->input('cancellation_reason');
-            $validatedData['canceled_at']         = now();
-        }
-
-        $validatedData['date'] = Carbon::parse($validatedData['date']);
-
+        // (O valor e inscrição são bloqueados pelo PaymentRequest - não podem ser alterados)
         $payment->update($validatedData);
 
         // Reavalia o estado da inscrição

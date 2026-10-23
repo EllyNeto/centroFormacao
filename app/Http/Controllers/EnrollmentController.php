@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Enrollment;
+use App\Http\Requests\EnrollmentRequest;
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\Room;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\Storage;
  * R9  - Mudança de curso: só antes de Matriculado; recalcula saldo.
  * R4  - Identificação: código de aluno (opcional) ou BI.
  */
-class enrollmentController extends Controller
+class EnrollmentController extends Controller
 {
     /**
      * Exibe a listagem completa de candidaturas e inscrições.
@@ -58,39 +59,13 @@ class enrollmentController extends Controller
      * Valida e armazena uma nova candidatura na base de dados.
      * O estado inicial é sempre 'Pendente' e sem turma associada até haver pagamento.
      *
-     * @param \Illuminate\Http\Request $request Dados da requisição HTTP
+     * @param \App\Http\Requests\EnrollmentRequest $request Dados da requisição HTTP
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(EnrollmentRequest $request)
     {
         // 1. Validação em linha dos dados pessoais, curso e turno pretendido
-        $validatedData = $request->validate([
-            'name'               => 'required|string|max:255',
-            'email'              => 'required|email|max:255',
-            'phone'              => 'required|string|max:20',
-            'number_of_identify' => 'required|string|max:50',
-            'student_code'       => 'nullable|string|exists:students,code',
-            'course_id'          => 'required|exists:courses,id',
-            'shift'              => 'required|string|in:Manhã,Tarde,Pós-Laboral',
-            'image'              => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
-        ], [
-            'name.required'               => 'O nome completo do candidato é obrigatório.',
-            'name.max'                    => 'O nome não pode exceder os 255 caracteres.',
-            'email.required'              => 'O endereço de email é obrigatório.',
-            'email.email'                 => 'Introduza um endereço de email válido.',
-            'phone.required'              => 'O número de telefone é obrigatório.',
-            'phone.max'                   => 'O telefone não pode exceder 20 dígitos.',
-            'number_of_identify.required' => 'O número do BI ou Passaporte é obrigatório.',
-            'number_of_identify.max'      => 'O documento não pode exceder 50 caracteres.',
-            'student_code.exists'         => 'O código de aluno indicado não existe no sistema.',
-            'course_id.required'          => 'A seleção do curso pretendido é obrigatória.',
-            'course_id.exists'            => 'O curso selecionado não é válido.',
-            'shift.required'              => 'O turno pretendido é obrigatório.',
-            'shift.in'                    => 'Selecione um turno válido (Manhã, Tarde ou Pós-Laboral).',
-            'image.image'                 => 'O ficheiro anexado deve ser uma imagem válida.',
-            'image.mimes'                 => 'A imagem deve estar no formato JPG, PNG ou WEBP.',
-            'image.max'                   => 'A imagem não pode exceder o tamanho máximo de 4MB.',
-        ]);
+        $validatedData = $request->validated();
 
         // 2. R4 — Validação cruzada: código de aluno + BI devem coincidir
         if (!empty($validatedData['student_code'])) {
@@ -105,15 +80,22 @@ class enrollmentController extends Controller
             }
         }
 
-        // 3. R11 — O curso deve ter pelo menos uma turma 'Aberta'
-        $hasOpenRoom = Room::where('course_id', $validatedData['course_id'])
+        // 3. R11 — Verificar disponibilidade de turma 'Aberta' com vagas para o curso
+        $openRooms = Room::where('course_id', $validatedData['course_id'])
             ->where('status', 'Aberta')
-            ->exists();
+            ->orderByRaw('CASE WHEN shift = ? THEN 0 ELSE 1 END', [$validatedData['shift']])
+            ->orderBy('id', 'asc')
+            ->get();
 
-        if (!$hasOpenRoom) {
+        $availableRoom = $openRooms->first(fn(Room $room) => !$room->isFull());
+        $joinWaitlist  = $request->boolean('join_waitlist');
+
+        if (!$availableRoom && !$joinWaitlist) {
             return back()
                 ->withInput()
-                ->withErrors(['course_id' => 'O curso selecionado não tem turmas abertas neste momento. Aguarde a abertura de uma nova turma.']);
+                ->withErrors([
+                    'course_id' => 'O curso selecionado não possui turmas abertas com vagas disponíveis neste momento. Marque a opção "Ir para a Lista de Espera" abaixo para registar o aluno e adicioná-lo automaticamente assim que uma turma for criada.',
+                ]);
         }
 
         // 4. R1 — Verificar inscrição ativa no mesmo curso pelo mesmo BI
@@ -138,14 +120,19 @@ class enrollmentController extends Controller
             $validatedData['image'] = null;
         }
 
-        // 6. Regra de Negócio: Candidatura nasce Pendente e sem turma
-        $validatedData['room_id'] = null;
-        $validatedData['status']  = 'Pendente';
-        $validatedData['cycle']   = 1;
-        $validatedData['date']    = now();
+        // 6. Regra de Negócio: Atribui turma aberta se disponível, ou coloca na Lista de Espera
+        if ($availableRoom && !$joinWaitlist) {
+            $validatedData['room_id'] = $availableRoom->id;
+            $validatedData['status']  = 'Pendente';
+        } else {
+            $validatedData['room_id'] = null;
+            $validatedData['status']  = 'Lista de Espera';
+        }
+        $validatedData['cycle'] = 1;
+        $validatedData['date']  = now();
 
-        // Remove campo não existente na tabela
-        unset($validatedData['student_code']);
+        // Remove campos auxiliares não existentes na tabela
+        unset($validatedData['student_code'], $validatedData['join_waitlist']);
 
         // 7. Criação do registo da candidatura na base de dados
         $enrollment = Enrollment::create($validatedData);
@@ -160,9 +147,15 @@ class enrollmentController extends Controller
             \Illuminate\Support\Facades\Log::warning("Falha ao enviar email de candidatura: " . $e->getMessage());
         }
 
+        if ($enrollment->isWaitlist()) {
+            return redirect()
+                ->route('enrollment.index')
+                ->with('success', 'Candidatura registada na Lista de Espera (' . $enrollment->formattedCode() . '). Logo que for criada uma turma para este curso, o aluno será adicionado automaticamente na mesma.');
+        }
+
         return redirect()
             ->route('enrollment.index')
-            ->with('success', 'Candidatura registada com sucesso (' . $enrollment->formattedCode() . '). Aguarda pagamento para atribuição de turma.');
+            ->with('success', 'Candidatura registada com sucesso (' . $enrollment->formattedCode() . ') e associada à turma "' . $availableRoom->name . '".');
     }
 
     /**
@@ -214,11 +207,11 @@ class enrollmentController extends Controller
     /**
      * Atualiza os dados de uma candidatura existente na base de dados.
      *
-     * @param \Illuminate\Http\Request $request Dados da requisição HTTP
+     * @param \App\Http\Requests\EnrollmentRequest $request Dados da requisição HTTP
      * @param int $id Identificador primário da inscrição
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(EnrollmentRequest $request, $id)
     {
         $enrollment = Enrollment::findOrFail($id);
 
@@ -230,33 +223,7 @@ class enrollmentController extends Controller
         }
 
         // 1. Validação em linha dos campos editáveis da candidatura
-        $validatedData = $request->validate([
-            'name'               => 'required|string|max:255',
-            'email'              => 'required|email|max:255',
-            'phone'              => 'required|string|max:20',
-            'number_of_identify' => 'required|string|max:50',
-            'student_code'       => 'nullable|string|exists:students,code',
-            'course_id'          => 'required|exists:courses,id',
-            'shift'              => 'required|string|in:Manhã,Tarde,Pós-Laboral',
-            'image'              => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
-        ], [
-            'name.required'               => 'O nome completo do candidato é obrigatório.',
-            'name.max'                    => 'O nome não pode exceder os 255 caracteres.',
-            'email.required'              => 'O endereço de email é obrigatório.',
-            'email.email'                 => 'Introduza um endereço de email válido.',
-            'phone.required'              => 'O número de telefone é obrigatório.',
-            'phone.max'                   => 'O telefone não pode exceder 20 dígitos.',
-            'number_of_identify.required' => 'O número do BI ou Passaporte é obrigatório.',
-            'number_of_identify.max'      => 'O documento não pode exceder 50 caracteres.',
-            'student_code.exists'         => 'O código de aluno indicado não existe no sistema.',
-            'course_id.required'          => 'A seleção do curso pretendido é obrigatória.',
-            'course_id.exists'            => 'O curso selecionado não é válido.',
-            'shift.required'              => 'O turno pretendido é obrigatório.',
-            'shift.in'                    => 'Selecione um turno válido (Manhã, Tarde ou Pós-Laboral).',
-            'image.image'                 => 'O ficheiro anexado deve ser uma imagem válida.',
-            'image.mimes'                 => 'A imagem deve estar no formato JPG, PNG ou WEBP.',
-            'image.max'                   => 'A imagem não pode exceder o tamanho máximo de 4MB.',
-        ]);
+        $validatedData = $request->validated();
 
         // 2. R4 — Validação cruzada: código de aluno + BI devem coincidir
         if (!empty($validatedData['student_code'])) {
@@ -272,18 +239,23 @@ class enrollmentController extends Controller
         }
 
         $courseChanged = (int) $validatedData['course_id'] !== (int) $enrollment->course_id;
+        $joinWaitlist  = $request->boolean('join_waitlist');
 
-        // 3. R11 — Se mudar de curso, novo curso deve ter turma 'Aberta'
-        if ($courseChanged) {
-            $hasOpenRoom = Room::where('course_id', $validatedData['course_id'])
-                ->where('status', 'Aberta')
-                ->exists();
+        // 3. R11 — Verificar disponibilidade de turma 'Aberta' caso mude de curso ou esteja sem turma
+        $openRooms = Room::where('course_id', $validatedData['course_id'])
+            ->where('status', 'Aberta')
+            ->orderByRaw('CASE WHEN shift = ? THEN 0 ELSE 1 END', [$validatedData['shift']])
+            ->orderBy('id', 'asc')
+            ->get();
 
-            if (!$hasOpenRoom) {
-                return back()
-                    ->withInput()
-                    ->withErrors(['course_id' => 'O curso selecionado não tem turmas abertas neste momento.']);
-            }
+        $availableRoom = $openRooms->first(fn(Room $room) => !$room->isFull());
+
+        if ($courseChanged && !$availableRoom && !$joinWaitlist) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'course_id' => 'O curso selecionado não possui turmas abertas com vagas disponíveis neste momento. Marque a opção "Ir para a Lista de Espera" abaixo para prosseguir.',
+                ]);
         }
 
         // 4. R1 — Verificar inscrição ativa no mesmo curso pelo mesmo BI (ignorando esta)
@@ -311,8 +283,21 @@ class enrollmentController extends Controller
             $validatedData['image'] = $uploadedImage->storeAs('candidates', $fileName, 'public');
         }
 
-        // Remove campo não existente na tabela
-        unset($validatedData['student_code']);
+        // Atualiza alocação de turma se mudou de curso ou se solicitou Lista de Espera
+        if ($courseChanged || !$enrollment->room_id || $joinWaitlist) {
+            if ($availableRoom && !$joinWaitlist) {
+                $validatedData['room_id'] = $availableRoom->id;
+                if ($enrollment->isWaitlist()) {
+                    $validatedData['status'] = 'Pendente';
+                }
+            } elseif (!$availableRoom || $joinWaitlist) {
+                $validatedData['room_id'] = null;
+                $validatedData['status']  = 'Lista de Espera';
+            }
+        }
+
+        // Remove campos auxiliares não existentes na tabela
+        unset($validatedData['student_code'], $validatedData['join_waitlist']);
 
         // 6. Atualização dos dados no modelo
         $enrollment->update($validatedData);

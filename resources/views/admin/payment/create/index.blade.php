@@ -59,9 +59,9 @@
                                             <label for="enrollment_id" class="form-label font-w600 text-dark">
                                                Inscrição <span class="text-danger">*</span>
                                             </label>
-                                            <select name="enrollment_id" 
-                                                    id="enrollment_id" 
-                                                    class="form-control default-select wide @error('enrollment_id') is-invalid @enderror" 
+                                            <select name="enrollment_id"
+                                                    id="enrollment_id"
+                                                    class="form-control select2 @error('enrollment_id') is-invalid @enderror"
                                                     required>
                                                 <option value="">Selecione o candidato...</option>
                                                 @foreach($enrollments as $enrollment)
@@ -157,18 +157,18 @@
                                             <label for="type_of_payment" class="form-label font-w600 text-dark">
                                                 Forma de Pagamento <span class="text-danger">*</span>
                                             </label>
-                                            <select name="type_of_payment" 
-                                                    id="type_of_payment" 
-                                                    class="form-control default-select wide @error('type_of_payment') is-invalid @enderror" 
+                                            <select name="type_of_payment"
+                                                    id="type_of_payment"
+                                                    class="form-control default-select wide @error('type_of_payment') is-invalid @enderror"
                                                     required>
                                                 <option value="Transferência" {{ old('type_of_payment') == 'Transferência' ? 'selected' : '' }}>
-                                                    Transferência Bancária
+                                                    Transferência Bancária (IBAN)
                                                 </option>
                                                 <option value="Multicaixa" {{ old('type_of_payment', 'Multicaixa') == 'Multicaixa' ? 'selected' : '' }}>
-                                                    Multicaixa
+                                                    Multicaixa (TPA / Express)
                                                 </option>
                                                 <option value="Numerário" {{ old('type_of_payment') == 'Numerário' ? 'selected' : '' }}>
-                                                    Numerário
+                                                    Numerário (Em Dinheiro)
                                                 </option>
                                             </select>
                                             @error('type_of_payment')
@@ -181,6 +181,11 @@
                                             <label for="value_display" class="form-label font-w600 text-dark">
                                                 Montante a Liquidar (Kz)
                                             </label>
+                                            <input type="hidden"
+                                                   name="value"
+                                                   id="payment_value"
+                                                   value="{{ $selectedEnrollment ? ($selectedEnrollment->canRepeat() ? (float)$selectedEnrollment->course->value : $selectedEnrollment->remainingBalance()) : 0 }}">
+                                            <input type="hidden" name="currency" value="AOA">
                                             <div class="input-group">
                                                 <input type="text"
                                                        id="value_display"

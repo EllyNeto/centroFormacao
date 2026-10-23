@@ -64,13 +64,13 @@
                                 </div>
 
                                 {{-- Campo: Preço / Valor do Curso (Kz) --}}
-                                {{-- <div class="col-md-6 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="value" class="form-label text-primary">Preço do Curso (Kz) <span class="text-danger">*</span></label>
                                     <input type="number" step="0.01" min="0" class="form-control @error('value') is-invalid @enderror" id="value" name="value" value="{{ old('value') }}" placeholder="Ex: 45000" required>
                                     @error('value')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                </div> --}}
+                                </div>
 
                                 {{-- Campo: Estado do Curso (Ativo / Inativo) --}}
                                 <div class="col-md-6 mb-3">

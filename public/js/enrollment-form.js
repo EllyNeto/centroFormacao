@@ -81,4 +81,42 @@ document.addEventListener('DOMContentLoaded', function () {
             filterRoomsByCourse();
         }
     }
+
+    // -------------------------------------------------------------------------
+    // 3. Exibição Dinâmica da Opção de Lista de Espera quando não há turmas
+    // -------------------------------------------------------------------------
+    var waitlistCard = document.getElementById('waitlistOptionCard');
+    var waitlistCheckbox = document.getElementById('join_waitlist');
+
+    function updateWaitlistVisibility() {
+        if (!courseSelect || !waitlistCard || !waitlistCheckbox) return;
+
+        var selectedOption = courseSelect.options[courseSelect.selectedIndex];
+        if (!selectedOption || !courseSelect.value) {
+            waitlistCard.classList.add('d-none');
+            waitlistCheckbox.checked = false;
+            return;
+        }
+
+        var openRoomsCount = parseInt(selectedOption.getAttribute('data-open-rooms') || '0', 10);
+
+        if (openRoomsCount === 0) {
+            waitlistCard.classList.remove('d-none');
+            waitlistCheckbox.checked = true;
+        } else {
+            waitlistCard.classList.add('d-none');
+            waitlistCheckbox.checked = false;
+        }
+    }
+
+    if (courseSelect && waitlistCard) {
+        courseSelect.addEventListener('change', updateWaitlistVisibility);
+        if (window.jQuery) {
+            $(courseSelect).on('change', updateWaitlistVisibility);
+        }
+        if (courseSelect.value) {
+            updateWaitlistVisibility();
+        }
+    }
 });
+

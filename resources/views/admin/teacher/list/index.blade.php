@@ -41,11 +41,11 @@
 
 						{{-- Container responsivo da Tabela --}}
 						<div class="table-responsive">
-							<table id="example4" class="display table style-1 custom-table" style="min-width: 845px; width: 100%;">
+							<table id="example4" class="display table table-hover style-1 custom-table">
 								<thead>
 									<tr>
-										<th>Fotografia</th>
-										<th>Nome Completo</th>
+										<th>Formador</th>
+										<th>Contactos</th>
 										<th>Género</th>
 										<th>Especialização</th>
 										<th>Turmas</th>
@@ -55,19 +55,28 @@
 								<tbody>
 									@forelse ($teachers as $teacher)
 										<tr>
-											{{-- Fotografia de Perfil --}}
+											{{-- Fotografia e Nome do Formador --}}
 											<td>
 												<div class="d-flex align-items-center">
 													<img src="{{ $teacher->image ? asset('storage/' . $teacher->image) : asset('images/no-img-avatar.png') }}" 
-														 class="rounded-circle avatar avatar-md me-2" 
-														 alt="{{ $teacher->name }}" 
-														 style="width: 45px; height: 45px; object-fit: cover; border: 2px solid #e2e8f0;">
+														 class="cf-avatar-md me-2" 
+														 alt="{{ $teacher->name }}">
+													<div>
+														<a href="{{ route('teacher.show', $teacher->id) }}" class="text-dark font-w600 d-block">
+															{{ $teacher->name }}
+														</a>
+														<small class="text-muted">BI: {{ $teacher->number_of_identify }}</small>
+													</div>
 												</div>
 											</td>
 
-											{{-- Nome do Formador --}}
-											<td><strong>{{ $teacher->name }}</strong></td>
-
+											{{-- Contactos --}}
+											<td>
+												<div class="fs-7">
+													<div><i class="fa fa-phone text-muted me-1"></i>{{ $teacher->phone }}</div>
+													<div class="text-muted"><i class="fa fa-envelope text-muted me-1"></i>{{ $teacher->email }}</div>
+												</div>
+											</td>
 
 											{{-- Género --}}
 											<td>
@@ -91,7 +100,6 @@
 											{{-- Célula de Acções --}}
 											<td class="text-end action-cell">
 												<div class="dropdown dropup ms-auto text-end c-pointer">
-													{{-- Botão acionador do dropdown --}}
 													<div class="btn-link" data-bs-toggle="dropdown" data-bs-placement="top" aria-expanded="false" role="button">
 														<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
 															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -102,7 +110,6 @@
 															</g>
 														</svg>
 													</div>
-													{{-- Menu suspenso de ações por formador --}}
 													<div class="dropdown-menu dropdown-menu-end">
 														<a class="dropdown-item" href="{{ route('teacher.show', $teacher->id) }}">
 															<i class="fa fa-eye me-2 text-primary"></i> Ver Detalhes
@@ -110,7 +117,7 @@
 														<a class="dropdown-item" href="{{ route('teacher.edit', $teacher->id) }}">
 															<i class="fa fa-pencil me-2 text-warning"></i> Editar
 														</a>
-														<form action="{{ route('teacher.destroy', $teacher->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem a certeza que deseja eliminar o formador {{ $teacher->name }}?')">
+														<form action="{{ route('teacher.destroy', $teacher->id) }}" method="POST" class="d-inline" data-confirm="Tem a certeza que deseja eliminar o formador {{ $teacher->name }}?">
 															@csrf
 															@method('DELETE')
 															<button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">
@@ -122,9 +129,8 @@
 											</td>
 										</tr>
 									@empty
-										{{-- Estado quando a tabela está vazia --}}
 										<tr>
-											<td colspan="8" class="text-center py-4 text-muted">
+											<td colspan="6" class="text-center py-4 text-muted">
 												<i class="fa fa-info-circle me-1"></i> Nenhum formador registado na base de dados.
 											</td>
 										</tr>
