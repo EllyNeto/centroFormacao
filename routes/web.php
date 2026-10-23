@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ClassroomController;
@@ -20,8 +21,8 @@ use App\Http\Controllers\DashboardController;
 Auth::routes();
 
 Route::middleware(['guest'])->group(function () {
-    Route::get('/contact', [AuthController::class, 'showContactForm'])->name('contact');
-    Route::post('/lead', [AuthController::class, 'storeLead'])->name('lead.store');
+    Route::get('/contact', [LoginController::class, 'showContactForm'])->name('contact');
+    Route::post('/lead', [LoginController::class, 'storeLead'])->name('lead.store');
 });
 
 /*
@@ -30,14 +31,14 @@ Route::middleware(['guest'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
-    // Página Principal (Dashboard com Indicadores Reais)
+    // Página Principal (Dashboard com Indicadores)
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // Rotas de Gestão de Utilizadores (Registo exclusivo pelo Admin dentro do sistema)
-    Route::get('/utilizador/listar', [AuthController::class, 'index'])->name('user.index');
-    Route::get('/utilizador/adicionar', [AuthController::class, 'create'])->name('user.create');
-    Route::post('/utilizador', [AuthController::class, 'store'])->name('user.store');
-    Route::delete('/utilizador/{id}', [AuthController::class, 'destroy'])->name('user.destroy');
+    Route::get('/utilizador/listar', [RegisterController::class, 'index'])->name('user.index');
+    Route::get('/utilizador/adicionar', [RegisterController::class, 'createForm'])->name('user.create');
+    Route::post('/utilizador', [RegisterController::class, 'store'])->name('user.store');
+    Route::delete('/utilizador/{id}', [RegisterController::class, 'destroy'])->name('user.destroy');
 
     // Rotas de Gestão de Cursos
     Route::get('/curso/listar', [CourseController::class, 'index'])->name('course.index');

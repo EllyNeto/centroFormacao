@@ -69,7 +69,7 @@ class ClassroomController extends Controller
         $classroom = Classroom::with(['rooms.course', 'rooms.teacher'])
             ->findOrFail($id);
 
-        return view('admin.classroom.details.index', compact('classroom'));
+        return view('admin.classroom.detail.index', compact('classroom'));
     }
 
     /**

@@ -47,13 +47,12 @@
 
 						{{-- Tabela Responsiva de Inscrições --}}
 						<div class="table-responsive">
-							<table id="example4" class="display table table-hover style-1 custom-table enrollment-table-min-width">
+							<table id="example4" class="display table table-hover style-1 custom-table">
 								<thead>
 									<tr>
 										<th>Código</th>
 										<th>Candidato</th>
-										<th>Documento &amp; Contacto</th>
-										<th>Curso &amp; Turno</th>
+										<th>Curso</th>
 										<th>Estado</th>
 										<th class="text-end">Acções</th>
 									</tr>
@@ -68,37 +67,16 @@
 												</span>
 											</td>
 
-											{{-- Fotografia e Nome do Candidato --}}
+											{{-- Nome do Candidato --}}
 											<td>
-												<div class="d-flex align-items-center">
-													@if($enrollment->image)
-														<img src="{{ asset('storage/' . $enrollment->image) }}" 
-															 class="candidate-avatar-sm me-2" 
-															 alt="{{ $enrollment->name }}">
-													@else
-														<div class="candidate-avatar-placeholder-sm me-2">
-															<i class="fa fa-user"></i>
-														</div>
-													@endif
-													<div>
-														<a href="{{ route('enrollment.show', $enrollment->id) }}" class="font-w600 text-dark d-block">
-															{{ $enrollment->name }}
-														</a>
-														<small class="text-muted">{{ $enrollment->email }}</small>
-													</div>
-												</div>
+												<a href="{{ route('enrollment.show', $enrollment->id) }}" class="font-w600 text-dark d-block">
+													{{ $enrollment->name }}
+												</a>
 											</td>
 
-											{{-- BI e Telefone --}}
+											{{-- Curso Pretendido --}}
 											<td>
-												<span class="text-dark font-w500 d-block">{{ $enrollment->number_of_identify }}</span>
-												<small class="text-muted"><i class="fa fa-phone me-1"></i>{{ $enrollment->phone }}</small>
-											</td>
-
-											{{-- Curso Pretendido e Turno --}}
-											<td>
-												<span class="fw-semibold text-dark d-block">{{ $enrollment->course->name ?? 'N/A' }}</span>
-												<small class="text-muted">Turno: {{ $enrollment->shift }}</small>
+												<span class="fw-semibold text-dark">{{ $enrollment->course->name ?? 'N/A' }}</span>
 											</td>
 
 											{{-- Estado da Candidatura com Cores Consistentes --}}
@@ -151,7 +129,7 @@
 										</tr>
 									@empty
 										<tr>
-											<td colspan="6" class="text-center py-5 text-muted">
+											<td colspan="5" class="text-center py-5 text-muted">
 												<i class="fa fa-id-card-o fa-2x mb-2 d-block"></i>
 												Nenhuma candidatura ou inscrição registada até ao momento.
 											</td>

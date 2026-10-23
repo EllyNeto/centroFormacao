@@ -52,10 +52,9 @@
 							<table id="example4" class="display table table-hover style-1 custom-table">
 								<thead>
 									<tr>
-										<th>Número da Sala</th>
+										<th>Sala</th>
 										<th>Capacidade</th>
 										<th>Turmas Alocadas</th>
-										<th>Observações</th>
 										<th class="text-end">Acções</th>
 									</tr>
 								</thead>
@@ -81,11 +80,6 @@
 												<span class="badge light {{ $classroom->rooms_count > 0 ? 'badge-info' : 'badge-secondary' }}">
 													{{ $classroom->rooms_count }} turma(s)
 												</span>
-											</td>
-
-											{{-- Descrição ou Observação resumida --}}
-											<td>
-												{{ Str::limit($classroom->description, 50, '...') ?: 'Sem observações registadas' }}
 											</td>
 
 											{{-- Menu suspenso de ações por registo --}}
@@ -123,7 +117,7 @@
 									@empty
 										{{-- Estado quando não existem salas cadastradas na base de dados --}}
 										<tr>
-											<td colspan="5" class="text-center py-4 text-muted">
+											<td colspan="4" class="text-center py-4 text-muted">
 												<i class="fa fa-info-circle me-1"></i> Nenhuma sala de aula registada até ao momento.
 											</td>
 										</tr>

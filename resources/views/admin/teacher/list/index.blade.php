@@ -45,8 +45,6 @@
 								<thead>
 									<tr>
 										<th>Formador</th>
-										<th>Contactos</th>
-										<th>Género</th>
 										<th>Especialização</th>
 										<th>Turmas</th>
 										<th class="text-end">Acções</th>
@@ -55,34 +53,11 @@
 								<tbody>
 									@forelse ($teachers as $teacher)
 										<tr>
-											{{-- Fotografia e Nome do Formador --}}
+											{{-- Nome do Formador --}}
 											<td>
-												<div class="d-flex align-items-center">
-													<img src="{{ $teacher->image ? asset('storage/' . $teacher->image) : asset('images/no-img-avatar.png') }}" 
-														 class="cf-avatar-md me-2" 
-														 alt="{{ $teacher->name }}">
-													<div>
-														<a href="{{ route('teacher.show', $teacher->id) }}" class="text-dark font-w600 d-block">
-															{{ $teacher->name }}
-														</a>
-														<small class="text-muted">BI: {{ $teacher->number_of_identify }}</small>
-													</div>
-												</div>
-											</td>
-
-											{{-- Contactos --}}
-											<td>
-												<div class="fs-7">
-													<div><i class="fa fa-phone text-muted me-1"></i>{{ $teacher->phone }}</div>
-													<div class="text-muted"><i class="fa fa-envelope text-muted me-1"></i>{{ $teacher->email }}</div>
-												</div>
-											</td>
-
-											{{-- Género --}}
-											<td>
-												<span class="badge light {{ $teacher->gender == 'Masculino' ? 'badge-info' : 'badge-secondary' }}">
-													{{ $teacher->gender ?? 'N/A' }}
-												</span>
+												<a href="{{ route('teacher.show', $teacher->id) }}" class="text-dark font-w600 d-block">
+													{{ $teacher->name }}
+												</a>
 											</td>
 
 											{{-- Especialização --}}
@@ -130,7 +105,7 @@
 										</tr>
 									@empty
 										<tr>
-											<td colspan="6" class="text-center py-4 text-muted">
+											<td colspan="4" class="text-center py-4 text-muted">
 												<i class="fa fa-info-circle me-1"></i> Nenhum formador registado na base de dados.
 											</td>
 										</tr>

@@ -69,15 +69,15 @@ class DashboardController extends Controller
             ->take(6)
             ->get();
 
-        $recentEnrollments = Enrollment::with(['course', 'room'])
+        $recentEnrollments = Enrollment::with(['course'])
             ->latest()
-            ->take(8)
+            ->take(5)
             ->get();
 
-        $recentPayments = Payment::with(['enrollment.course'])
+        $recentPayments = Payment::with(['enrollment'])
             ->where('status', 'Confirmado')
             ->latest()
-            ->take(6)
+            ->take(5)
             ->get();
 
         $recentTeachers = Teacher::withCount('rooms')

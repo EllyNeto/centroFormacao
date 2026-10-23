@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Lead;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -48,5 +49,27 @@ class LoginController extends Controller
     protected function loggedOut(Request $request)
     {
         return redirect()->route('login')->with('status', 'Sessão terminada com sucesso.');
+    }
+
+    public function showContactForm()
+    {
+        return view('auth.contact');
+    }
+
+    public function storeLead(Request $request)
+    {
+        $validated = $request->validate([
+            'lead_email' => ['required', 'email', 'max:255', 'unique:leads,email'],
+        ], [
+            'lead_email.required' => 'O endereço de e‑mail é obrigatório.',
+            'lead_email.email'    => 'Por favor, indique um e‑mail válido.',
+            'lead_email.unique'   => 'Este e‑mail já está registado como lead.',
+        ]);
+
+        Lead::create([
+            'email' => $validated['lead_email'],
+        ]);
+
+        return back()->with('status', 'Obrigado! Entraremos em contacto brevemente.');
     }
 }

@@ -226,7 +226,7 @@
 
         {{-- Linha 2: Resumo de Infraestrutura e Funil de Secretaria (4 Mini-Indicadores com Ícones Vetoriais Outline) --}}
         <div class="row g-3 mb-4">
-            <div class="col-xl-3 col-6">
+            <div class="col-xl-3 col-sm-6 col-12">
                 <a href="{{ route('classroom.index') }}" class="cf-mini-stat-card">
                     <div class="cf-mini-stat-icon bg-primary-subtle text-primary" aria-hidden="true">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -243,13 +243,13 @@
                             <path d="M8 14h.01"></path>
                         </svg>
                     </div>
-                    <div>
+                    <div class="cf-mini-stat-body">
                         <span class="cf-mini-stat-title">Salas</span>
                         <strong class="cf-mini-stat-num">{{ $activeClassrooms }} ativas de {{ $totalClassrooms }}</strong>
                     </div>
                 </a>
             </div>
-            <div class="col-xl-3 col-6">
+            <div class="col-xl-3 col-sm-6 col-12">
                 <a href="{{ route('course.index') }}" class="cf-mini-stat-card">
                     <div class="cf-mini-stat-icon bg-info-subtle text-info" aria-hidden="true">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -257,13 +257,13 @@
                             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                         </svg>
                     </div>
-                    <div>
+                    <div class="cf-mini-stat-body">
                         <span class="cf-mini-stat-title">Oferta Formativa</span>
                         <strong class="cf-mini-stat-num">{{ $activeCourses }} cursos ativos ({{ $totalCourses }} total)</strong>
                     </div>
                 </a>
             </div>
-            <div class="col-xl-3 col-6">
+            <div class="col-xl-3 col-sm-6 col-12">
                 <a href="{{ route('teacher.index') }}" class="cf-mini-stat-card">
                     <div class="cf-mini-stat-icon bg-success-subtle text-success" aria-hidden="true">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -273,20 +273,20 @@
                             <path d="m7 11 3-3 2 2 4-4"></path>
                         </svg>
                     </div>
-                    <div>
+                    <div class="cf-mini-stat-body">
                         <span class="cf-mini-stat-title">Corpo Docente</span>
                         <strong class="cf-mini-stat-num">{{ $totalTeachers }} formadores ({{ $activeTeachers }} c/ turma)</strong>
                     </div>
                 </a>
             </div>
-            <div class="col-xl-3 col-6">
+            <div class="col-xl-3 col-sm-6 col-12">
                 <a href="{{ route('enrollment.index') }}" class="cf-mini-stat-card">
                     <div class="cf-mini-stat-icon bg-warning-subtle text-warning" aria-hidden="true">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                         </svg>
                     </div>
-                    <div>
+                    <div class="cf-mini-stat-body">
                         <span class="cf-mini-stat-title">Funil de Admissão</span>
                         <strong class="cf-mini-stat-num">{{ $pendingEnrollments }} Pend. &bull; {{ $approvedEnrollments }} Pagos &bull; {{ $enrolledStudents }} Matr.</strong>
                     </div>
@@ -297,14 +297,14 @@
         {{-- Linha 3: Gráficos Analíticos (Evolução Semestral + Distribuição por Turno & Top Cursos) --}}
         <div class="row g-4 mb-4">
             {{-- Gráfico 1: Evolução Mensal de Inscrições, Matrículas e Receita (Últimos 6 Meses) --}}
-            <div class="col-xl-8">
-                <div class="card h-100 mb-0">
-                    <div class="card-header flex-wrap d-flex justify-content-between align-items-center">
-                        <div>
+            <div class="col-xxl-8 col-xl-7 col-12">
+                <div class="card cf-dashboard-card h-100 mb-0">
+                    <div class="card-header flex-wrap d-flex justify-content-between align-items-start align-items-md-center gap-3">
+                        <div class="cf-card-header-info">
                             <h5 class="card-title mb-1">Desempenho Académico e Financeiro (Últimos 6 Meses)</h5>
                             <p class="subtitle text-muted mb-0">Comparativo mensal de novas inscrições, matrículas efetivadas e receita</p>
                         </div>
-                        <div class="d-flex flex-wrap gap-3 mt-2 mt-sm-0">
+                        <div class="cf-chart-summary-group">
                             <div class="cf-chart-summary-pill">
                                 <small class="text-muted d-block">Inscrições (6M)</small>
                                 <strong class="text-primary">{{ $totalEnrollmentsLast6Months }}</strong>
@@ -319,7 +319,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column justify-content-center">
                         <div class="cf-chart-container">
                             <canvas id="enrollmentRevenueChart"></canvas>
                         </div>
@@ -328,8 +328,8 @@
             </div>
 
             {{-- Gráfico 2: Cursos Mais Procurados & Distribuição por Turno --}}
-            <div class="col-xl-4">
-                <div class="card h-100 mb-0">
+            <div class="col-xxl-4 col-xl-5 col-12">
+                <div class="card cf-dashboard-card h-100 mb-0">
                     <div class="card-header">
                         <h5 class="card-title mb-1">Cursos Mais Procurados &amp; Turnos</h5>
                         <p class="subtitle text-muted mb-0">Top 5 cursos por volume de candidaturas</p>
@@ -345,11 +345,11 @@
                                     $pct = round(($course->enrollments_count / $maxCourseEnrollments) * 100);
                                 @endphp
                                 <div class="mb-3">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <a href="{{ route('course.show', $course->id) }}" class="font-w600 text-dark fs-7 text-truncate me-2">
+                                    <div class="d-flex justify-content-between align-items-center gap-2 mb-1">
+                                        <a href="{{ route('course.show', $course->id) }}" class="font-w600 text-dark fs-7 text-truncate">
                                             {{ $course->name }}
                                         </a>
-                                        <span class="badge light badge-primary fs-8">
+                                        <span class="badge light badge-primary fs-8 flex-shrink-0">
                                             {{ $course->enrollments_count }} {{ $course->enrollments_count == 1 ? 'inscrição' : 'inscrições' }}
                                         </span>
                                     </div>
@@ -374,79 +374,51 @@
             </div>
         </div>
 
-        {{-- Linha 4: Tabelas Operacionais de Monitorização Rápida --}}
+        {{-- Linha 4: Tabelas Operacionais de Monitorização Rápida (Essenciais e Compactas) --}}
         <div class="row g-4">
-            {{-- Últimas Candidaturas / Inscrições --}}
-            <div class="col-xl-7">
-                <div class="card h-100 mb-0">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+            {{-- Últimas Inscrições --}}
+            <div class="col-xl-6 col-12">
+                <div class="card cf-dashboard-card h-100 mb-0">
+                    <div class="card-header flex-wrap d-flex justify-content-between align-items-center gap-2">
                         <div>
-                            <h5 class="card-title mb-1">Últimas Inscrições Registadas</h5>
-                            <p class="subtitle text-muted mb-0">Acompanhamento imediato das candidaturas mais recentes</p>
+                            <h5 class="card-title mb-0">Últimas Inscrições</h5>
                         </div>
-                        <a href="{{ route('enrollment.index') }}" class="btn btn-outline-primary btn-xs">
+                        <a href="{{ route('enrollment.index') }}" class="btn btn-outline-primary btn-xs flex-shrink-0">
                             Ver Todas <i class="fa fa-arrow-right ms-1"></i>
                         </a>
                     </div>
                     <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover custom-table mb-0">
+                        <div class="table-responsive cf-dashboard-table-wrap">
+                            <table class="table table-hover custom-table cf-dashboard-table mb-0">
                                 <thead>
                                     <tr>
                                         <th class="ps-4">Candidato</th>
-                                        <th>Curso / Turno</th>
-                                        <th>Estado</th>
-                                        <th class="text-end pe-4">Ação Rápida</th>
+                                        <th>Curso</th>
+                                        <th class="text-end pe-4">Estado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($recentEnrollments as $enrollment)
                                         <tr>
-                                            <td class="ps-4">
-                                                <div class="d-flex align-items-center">
-                                                    @if($enrollment->image)
-                                                        <img src="{{ asset('storage/' . $enrollment->image) }}" class="candidate-avatar-sm me-2" alt="{{ $enrollment->name }}">
-                                                    @else
-                                                        <div class="candidate-avatar-placeholder-sm me-2">
-                                                            <i class="fa fa-user"></i>
-                                                        </div>
-                                                    @endif
-                                                    <div>
-                                                        <a href="{{ route('enrollment.show', $enrollment->id) }}" class="font-w600 text-dark d-block">
-                                                            {{ $enrollment->name }}
-                                                        </a>
-                                                        <small class="text-muted">{{ $enrollment->formattedCode() }}</small>
-                                                    </div>
-                                                </div>
+                                            <td class="ps-4" data-label="Candidato">
+                                                <a href="{{ route('enrollment.show', $enrollment->id) }}" class="font-w600 text-dark d-block text-truncate cf-table-cell-text">
+                                                    {{ $enrollment->name }}
+                                                </a>
                                             </td>
-                                            <td>
-                                                <span class="font-w600 text-dark d-block">{{ $enrollment->course->name ?? 'N/D' }}</span>
-                                                <small class="text-muted">{{ $enrollment->shift }}</small>
+                                            <td data-label="Curso">
+                                                <span class="text-muted d-block text-truncate cf-table-cell-text">
+                                                    {{ $enrollment->course->name ?? 'N/D' }}
+                                                </span>
                                             </td>
-                                            <td>
+                                            <td class="text-end pe-4" data-label="Estado">
                                                 <span class="badge light {{ $enrollment->statusBadgeClass() }}">
                                                     {{ $enrollment->status }}
                                                 </span>
                                             </td>
-                                            <td class="text-end pe-4">
-                                                @if($enrollment->status === 'Pendente')
-                                                    <a href="{{ route('payment.create', ['enrollment_id' => $enrollment->id]) }}" class="btn btn-primary btn-xs" title="Registar Pagamento">
-                                                        <i class="fa fa-money me-1"></i> Pagar
-                                                    </a>
-                                                @elseif($enrollment->status === 'Pago')
-                                                    <a href="{{ route('enrollment.show', $enrollment->id) }}" class="btn btn-success btn-xs" title="Efectivar Matrícula">
-                                                        <i class="fa fa-user-plus me-1"></i> Matricular
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('enrollment.show', $enrollment->id) }}" class="btn btn-outline-primary btn-xs">
-                                                        <i class="fa fa-eye"></i> Detalhes
-                                                    </a>
-                                                @endif
-                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="text-center py-4 text-muted">
+                                            <td colspan="3" class="text-center py-4 text-muted">
                                                 Nenhuma inscrição registada recentemente.
                                             </td>
                                         </tr>
@@ -458,47 +430,42 @@
                 </div>
             </div>
 
-            {{-- Últimos Pagamentos Confirmados --}}
-            <div class="col-xl-5">
-                <div class="card h-100 mb-0">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+            {{-- Últimos Pagamentos --}}
+            <div class="col-xl-6 col-12">
+                <div class="card cf-dashboard-card h-100 mb-0">
+                    <div class="card-header flex-wrap d-flex justify-content-between align-items-center gap-2">
                         <div>
-                            <h5 class="card-title mb-1">Últimos Pagamentos Confirmados</h5>
-                            <p class="subtitle text-muted mb-0">Recibos emitidos recentemente</p>
+                            <h5 class="card-title mb-0">Últimos Pagamentos</h5>
                         </div>
-                        <a href="{{ route('payment.index') }}" class="btn btn-outline-primary btn-xs">
+                        <a href="{{ route('payment.index') }}" class="btn btn-outline-primary btn-xs flex-shrink-0">
                             Histórico <i class="fa fa-arrow-right ms-1"></i>
                         </a>
                     </div>
                     <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover custom-table mb-0">
+                        <div class="table-responsive cf-dashboard-table-wrap">
+                            <table class="table table-hover custom-table cf-dashboard-table mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="ps-4">Recibo / Candidato</th>
-                                        <th>Método</th>
+                                        <th class="ps-4">Recibo</th>
+                                        <th>Candidato</th>
                                         <th class="text-end pe-4">Valor</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($recentPayments as $payment)
                                         <tr>
-                                            <td class="ps-4">
-                                                <a href="{{ route('payment.show', $payment->id) }}" class="font-w600 text-primary d-block">
+                                            <td class="ps-4 text-nowrap" data-label="Recibo">
+                                                <a href="{{ route('payment.show', $payment->id) }}" class="font-w600 text-primary">
                                                     {{ $payment->reference }}
                                                 </a>
-                                                <small class="text-muted text-truncate d-block">
-                                                    {{ $payment->enrollment->name ?? 'N/D' }}
-                                                </small>
                                             </td>
-                                            <td>
-                                                <span class="badge light badge-info">
-                                                    <i class="{{ $payment->typeIcon() }} me-1"></i>{{ $payment->type_of_payment }}
+                                            <td data-label="Candidato">
+                                                <span class="text-dark d-block text-truncate cf-table-cell-text">
+                                                    {{ $payment->enrollment->name ?? 'N/D' }}
                                                 </span>
                                             </td>
-                                            <td class="text-end pe-4">
-                                                <strong class="text-success d-block">{{ $payment->formattedValue() }}</strong>
-                                                <small class="text-muted fs-8">{{ $payment->formattedDate() }}</small>
+                                            <td class="text-end pe-4 text-nowrap" data-label="Valor">
+                                                <strong class="text-success">{{ $payment->formattedValue() }}</strong>
                                             </td>
                                         </tr>
                                     @empty
