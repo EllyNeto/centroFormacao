@@ -3,7 +3,7 @@
 # Centro de Formação — Sistema Integrado de Gestão Académica e Financeira
 
 ---
-
+Última atualização: 2026-11-04 (passagem para Laravel 13 / PHP 8.5).
 ## Descrição
 
 O **Centro de Formação** é uma aplicação web completa de gestão académica, pedagógica e financeira desenvolvida em **Laravel 13** com base de dados **MySQL**.
@@ -33,7 +33,7 @@ O sistema implementa um fluxo de trabalho rigoroso e auditável dividido em 4 et
 
 ### 1. Pré-requisitos
 Certifique-se de que o ambiente possui instalados os seguintes componentes:
-- **PHP** `>= 8.4` (com extensões `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`)
+- **PHP** `8.5` (com extensões `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`)
 - **Composer** `>= 2.x`
 - **MySQL** `>= 5.7` ou **MariaDB** `>= 10.3`
 - **Node.js & NPM** *(opcional, apenas caso deseje recompilar assets front-end)*
@@ -98,9 +98,8 @@ Aceda à aplicação no navegador através do endereço:
 
 ## Documentação Complementar do Repositório
 
-Para facilitar a navegação pelo código-fonte, o repositório inclui dois documentos técnicos detalhados:
-- **[`ESTRUTURA_PROJETO.md`](file:///home/eneto/Documents/infosi%20intership/projects/centroFormacao/ESTRUTURA_PROJETO.md)**: Árvore completa de diretórios, diagrama Entidade-Relacionamento (ER) da base de dados MySQL e descrição das camadas MVC.
-- **[`DOCUMENTACAO_VIEWS.md`](file:///home/eneto/Documents/infosi%20intership/projects/centroFormacao/DOCUMENTACAO_VIEWS.md)**: Catálogo detalhado de todas as *views* Blade do sistema organizadas por módulo.
+Para facilitar a navegação pelo código-fonte, o repositório inclui documentação técnica detalhada:
+- **[`ESTRUTURA_DO_PROJETO.md`](ESTRUTURA_DO_PROJETO.md)**: Árvore de diretórios, diagrama Entidade-Relacionamento (ER) da base de dados MySQL e descrição das camadas MVC.
 
 ---
 
@@ -123,5 +122,5 @@ Em conformidade com as diretrizes de transparência, a Inteligência Artificial 
    - Implementação consistente do Modo Claro e Modo Escuro (`public/js/theme-init.js`).
 3. **Dados de Demonstração e Regras de Validação (`database/seeds/DatabaseSeeder.php`, `app/Http/Requests/`)**:
    - Geração de cenários realistas angolanos no `DatabaseSeeder` (cursos, salas, formadores, turmas, pagamentos em Kwanzas e inscrições nos estados *Matriculado*, *Pago*, *Pendente* e *Lista de Espera*) e revisão de mensagens de validação em português.
-4. **Documentação Técnica (`README.md`, `ESTRUTURA_PROJETO.md`, `DOCUMENTACAO_VIEWS.md`)**:
+4. **Documentação Técnica (`README.md`, `ESTRUTURA_DO_PROJETO.md`)**:
    - Estruturação da documentação arquitetural, diagramas Mermaid e catálogo de vistas do sistema.

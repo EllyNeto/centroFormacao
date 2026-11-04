@@ -1,5 +1,5 @@
 # 📘 Centro de Formação — Estrutura do Projecto
-
+Sistema de gestão de um centro de formação profissional, desenvolvido em **Laravel 13** (PHP 8.5) com **MySQL** e vistas **Blade**.
 Sistema de gestão de um centro de formação profissional, desenvolvido em **Laravel** (PHP) com **MySQL** e vistas **Blade**.
 
 ---
@@ -27,11 +27,11 @@ Sistema de gestão de um centro de formação profissional, desenvolvido em **La
 
 | Camada | Tecnologia |
 | :--- | :--- |
-| Backend | PHP + Laravel |
+| Backend | PHP 8.5 + Laravel 13 |
 | Base de dados | MySQL (`centroformacao`) |
 | Frontend | Blade, Bootstrap, jQuery, Select2 |
 | Ícones | Material Symbols, Font Awesome |
-| Assets | Laravel Mix (`webpack.mix.js`) |
+| Assets | Vite (`vite.config.js`) |
 
 ---
 
@@ -120,7 +120,27 @@ centroFormacao/
 
 ## 4. Base de Dados
 
-Todas as tabelas de negócio possuem `id`, `created_at`, `updated_at` e `deleted_at` (**Soft Delete**).
+Todas as migrações de negócio utilizam **Soft Deletes** (`softDeletes()`) e timestamps (`created_at`, `updated_at`, `deleted_at`).
+
+### Ordem de execução das migrações
+
+| Ordem | Ficheiro | Tabela(s) |
+| :---: | :--- | :--- |
+| 1 | `0001_01_01_000000_create_users_table.php` | `users`, `password_reset_tokens`, `sessions` |
+| 2 | `0001_01_01_000001_create_cache_table.php` | `cache`, `cache_locks` |
+| 3 | `0001_01_01_000002_create_jobs_table.php` | `jobs`, `job_batches`, `failed_jobs` |
+| 4 | `2019_08_19_000000_create_failed_jobs_table.php` | — (sem ação; `failed_jobs` já existe) |
+| 5 | `2026_09_23_103900_create_students_table.php` | `students` |
+| 6 | `2026_09_23_104110_create_teachers_table.php` | `teachers` |
+| 7 | `2026_09_23_104252_create_courses_table.php` | `courses` |
+| 8 | `2026_09_23_104758_create_payments_table.php` | `payments` |
+| 9 | `2026_09_23_105833_create_rooms_table.php` | `rooms` |
+| 10 | `2026_09_23_110029_create_enrollments_table.php` | `enrollments` |
+| 11 | `2026_09_30_141257_create_classrooms_table.php` | `classrooms` |
+| 12 | `2026_10_01_000000_add_classroom_id_to_rooms_table.php` | adiciona `classroom_id` a `rooms` |
+
+> [!NOTE]
+> A migration `2019_08_19_000000_create_failed_jobs_table.php` é um **no-op**: a tabela `failed_jobs` já é criada pela migration de jobs (`0001_01_01_000002`).
 
 ### 4.1 `classrooms` — Salas
 
@@ -128,7 +148,7 @@ Todas as tabelas de negócio possuem `id`, `created_at`, `updated_at` e `deleted
 | :--- | :--- | :--- |
 | `id` | bigint | PK |
 | `number_of_classroom` | integer | Número da sala (único) |
-| `capacity` | integer | **Define a capacidade das turmas** |
+| `capacity` | integer | Capacidade da sala |
 | `description` | text | nullable |
 
 ### 4.2 `courses` — Cursos
@@ -165,10 +185,13 @@ Todas as tabelas de negócio possuem `id`, `created_at`, `updated_at` e `deleted
 | `end_time` | time | Hora de término |
 | `days_of_week` | json | Ex.: `["Segunda-feira","Quarta-feira"]` |
 | `shift` | string | Manhã / Tarde / Pós-Laboral |
-| `max_capacity` | integer | **Herdado de `classrooms.capacity`** |
-| `teacher_id` | FK | → `teachers.id` |
-| `course_id` | FK | → `courses.id` |
-| `classroom_id` | FK | → `classrooms.id` (nullable, `nullOnDelete`) |
+| `max_capacity` | integer | Capacidade máxima |
+| `teacher_id` | bigint FK | → `teachers.id` |
+| `course_id` | bigint FK | → `courses.id` |
+| `classroom_id` | bigint FK | → `classrooms.id` (nullable, `nullOnDelete`, adicionado posteriormente) |
+
+> [!NOTE]
+> `classroom_id` **não** vem na criação inicial de `rooms`; é adicionado pela migration `2026_10_01_000000_add_classroom_id_to_rooms_table.php`.
 
 ### 4.5 `enrollments` — Inscrições
 
@@ -181,9 +204,12 @@ Todas as tabelas de negócio possuem `id`, `created_at`, `updated_at` e `deleted
 | `number_of_identify` | string | BI |
 | `image` | string | nullable |
 | `shift` | string | Turno pretendido |
-| `status` | string | `Pendente` (padrão), `Pago`, `Matriculado`, `Lista de Espera`, `Cancelado` |
+| `status` | string | `Pendente` (predefinido), `Pago`, `Matriculado`, `Lista de Espera`, `Cancelado` |
 | `date` | datetime | nullable |
-| `course_id` | FK | → `courses.id` |
+| `course_id` | bigint FK | → `courses.id` |
+
+> [!WARNING]
+> `enrollments` **não tem** `enrollment_id` nem `room_id`. Não há FK para `payments` nem para `students`.
 
 ### 4.6 `payments` — Pagamentos
 
@@ -197,24 +223,31 @@ Todas as tabelas de negócio possuem `id`, `created_at`, `updated_at` e `deleted
 | `date` | datetime | |
 | `currency` | string | Ex.: AOA |
 
+> [!WARNING]
+> `payments` **não tem** `enrollment_id` (coluna inexistente), apesar de o modelo `Enrollment` declarar essa relação.
+
 ### 4.7 `students` — Formandos
 
 | Coluna | Tipo | Obs. |
 | :--- | :--- | :--- |
 | `id` | bigint | PK |
 | `name` | string | |
-| `email` | string | |
-| `number_of_identify` | string | BI |
+| `email` | string | único |
+| `number_of_identify` | string | BI — único |
 | `phone` | integer | |
 | `code` | integer | Nº de formando |
-| `image` | string | |
+| `image` | string | nullable |
+
+> [!WARNING]
+> `students` **não tem** `enrollment_id` nem `room_id`.
 
 ### 4.8 Tabelas do sistema
 
 - `users` — utilizadores administradores (autenticação).
-- `failed_jobs` — falhas de filas (Laravel).
-
----
+- `password_reset_tokens` — reposição de palavra-passe.
+- `sessions` — sessões de utilizador.
+- `cache`, `cache_locks` — cache da aplicação.
+- `jobs`, `job_batches`, `failed_jobs` — filas e jobs (Laravel).
 
 ## 5. Diagrama de Entidades (ERD)
 

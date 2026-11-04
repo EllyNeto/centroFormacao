@@ -1,0 +1,257 @@
+/**
+ * Folha de Estilos para Impressão da Lista Nominal de Formandos
+ * Utilizado por admin/room/details/listOfStudents.blade.php
+ */
+
+/* Estilos Globais e Tipografia Limpa */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1e293b;
+    background-color: #f8fafc;
+    line-height: 1.5;
+    padding: 20px;
+}
+
+/* Barra de Ações (Oculta na Impressão) */
+.no-print-bar {
+    max-width: 900px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.action-buttons-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: #1e40af;
+    color: #ffffff;
+}
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-secondary {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+.btn-secondary:hover {
+    background-color: #cbd5e1;
+}
+
+/* Folha A4 para Impressão */
+.sheet {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* Cabeçalho Oficial */
+.doc-header {
+    text-align: center;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+}
+
+.doc-header h2 {
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #0f172a;
+}
+
+.doc-header h1 {
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin: 6px 0;
+    color: #1e3a8a;
+}
+
+.doc-header p {
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* Caixa de Metadados da Turma */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 24px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 24px;
+    font-size: 13px;
+}
+
+.info-item {
+    display: flex;
+    align-items: baseline;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #475569;
+    min-width: 110px;
+}
+
+.info-value {
+    color: #0f172a;
+    font-weight: 500;
+}
+
+/* Tabela Nominal */
+.students-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-bottom: 30px;
+}
+
+.students-table th, 
+.students-table td {
+    border: 1px solid #cbd5e1;
+    padding: 8px 10px;
+    text-align: left;
+}
+
+.students-table th {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.students-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Larguras de Colunas da Tabela de Formandos */
+.col-num {
+    width: 40px;
+}
+
+.col-code {
+    width: 120px;
+}
+
+.col-bi {
+    width: 150px;
+}
+
+.col-phone {
+    width: 110px;
+}
+
+.col-signature {
+    width: 160px;
+}
+
+.blank-placeholder {
+    color: #cbd5e1;
+}
+
+/* Seção de Assinaturas e Rodapé */
+.signature-section {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    page-break-inside: avoid;
+}
+
+.signature-box {
+    width: 45%;
+    text-align: center;
+}
+
+.signature-line {
+    border-top: 1px solid #0f172a;
+    margin-bottom: 6px;
+}
+
+.signature-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #334155;
+    text-transform: uppercase;
+}
+
+.signature-name {
+    color: #64748b;
+    font-size: 11px;
+}
+
+.doc-footer {
+    margin-top: 40px;
+    padding-top: 12px;
+    border-top: 1px dashed #cbd5e1;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+/* Configurações Estritas para Impressão em Papel */
+@media print {
+    body {
+        background: #ffffff;
+        padding: 0;
+    }
+
+    .no-print, .no-print-bar {
+        display: none !important;
+    }
+
+    .sheet {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    @page {
+        size: A4 portrait;
+        margin: 15mm 12mm 15mm 12mm;
+    }
+}
