@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -21,11 +23,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $image Caminho ou URL da imagem do formando
  * @property string $shift Turno pretendido pelo formando
  * @property string $status Estado da matrícula (Pendente, Pago, Matriculado, Lista de Espera, Cancelado)
- * @property \Carbon\CarbonInterface|null $date Data da matrícula
+ * @property CarbonInterface|null $date Data da matrícula
  * @property int $course_id Chave estrangeira para o curso escolhido
- * @property \Carbon\CarbonInterface|null $deleted_at Data de exclusão lógica (soft delete)
- * @property \Carbon\CarbonInterface|null $created_at Data de criação do registo
- * @property \Carbon\CarbonInterface|null $updated_at Data da última atualização
+ * @property CarbonInterface|null $deleted_at Data de exclusão lógica (soft delete)
+ * @property CarbonInterface|null $created_at Data de criação do registo
+ * @property CarbonInterface|null $updated_at Data da última atualização
  */
 class Enrollment extends Model
 {
@@ -42,10 +44,28 @@ class Enrollment extends Model
      *
      * A coluna course_id na tabela enrollments referencia courses.id.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    /**
+     * Retorna a classe CSS de badge correspondente ao estado da candidatura/inscrição.
+     *
+     * Utilizado para estilização visual dinâmica nas tabelas e no painel principal.
+     *
+     * @return string Classe CSS do Bootstrap / tema (ex.: badge-success, badge-warning)
+     */
+    public function statusBadgeClass(): string
+    {
+        return match ($this->status) {
+            'Pago' => 'badge-success',
+            'Matriculado' => 'badge-info',
+            'Lista de Espera' => 'badge-secondary',
+            'Cancelado' => 'badge-danger',
+            default => 'badge-warning',
+        };
     }
 }

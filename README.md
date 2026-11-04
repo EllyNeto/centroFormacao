@@ -88,13 +88,8 @@ php artisan serve
 Aceda à aplicação no navegador através do endereço:
 - **URL de Acesso**: `http://127.0.0.1:8000/login`
 
-#### Credenciais de Demonstração (criadas pelo `DatabaseSeeder`)
-| Perfil | E-mail | Palavra-passe |
-| :--- | :--- | :--- |
-| **Administrador** | `admin@centroformacao.ao` | `12345678` |
-| **Secretaria Académica** | `secretaria@centroformacao.ao` | `12345678` |
-
 ---
+
 
 ## Documentação Complementar do Repositório
 
