@@ -6,7 +6,7 @@
 
 ## Descrição
 
-O **Centro de Formação** é uma aplicação web completa de gestão académica, pedagógica e financeira desenvolvida em **Laravel 7** com base de dados **MySQL**.
+O **Centro de Formação** é uma aplicação web completa de gestão académica, pedagógica e financeira desenvolvida em **Laravel 13** com base de dados **MySQL**.
 
 ### Objetivo do Projeto
 O objetivo principal do sistema é centralizar e automatizar todo o ciclo de vida operacional de um centro de formação profissional — desde a criação de cursos, alocação de salas físicas e corpo docente, abertura de turmas por turnos, receção de candidaturas/inscrições e controlo de lista de espera, até à liquidação de propinas em Kwanzas (`AOA`), emissão de recibos e efetivação de matrículas de formandos oficiais.
@@ -33,7 +33,7 @@ O sistema implementa um fluxo de trabalho rigoroso e auditável dividido em 4 et
 
 ### 1. Pré-requisitos
 Certifique-se de que o ambiente possui instalados os seguintes componentes:
-- **PHP** `>= 7.4` (com extensões `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`)
+- **PHP** `>= 8.4` (com extensões `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`)
 - **Composer** `>= 2.x`
 - **MySQL** `>= 5.7` ou **MariaDB** `>= 10.3`
 - **Node.js & NPM** *(opcional, apenas caso deseje recompilar assets front-end)*
@@ -107,7 +107,7 @@ Para facilitar a navegação pelo código-fonte, o repositório inclui dois docu
 ## Recursos
 
 ### Referências Técnicas e Documentação Oficial
-- **Laravel 7.x Documentation**: [https://laravel.com/docs/7.x](https://laravel.com/docs/7.x) — Arquitetura MVC, Eloquent ORM, Migrations, Form Requests e Blade Templates.
+- **Laravel 13.x Documentation**: [https://laravel.com/docs/13.x](https://laravel.com/docs/13.x) — Arquitetura MVC, Eloquent ORM, Migrations, Form Requests e Blade Templates.
 - **Laravel UI (`laravel/ui:^2.4`)**: [https://github.com/laravel/ui](https://github.com/laravel/ui) — Scaffolding oficial de autenticação (`AuthenticatesUsers`, `RegistersUsers` e `Auth::routes()`).
 - **MySQL 8.0 Reference Manual**: [https://dev.mysql.com/doc/](https://dev.mysql.com/doc/) — Modelação relacional, chaves estrangeiras e índices.
 - **Bootstrap 5 Documentation**: [https://getbootstrap.com/docs/5.0/](https://getbootstrap.com/docs/5.0/) — Sistema de grelha responsiva, utilitários de layout e componentes de interface.
