@@ -1,0 +1,102 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\courseController;
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('admin.dashboard.index');
+});
+
+Route::get('/curso/list', [courseController::class , 'index'])->name('course.index');
+// Route::get('/curso/adicionar', [courseController::class , 'create'])->name('course.create');
+// Route::get('/curso/{$id}', [courseController::class , 'show'])->name('course.show');
+// Route::get('/curso/edit/{$id}', [courseController::class , 'edit'])->name('course.edit');
+// Route::put('/curso/update/{$id}', [courseController::class , 'update']);
+// Route::post('/curso', [courseController::class , 'store']);
+// Route::delete('/curso/{id}', [courseController::class , 'destroy']);
+
+    // Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Rotas de Gestão de Utilizadores (Registo exclusivo pelo Admin dentro do sistema)
+    // Route::get('/utilizador/listar', [RegisterController::class, 'index'])->name('user.index');
+    // Route::get('/utilizador/adicionar', [RegisterController::class, 'createForm'])->name('user.create');
+    // Route::post('/utilizador', [RegisterController::class, 'store'])->name('user.store');
+    // Route::delete('/utilizador/{id}', [RegisterController::class, 'destroy'])->name('user.destroy');
+
+    // Rotas de Gestão de Cursos
+    // Route::get('/curso/listar', [CourseController::class, 'index'])->name('course.index');
+    // Route::get('/curso/adicionar', [CourseController::class, 'create'])->name('course.create');
+    // Route::post('/curso', [CourseController::class, 'store'])->name('course.store');
+    // Route::get('/curso/{id}', [CourseController::class, 'show'])->name('course.show');
+    // Route::get('/curso/edit/{id}', [CourseController::class, 'edit'])->name('course.edit');
+    // Route::put('/curso/update/{id}', [CourseController::class, 'update'])->name('course.update');
+    // Route::delete('/curso/{id}', [CourseController::class, 'destroy'])->name('course.destroy');
+
+    // Rotas de Gestão de Formadores (Professores)
+    // Route::get('/formador/listar', [TeacherController::class, 'index'])->name('teacher.index');
+    // Route::get('/formador/adicionar', [TeacherController::class, 'create'])->name('teacher.create');
+    // Route::post('/formador', [TeacherController::class, 'store'])->name('teacher.store');
+    // Route::get('/formador/{id}', [TeacherController::class, 'show'])->name('teacher.show');
+    // Route::get('/formador/edit/{id}', [TeacherController::class, 'edit'])->name('teacher.edit');
+    // Route::put('/formador/update/{id}', [TeacherController::class, 'update'])->name('teacher.update');
+    // Route::delete('/formador/{id}', [TeacherController::class, 'destroy'])->name('teacher.destroy');
+
+    // Rotas de Gestão de Salas
+    // Route::get('/sala/listar', [ClassroomController::class, 'index'])->name('classroom.index');
+    // Route::get('/sala/adicionar', [ClassroomController::class, 'create'])->name('classroom.create');
+    // Route::post('/sala', [ClassroomController::class, 'store'])->name('classroom.store');
+    // Route::get('/sala/{id}', [ClassroomController::class, 'show'])->name('classroom.show');
+    // Route::get('/sala/edit/{id}', [ClassroomController::class, 'edit'])->name('classroom.edit');
+    // Route::put('/sala/update/{id}', [ClassroomController::class, 'update'])->name('classroom.update');
+    // Route::delete('/sala/{id}', [ClassroomController::class, 'destroy'])->name('classroom.destroy');
+
+    // Rotas de Gestão de Turmas
+    // Route::get('/turma/listar', [RoomController::class, 'index'])->name('room.index');
+    // Route::get('/turma/adicionar', [RoomController::class, 'create'])->name('room.create');
+    // Route::post('/turma', [RoomController::class, 'store'])->name('room.store');
+    // Route::get('/turma/{id}', [RoomController::class, 'show'])->name('room.show');
+    // Route::get('/turma/{id}/imprimir-formandos', [RoomController::class, 'printStudents'])->name('room.printStudents');
+    // Route::get('/turma/edit/{id}', [RoomController::class, 'edit'])->name('room.edit');
+    // Route::put('/turma/update/{id}', [RoomController::class, 'update'])->name('room.update');
+    // Route::delete('/turma/{id}', [RoomController::class, 'destroy'])->name('room.destroy');
+
+    // Rotas de Gestão de Formandos (Alunos)
+    // Route::get('/formando/listar', [StudentController::class, 'index'])->name('student.index');
+    // Route::get('/formando/adicionar', [StudentController::class, 'create'])->name('student.create');
+    // Route::post('/formando', [StudentController::class, 'store'])->name('student.store');
+    // Route::get('/formando/{id}', [StudentController::class, 'show'])->name('student.show');
+    // Route::get('/formando/edit/{id}', [StudentController::class, 'edit'])->name('student.edit');
+    // Route::put('/formando/update/{id}', [StudentController::class, 'update'])->name('student.update');
+    // Route::delete('/formando/{id}', [StudentController::class, 'destroy'])->name('student.destroy');
+
+    // Rotas de Gestão de Inscrições / Matrículas
+    // Route::get('/inscricao/listar', [EnrollmentController::class, 'index'])->name('enrollment.index');
+    // Route::get('/inscricao/adicionar', [EnrollmentController::class, 'create'])->name('enrollment.create');
+    // Route::post('/inscricao', [EnrollmentController::class, 'store'])->name('enrollment.store');
+    // Route::get('/inscricao/{id}', [EnrollmentController::class, 'show'])->name('enrollment.show');
+    // Route::get('/inscricao/edit/{id}', [EnrollmentController::class, 'edit'])->name('enrollment.edit');
+    // Route::put('/inscricao/update/{id}', [EnrollmentController::class, 'update'])->name('enrollment.update');
+    // Route::delete('/inscricao/{id}', [EnrollmentController::class, 'destroy'])->name('enrollment.destroy');
+    // Ação específica: efetivar inscrição com propina paga em formando oficial
+    // Route::post('/inscricao/{id}/efectivar', [StudentController::class, 'storeFromEnrollment'])->name('enrollment.enroll');
+
+    // Rotas de Gestão de Pagamentos
+    // Route::get('/pagamento/listar', [PaymentController::class, 'index'])->name('payment.index');
+    // Route::get('/pagamento/adicionar', [PaymentController::class, 'create'])->name('payment.create');
+    // Route::post('/pagamento', [PaymentController::class, 'store'])->name('payment.store');
+    // Route::get('/pagamento/{id}', [PaymentController::class, 'show'])->name('payment.show');
+    // Route::get('/pagamento/edit/{id}', [PaymentController::class, 'edit'])->name('payment.edit');
+    // Route::put('/pagamento/update/{id}', [PaymentController::class, 'update'])->name('payment.update');
+    // Route::delete('/pagamento/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
